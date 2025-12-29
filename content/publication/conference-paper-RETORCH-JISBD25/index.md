@@ -54,12 +54,12 @@ featured: false
 # - name: Custom Link
 #   url: http://example.org
 
-url_pdf: 'TO-DO'
+url_pdf: 'https://digibuo.uniovi.es/dspace/bitstream/handle/10651/80780/11705-JISBD-2025-14.pdf?sequence=4&isAllowed=y'
 url_code: ''
 url_dataset: ''
 url_poster: ''
 url_project: ''
-url_slides: 'TO-DO'
+url_slides: 'https://digibuo.uniovi.es/dspace/bitstream/handle/10651/80780/2025_JISBD_AugustoRETORCHStarPresentation.pdf?sequence=1&isAllowed=y'
 url_source: ''
 url_video: ''
 
