@@ -1,0 +1,33 @@
+/* ── Core — design tokens, reset, shared primitives ────── */
+@import './core/tokens.css';
+@import './core/base.css';
+@import './core/components.css';
+@import './core/animations.css';
+@import './core/transitions.css';
+
+/* ── Layout — persistent chrome ─────────────────────────── */
+@import './layout/header.css';
+@import './layout/footer.css';
+@import './layout/hero.css';
+
+/* ── Homepage ────────────────────────────────────────────── */
+@import './home/globe.css';
+
+/* ── Research — publications ─────────────────────────────── */
+@import './research/publications.css';
+
+/* ── Experience ──────────────────────────────────────────── */
+@import './experience/experience.css';
+
+/* ── Projects ────────────────────────────────────────────── */
+@import './projects/projects.css';
+
+/* ── Talks ───────────────────────────────────────────────── */
+@import './talks/talks.css';
+
+/* ── Teaching ────────────────────────────────────────────── */
+@import './teaching/teaching.css';
+@import './teaching/subject.css';
+
+/* ── Responsive — breakpoint overrides (must be last) ────── */
+@import './core/responsive.css';

@@ -1,0 +1,10 @@
+---
+// Classification chips shown on every publication card and in the detail panel.
+const { pub, class: className = 'pub-badges' } = Astro.props;
+---
+<div class={className}>
+  {pub.has_identifier && <span class="badge badge--id">{pub.identifier}</span>}
+  {pub.has_core && <span class="badge badge--core">Core {pub.core}</span>}
+  {pub.has_quartile && <span class="badge badge--quartile">{pub.quartile}</span>}
+  {pub.has_arxiv && <a class="badge badge--arxiv" href={pub.arxiv_url} target="_blank" rel="noopener">arXiv</a>}
+</div>

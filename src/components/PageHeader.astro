@@ -1,0 +1,11 @@
+---
+// Standard page header: eyebrow + h1 + optional muted description.
+// All props arrive already localized (i18n strings from the page).
+const { eyebrow, heading, description = '' } = Astro.props;
+---
+<header class="page-header container">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1>{heading}</h1>
+  {description && <p class="text-muted">{description}</p>}
+  <slot />
+</header>

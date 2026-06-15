@@ -1,0 +1,463 @@
+/* =========================================================
+   Buttons — quiet by default, filled primary.
+   Hover lifts use the `translate` property (see animations.css
+   for the translate-vs-transform contract).
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0.85rem 1.5rem;
+  border: var(--border-w) solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  transition: translate var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out);
+}
+
+.btn:hover {
+  translate: 0 -1px;
+  box-shadow: var(--shadow-2);
+  border-color: var(--color-accent);
+}
+
+.btn:active {
+  translate: 0 0;
+  box-shadow: var(--shadow-1);
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;               /* always white text on blue background */
+  border-color: transparent;
+}
+
+.btn-secondary {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+  border-color: transparent;
+}
+
+.btn-outline {
+  background: transparent;
+}
+
+.btn-sm {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* =========================================================
+   Cards — hairline border + soft resting shadow; linked cards
+   raise one elevation step on hover.
+   ========================================================= */
+.card {
+  background: var(--color-surface);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-5);
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: translate var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-1) var(--ease-out);
+}
+
+.card-link:hover {
+  translate: 0 -2px;
+  box-shadow: var(--shadow-2);
+}
+
+.card-link:hover .card {
+  box-shadow: none;
+  border-color: var(--color-border-strong);
+}
+
+.card-link .card {
+  height: 100%;
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+
+/* =========================================================
+   Tags / pills — quiet hairline chips
+   ========================================================= */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.3rem 0.85rem;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   Badges
+   ========================================================= */
+.badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.85rem;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  white-space: nowrap;
+}
+
+.badge-status-open {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.badge-status-closed {
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+}
+
+/* Publication classification badges */
+.pub-badges {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.badge--id {
+  background: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+  font-size: 0.72rem;
+}
+
+.badge--core {
+  background: var(--badge-core-bg);
+  color: var(--badge-core-fg);
+  border-color: var(--badge-core-border);
+}
+
+.badge--quartile {
+  background: var(--badge-quartile-bg);
+  color: var(--badge-quartile-fg);
+  border-color: var(--badge-quartile-border);
+}
+
+.badge--arxiv {
+  background: var(--badge-arxiv-bg);
+  color: var(--badge-arxiv-fg);
+  border-color: var(--badge-arxiv-border);
+  text-decoration: none;
+  transition: background var(--dur-1) var(--ease-out);
+}
+
+.badge--arxiv:hover {
+  background: var(--badge-arxiv-bg-hover);
+}
+
+/* =========================================================
+   Filter bar — shared faceted-filter panel (publications page
+   and TFG/TFM lists), driven by initFilters() via data attributes.
+   ========================================================= */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-alt);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filter-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-width: 5rem;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out),
+              color var(--dur-1) var(--ease-out);
+}
+
+.filter-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.filter-btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;               /* always white text on blue background */
+}
+
+.filter-btn--author .author-avatar {
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 0.5rem;
+}
+
+.filter-btn--logo {
+  padding: 0.3rem 0.5rem;
+}
+
+.filter-btn--logo.is-active {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-1);
+}
+
+.filter-logo {
+  display: block;
+  height: 1.75rem;
+  width: auto;
+  max-width: 6rem;
+}
+
+.filter-search {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  background: var(--color-surface);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  outline: none;
+}
+
+.filter-search:focus {
+  border-color: var(--color-accent);
+}
+
+.filter-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.filter-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.filter-count {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.filter-reset {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border);
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.filter-reset:hover {
+  color: var(--color-text);
+}
+
+/* ── Sidebar variant — vertical checkbox groups (publications page) ── */
+.filter-bar--sidebar {
+  margin-bottom: 0;
+}
+
+.filter-heading {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0 0 var(--space-2);
+}
+
+.filter-bar--sidebar .filter-group {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-w) solid var(--color-border);
+}
+
+.filter-bar--sidebar .filter-group:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.filter-bar--sidebar .filter-label {
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.filter-bar--sidebar .filter-buttons {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+}
+
+/* Checkbox-style rows: the box is a ::before pseudo — no extra markup */
+.filter-bar--sidebar .filter-btn {
+  justify-content: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 0.28rem 0.25rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-weight: 400;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.filter-bar--sidebar .filter-btn::before {
+  content: '';
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border: var(--border-w) solid var(--color-border-strong);
+  border-radius: 0.25rem;
+  background: var(--color-surface);
+  font-size: 0.7rem;
+  line-height: 1;
+  color: #fff;
+  transition: background var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out);
+}
+
+.filter-bar--sidebar .filter-btn:hover {
+  background: var(--color-accent-soft);
+  border-color: transparent;
+}
+
+.filter-bar--sidebar .filter-btn.is-active {
+  background: none;
+  color: var(--color-text);
+}
+
+.filter-bar--sidebar .filter-btn.is-active:hover {
+  background: var(--color-accent-soft);
+}
+
+.filter-bar--sidebar .filter-btn.is-active::before {
+  content: '✓';
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.filter-bar--sidebar .filter-meta {
+  margin-left: 0;
+}
+
+/* ── Pagination (rendered by initFilters when data-page-size is set) ── */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.pager-btn {
+  min-width: 2.1rem;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out),
+              color var(--dur-1) var(--ease-out);
+}
+
+.pager-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.pager-btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.pager-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

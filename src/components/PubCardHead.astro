@@ -1,0 +1,13 @@
+---
+// Shared head block of every publication card variant:
+// title + classification badges, author chips, venue — date line.
+import PubBadges from './PubBadges.astro';
+import AuthorList from './AuthorList.astro';
+const { pub } = Astro.props;
+---
+<div class="pub-card-head">
+  <h3>{pub.title}</h3>
+  <PubBadges pub={pub} />
+</div>
+<p class="pub-authors"><AuthorList authors={pub.authors} /></p>
+<p class="pub-venue">{pub.venue} — {pub.date_formatted}</p>

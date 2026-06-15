@@ -1,0 +1,114 @@
+---
+// Homepage: hero, about, scroll-driven globe, featured/latest pubs, talks.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PubCardLink from '../../components/PubCardLink.astro';
+import TalkCard from '../../components/TalkCard.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import { langStaticPaths, loadI18n, localize, prefixFor } from '../../lib/i18n.js';
+import { loadProfile, loadCoauthors, loadProjects, loadPublications, loadTalks } from '../../lib/data.js';
+import { buildPublicationViewModels, buildTalkViewModels, buildMapLocations, byDateDesc } from '../../lib/viewmodels.js';
+import { richTextBlocks, escapeHtml } from '../../lib/richtext.js';
+import { loadIcon } from '../../lib/icons.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const prefix = prefixFor(lang);
+const profile = loadProfile();
+const coauthors = loadCoauthors();
+const projects = loadProjects();
+const projectsById = Object.fromEntries(projects.map((p) => [p.id, p]));
+
+const publications = buildPublicationViewModels(loadPublications(), coauthors, projectsById, lang, prefix, t);
+const featuredPublications = publications.filter((p) => p.featured).sort(byDateDesc('date'));
+const latestPublications = publications.filter((p) => !p.featured).sort(byDateDesc('date')).slice(0, 5);
+const talks = buildTalkViewModels(loadTalks(), lang, t);
+const mapLocations = buildMapLocations(publications, prefix);
+
+const bioParagraphs = richTextBlocks(localize(profile, 'bio', lang));
+const organizationsHtml = profile.organizations
+  .map((org) => `<a href="${org.url}" target="_blank" rel="noopener">${escapeHtml(org.name)}</a>`)
+  .join(' · ');
+const iconArrow = loadIcon('arrow-right');
+const iconDownload = loadIcon('download');
+---
+<BaseLayout lang={lang} t={t} pagePath="" description={t.meta_desc_home}>
+<main id="main">
+  <section class="hero container">
+    <div class="hero-content">
+      <p class="eyebrow">{t.profile_role || profile.role}</p>
+      <h1>{t.hero_greeting} <span class="highlight">{profile.name}</span></h1>
+      <p class="hero-tagline">{localize(profile, 'tagline', lang)}</p>
+      <p class="text-muted" set:html={organizationsHtml} />
+      <div class="btn-row">
+        <a class="btn btn-primary" href={`${prefix}publications/`}><Fragment set:html={iconArrow} /> {t.btn_view_publications}</a>
+        <a class="btn btn-secondary" href={`/${profile.cv}`} target="_blank" rel="noopener"><Fragment set:html={iconDownload} /> {t.btn_download_cv}</a>
+      </div>
+      <SocialLinks />
+    </div>
+    <div class="hero-photo-wrap">
+      <img class="hero-photo" src={`/${profile.photo}`} alt={profile.name} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow={t.about_eyebrow} heading={t.about_heading} />
+      {bioParagraphs.map((block) => <Fragment set:html={block} />)}
+      <div class="tag-row">
+        {profile.interests.map((interest) => <span class="tag">{interest}</span>)}
+      </div>
+    </div>
+  </section>
+
+  {mapLocations.length > 0 && (
+    <Fragment>
+    <!-- Scroll driver — provides 3× viewport of scroll space for one full rotation -->
+    <div class="globe-scroll-driver" id="globe-scroll-driver">
+      <div class="globe-sticky" id="globe-sticky">
+        <div class="globe-sticky-head container">
+          <p class="eyebrow">{t.globe_eyebrow}</p>
+          <h2>{t.globe_heading}</h2>
+        </div>
+        <div class="globe-viz-wrap">
+          <div id="globe-viz"></div>
+        </div>
+      </div>
+    </div>
+    <script is:inline set:html={`window.GLOBE_LOCATIONS=${JSON.stringify(mapLocations)};`} />
+    </Fragment>
+  )}
+
+  <section class="section section-alt">
+    <div class="container">
+      <SectionHead eyebrow={t.featured_eyebrow} heading={t.featured_heading}
+        actionHref={`${prefix}publications/`} actionLabel={t.btn_view_all} />
+      <div class="grid">
+        {featuredPublications.map((pub) => <PubCardLink pub={pub} excerpt tags />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead eyebrow={t.latest_eyebrow} heading={t.latest_heading}
+        actionHref={`${prefix}publications/`} actionLabel={t.btn_view_all} />
+      <div class="grid">
+        {latestPublications.map((pub) => <PubCardLink pub={pub} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <SectionHead eyebrow={t.talks_home_eyebrow} heading={t.talks_home_heading}
+        actionHref={`${prefix}talks/`} actionLabel={t.btn_view_all} />
+      <div class="grid grid-2">
+        {talks.map((talk) => <TalkCard talk={talk} t={t} />)}
+      </div>
+    </div>
+  </section>
+</main>
+</BaseLayout>

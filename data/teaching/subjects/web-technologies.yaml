@@ -1,0 +1,5 @@
+title: "Web Technologies"
+title_es: "Tecnologías Web"
+title_it: "Tecnologie Web"
+order: 1
+# Session content lives in src/content/teaching/web-technologies/ (MDX files).

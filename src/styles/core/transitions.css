@@ -1,0 +1,27 @@
+/* =========================================================
+   Cross-document view transitions — pure CSS progressive
+   enhancement (no ClientRouter, zero JS). Chromium/Safari get
+   a fast crossfade between pages; other browsers navigate
+   instantly as before.
+   ========================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation-duration: 200ms;
+    animation-timing-function: var(--ease-out);
+  }
+
+  ::view-transition-new(root) {
+    animation-duration: 250ms;
+    animation-timing-function: var(--ease-out);
+  }
+}
+
+/* The header gets its own snapshot group so the persistent chrome stays
+   visually stable instead of crossfading with the page. */
+.site-header {
+  view-transition-name: site-header;
+}

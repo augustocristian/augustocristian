@@ -1,0 +1,38 @@
+---
+title: "Seminar 1: Code Quality & Technical Debt"
+type: seminar
+order: 1
+pdf_url: ""
+---
+
+## What is Technical Debt?
+
+**Technical debt** is the implied cost of future rework caused by
+choosing an easy solution now instead of a better approach.
+
+Types of technical debt:
+
+- **Intentional** — deliberate shortcuts to meet a deadline
+- **Unintentional** — poor practices; lack of knowledge
+- **Bit rot** — code that decays as its environment evolves
+
+## Code Quality Metrics
+
+Key metrics for measuring code quality:
+
+- **Cyclomatic Complexity** — number of independent paths through code
+- **Code Coverage** — percentage of code exercised by tests
+- **Code Duplication** — repeated logic (DRY principle)
+- **Coupling & Cohesion** — how modules depend on each other
+
+<Exercise title="Activity: Refactoring Kata">
+
+You are given the [Gilded Rose kata](https://github.com/emilybache/GildedRose-Refactoring-Kata).
+
+1. Run the existing tests — they all pass
+2. Analyse the code: identify code smells and complexity issues
+3. Refactor the `updateQuality()` method **without changing behaviour**
+4. Add at least 5 new test cases to cover edge cases
+5. Measure cyclomatic complexity before and after using a static analysis tool
+
+</Exercise>

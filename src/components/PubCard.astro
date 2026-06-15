@@ -1,0 +1,20 @@
+---
+// Full publication card (publications page).
+import PubCardHead from './PubCardHead.astro';
+import LinkButtonRow from './LinkButtonRow.astro';
+const { pub, t } = Astro.props;
+---
+<article class="pub-card" id={pub.id}>
+  <PubCardHead pub={pub} />
+  <details class="pub-abstract-details">
+    <summary>{t.pub_abstract}</summary>
+    <p class="pub-abstract">{pub.abstract}</p>
+  </details>
+  {pub.has_tags && (
+    <div class="tag-row">
+      {pub.tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  )}
+  {pub.projects_html && <p class="text-muted" set:html={pub.projects_html} />}
+  <LinkButtonRow links={pub.links} />
+</article>

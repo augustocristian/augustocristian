@@ -1,30 +1,27 @@
-# 1. Acknowledgments
-This project is based on the [Hugo Academic Template](https://github.com/HugoBlox/theme-academic-cv), with the necessary modifications
+# 1. About this project
+This website is built with [Astro](https://astro.build): content lives as YAML files under
+`data/` (and teaching sessions as Markdown/MDX under `src/content/teaching/`), rendered
+through Astro components (`src/components/`, `src/pages/`) into plain HTML/CSS/JS in
+`dist/`. See [CLAUDE.md](CLAUDE.md) for the full architecture and a guide to adding new
+publications, talks, projects, education/experience entries, etc.
+
 # 2. Modify the website content and preview it locally
-[Here](https://wowchemy.com/docs/getting-started/install-hugo-extended/) you'll find a comprehensive guide on the setup process. If you're using Windows, the steps are quite straightforward:
-
-1. First, install the Scoop package manager in PowerShell by executing the following commands:
+1. Install [Node.js](https://nodejs.org/) (v22 or later).
+2. Install dependencies:
     ```powershell
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-    Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+    npm install
     ```
-
-2. Next, download the necessary packages for running the site:
+3. Edit the relevant file(s) under `data/` (see [CLAUDE.md](CLAUDE.md) for the data schemas).
+4. Start the dev server with live reload:
     ```powershell
-    scoop install git go hugo-extended nodejs
-    ``` 
+    npm run dev
+    ```
+    Then open http://localhost:4321.
 
-3. Navigate to your repository folder and launch Hugo:
-    ```powershell
-    hugo server
-    ``` 
+Alternatively, build the production site with `npm run build` and preview the result with
+`npm run preview`, or combine both with `scripts/deploy.ps1 -Serve`, which serves the built
+site at http://localhost:8080.
 
-After completing these steps, you can access the website locally at http://localhost:port/. The port number depends on whether you have other services running locally. Upon running `hugo server`, you'll be able to see the port where the site is being displayed.
-
-How to update-align hugo version with the template requirements
-    ```powershell 
-    scoop update hugo-extended 
-    ``` 
-# 3. Customization
-## Icon Packages
-For comprehensive information about standard icons, please refer to the [official website](https://github.com/hugo-mods/icons). Additionally, for advanced functionality and other icon sets, consider installing additional packages.
+# 3. Deployment
+Pushing to `main` triggers `.github/workflows/publish.yaml`, which runs `npm run build` and
+deploys `dist/` to GitHub Pages. Netlify builds with the same command (see `netlify.toml`).

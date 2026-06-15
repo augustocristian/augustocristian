@@ -1,0 +1,50 @@
+---
+// One funded project on the projects timeline: year marker + collapsible
+// card with thumbnail, status/grant chips and the funding details list.
+const { project, t } = Astro.props;
+---
+<article class="proj-item" id={project.id}>
+  <div class="timeline-marker">
+    <div class="timeline-dot"></div>
+    <span class="timeline-year">{project.year_start}</span>
+  </div>
+  <details class="timeline-card">
+    <summary>
+      <div class="timeline-thumb">
+        <img src={`/${project.image}`} alt={project.title} />
+      </div>
+      <div class="timeline-info">
+        <div class="timeline-meta">
+          <span class={`badge badge-status-${project.status}`}>{project.status_label}</span>
+          <span class="tag">{project.summary}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p class="timeline-subtitle text-muted">{project.full_title}</p>
+        <p class="proj-dates">{project.date_range}</p>
+      </div>
+      <svg class="timeline-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </summary>
+    <dl class="project-details">
+      <dt>{t.project_funding}</dt>
+      <dd>{project.funding_body}</dd>
+      {project.has_amount && (
+        <Fragment>
+          <dt>{t.project_amount}</dt>
+          <dd>{project.amount}</dd>
+        </Fragment>
+      )}
+      <dt>{t.project_duration}</dt>
+      <dd>{project.date_range}</dd>
+      <dt>{t.project_partners}</dt>
+      <dd>{project.partners}</dd>
+      <dt>{t.project_researchers}</dt>
+      <dd>{project.researchers}</dd>
+      {project.has_role && (
+        <Fragment>
+          <dt>{t.project_role}</dt>
+          <dd>{project.role}</dd>
+        </Fragment>
+      )}
+    </dl>
+  </details>
+</article>

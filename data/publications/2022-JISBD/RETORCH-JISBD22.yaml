@@ -1,0 +1,28 @@
+﻿type: conference
+authors: [augusto, moranjesus, claudio, tuya]
+date: 2022-09-05
+venue_short: "JISBD22"
+location: "Santiago de Compostela, Spain"
+abstract: >-
+  La ejecuciÃ³n de pruebas de sistema puede requerir grandes cantidades de recursos
+  fÃ­sico-lÃ³gicos al necesitar todo el sistema para su ejecuciÃ³n. Ejecutarlas en la
+  infraestructura potencialmente limitada y escalable del Cloud, permite obtener un mejor
+  coste, eligiendo entre las distintas infraestructuras disponibles. No obstante, es
+  habitual que la ejecuciÃ³n de las pruebas no use totalmente los objetos contratados por lo
+  que no todo el coste es usado. En este trabajo se detalla un modelo de coste que tiene en
+  cuenta los recursos que requieren las pruebas de sistema en el Cloud. El modelo divide el
+  coste de la infraestructura (el coste de los objetos contratados) en el coste del plan de
+  ejecuciÃ³n (el coste de los distintos recursos requeridos por las pruebas) y
+  sobresuscripciÃ³n (el coste de la infraestructura que no utilizada). Con el modelo se
+  pueden comparar diferentes combinaciones de objetos en el Cloud, no solo con el coste de
+  la infraestructura (contratado) sino que se puede elegir que objetos se contratan y cÃ³mo
+  se usan atendiendo al coste del plan de ejecuciÃ³n (usado) y de sobresuscripciÃ³n (no
+  usado).
+tags: [Continuous integration, Continuous testing, End-to-End testing, Software testing, Test orchestration, Testing in the cloud]
+featured: false
+links:
+  pdf: "https://hdl.handle.net/10651/72494"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/72494/2022_09_JISBD22_RETORCH_Presentation.pdf?sequence=4&isAllowed=y"
+projects: [testbus]
+lat: 42.8782
+lng: -8.5448

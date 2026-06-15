@@ -1,0 +1,19 @@
+---
+import LinkButtonRow from './LinkButtonRow.astro';
+const { talk, t } = Astro.props;
+---
+<article class="card talk-card" id={talk.id}>
+  <img src={`/${talk.image}`} alt={talk.title} />
+  <p class="talk-meta">{talk.date_range} · {talk.location}</p>
+  <h3>{talk.has_event_url
+    ? <a href={talk.event_url} target="_blank" rel="noopener">{talk.title}</a>
+    : talk.title}</h3>
+  <p>{talk.summary}</p>
+  {talk.abstract && (
+    <details class="pub-abstract-details">
+      <summary>{t.talk_abstract}</summary>
+      <p class="pub-abstract">{talk.abstract}</p>
+    </details>
+  )}
+  <LinkButtonRow links={talk.links} />
+</article>

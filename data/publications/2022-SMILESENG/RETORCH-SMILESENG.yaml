@@ -1,0 +1,31 @@
+type: conference
+authors: [augusto, moranjesus, claudio, tuya]
+date: 2022-07-24
+venue_short: "SMILESENG22"
+location: "Córdoba, Spain"
+abstract: >-
+  End-to-end (E2E) test suite execution is expensive due to the number of complex resources
+  required. When E2E test suites are executed frequently into a continuous integration
+  system, the total amount of resources required may be prohibitive, moreover when the
+  tests are run in the Cloud with different billing strategies. Traditional techniques to
+  optimize the test suites, such as test suite reduction, minimization, or prioritization,
+  are limited in E2E due to the fact that reordering or selecting a subset of test cases
+  also requires deploying the same expensive system. The current Ph.D. thesis aims to
+  achieve an efficient E2E test execution for large systems in the Cloud. This is done
+  through a smart characterization of the resources required by the test cases, grouping
+  and scheduling them according to their resource usage to avoid unnecessary redeployments
+  and reduce execution time, and finally, executing them into a combination of Cloud
+  infrastructure (i.e., containers, virtual machines, and services) to optimize the costs
+  employed in executing the test suite. Based on the scheduled test cases, we elaborate a
+  cost model for selecting the most cost-effective infrastructure of those available in the
+  Cloud, considering both the cost of the resources required by the test cases and the
+  oversubscription cost (cost incurred in infrastructure contracted and not used during the
+  test suite execution).
+tags: [Continuous integration, Continuous testing, End-to-End testing, Software testing, Test orchestration, Testing in the cloud]
+featured: false
+links:
+  pdf: "https://hdl.handle.net/10651/75846"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/75846/22_SMILENG22_RETORCH_Presentation_RUO-1.pdf?sequence=2&isAllowed=y"
+projects: [testbus]
+lat: 37.8882
+lng: -4.7794

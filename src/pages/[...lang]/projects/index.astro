@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import ProjectTimelineItem from '../../../components/ProjectTimelineItem.astro';
+import { langStaticPaths, loadI18n } from '../../../lib/i18n.js';
+import { loadProjects } from '../../../lib/data.js';
+import { buildProjectViewModels } from '../../../lib/viewmodels.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const projects = buildProjectViewModels(loadProjects(), lang, t);
+---
+<BaseLayout lang={lang} t={t} pagePath="projects/" title={t.page_projects_heading} description={t.meta_desc_projects}>
+<main id="main">
+  <PageHeader eyebrow={t.page_projects_eyebrow} heading={t.page_projects_heading} description={t.page_projects_desc} />
+
+  <section class="section">
+    <div class="container">
+      <div class="projects-timeline">
+        {projects.map((project) => <ProjectTimelineItem project={project} t={t} />)}
+      </div>
+    </div>
+  </section>
+</main>
+</BaseLayout>

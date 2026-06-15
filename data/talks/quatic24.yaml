@@ -1,0 +1,34 @@
+﻿title: "17th International Conference on the Quality of Information and Communications Technology"
+title_es: "17.ª Conferencia Internacional sobre Calidad en Tecnologías de la Información y Comunicación"
+title_it: "17ª Conferenza Internazionale sulla Qualità nelle Tecnologie dell'Informazione e della Comunicazione"
+event_url: "https://2024.quatic.org/home"
+location: "Pisa, Italy"
+location_es: "Pisa, Italia"
+location_it: "Pisa, Italia"
+summary: "Participate as the Online Chair in the organizing committee."
+summary_es: "Participación como Online Chair en el comité organizador."
+summary_it: "Partecipazione come Online Chair nel comitato organizzatore."
+abstract: >-
+  QUATIC is a forum for disseminating advanced methods, techniques and tools for supporting
+  quality approaches to ICT engineering and management. Practitioners and researchers are
+  encouraged to exchange ideas and approaches on how to adopt a quality culture in ICT
+  process and product improvement and to provide practical studies in varying contexts.
+  Information on previous editions can be found here.
+abstract_es: >-
+  QUATIC es un foro para difundir métodos, técnicas y herramientas avanzadas que apoyen
+  enfoques de calidad en la ingeniería y gestión de las TIC. Se anima a profesionales e
+  investigadores a intercambiar ideas y enfoques sobre cómo adoptar una cultura de calidad
+  en la mejora de procesos y productos TIC, y a proporcionar estudios prácticos en distintos
+  contextos. La información sobre ediciones anteriores está disponible en el sitio web.
+abstract_it: >-
+  QUATIC è un forum per la divulgazione di metodi, tecniche e strumenti avanzati a supporto
+  degli approcci alla qualità nell'ingegneria e nella gestione delle TIC. Professionisti e
+  ricercatori sono incoraggiati a scambiare idee e approcci su come adottare una cultura
+  della qualità nel miglioramento dei processi e dei prodotti TIC, e a fornire studi pratici
+  in contesti diversi. Informazioni sulle edizioni precedenti sono disponibili sul sito.
+date_start: 2024-09-11
+date_end: 2024-09-13
+image: "img/talks/quatic24.jpeg"
+links:
+  - label: "Follow on X"
+    url: "https://twitter.com/quatic_conf2024"

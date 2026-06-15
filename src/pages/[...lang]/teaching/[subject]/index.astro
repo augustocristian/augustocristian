@@ -1,0 +1,131 @@
+---
+// Subject page: Theory/Labs/Seminars tabs. Each session is a collapsible unit
+// rendering its Markdown body, an optional embedded PDF from the external
+// teaching-materials repo, and an optional external repo link. Below the tabs,
+// GithubPdfList shows the subject folder of the materials repo live.
+import { render } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Exercise from '../../../../components/Exercise.astro';
+import PdfViewer from '../../../../components/PdfViewer.astro';
+import GithubPdfList from '../../../../components/GithubPdfList.astro';
+import { LANGS, loadI18n, localize, prefixFor } from '../../../../lib/i18n.js';
+import { loadSubjects } from '../../../../lib/data.js';
+import { loadSubjectSessions } from '../../../../lib/teaching.js';
+
+export function getStaticPaths() {
+  const subjects = loadSubjects().filter((s) => !s.hidden);
+  return LANGS.flatMap(({ code }) =>
+    subjects.map((subject) => ({
+      params: { lang: code === 'en' ? undefined : code, subject: subject.id },
+      props: { lang: code, subject },
+    })),
+  );
+}
+
+const { lang, subject } = Astro.props;
+const t = loadI18n(lang);
+const prefix = prefixFor(lang);
+const subjectTitle = localize(subject, 'title', lang) || subject.title;
+const pagePath = `teaching/${subject.id}/`;
+
+const sessions = await loadSubjectSessions(subject.id);
+const tabs = [
+  { key: 'theory', label: t.teaching_tab_theory, items: sessions.theory },
+  { key: 'labs', label: t.teaching_tab_labs, items: sessions.lab },
+  { key: 'seminars', label: t.teaching_tab_seminars, items: sessions.seminar },
+].filter((tab) => tab.items.length > 0);
+
+// Pre-render every session's MDX body (Content components can't be awaited
+// inside the template).
+const rendered = {};
+for (const tab of tabs) {
+  rendered[tab.key] = await Promise.all(tab.items.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })));
+}
+---
+<BaseLayout lang={lang} t={t} pagePath={pagePath} title={`${subjectTitle} — ${t.nav_teaching}`} description={t.meta_desc_teaching}>
+<main id="main">
+  <header class="page-header container">
+    <a href={`${prefix}teaching/`} class="subject-back-link">{t.teaching_back}</a>
+    <h1>{subjectTitle}</h1>
+  </header>
+
+  <div class="container subject-page">
+
+    <nav class="subject-tabs" aria-label={t.subject_tabs_aria}>
+      {tabs.map((tab, i) => (
+        <button class={`subject-tab-btn${i === 0 ? ' is-active' : ''}`} data-tab={tab.key}>{tab.label}</button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIdx) => (
+      <div class="subject-tab-panel" id={`tab-${tab.key}`} hidden={tabIdx !== 0}>
+        {rendered[tab.key].map(({ entry, Content }, idx) => (
+          <details class="subject-unit" open={idx === 0}>
+            <summary class="subject-unit-summary">
+              <span class="subject-unit-title">{entry.data.title}</span>
+              {entry.data.repo_url && (
+                <a class="btn btn-sm btn-outline" href={entry.data.repo_url} target="_blank" rel="noopener" onclick="event.stopPropagation()">{t.teaching_lab_external}</a>
+              )}
+            </summary>
+            <div class="subject-unit-body">
+              <div class="session-body lab-guide">
+                <Content components={{ Exercise }} />
+              </div>
+              {entry.data.pdf_url && <PdfViewer url={entry.data.pdf_url} title={entry.data.title} t={t} />}
+            </div>
+          </details>
+        ))}
+      </div>
+    ))}
+
+    <GithubPdfList subjectId={subject.id} t={t} />
+
+  </div>
+</main>
+
+<script>
+  // Tab switching with URL-hash persistence (#theory / #labs / #seminars).
+  const tabBtns = document.querySelectorAll('.subject-tab-btn');
+  const panels = document.querySelectorAll('.subject-tab-panel');
+
+  function activateTab(name, updateHash) {
+    let found = false;
+    panels.forEach((panel) => {
+      const match = panel.id === `tab-${name}`;
+      panel.hidden = !match;
+      if (match) found = true;
+    });
+    if (!found) return;
+    tabBtns.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.tab === name));
+    if (updateHash) history.replaceState(null, '', `#${name}`);
+  }
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.tab, true));
+  });
+
+  const hash = location.hash.slice(1);
+  if (hash) activateTab(hash, false);
+
+  // Lazy PDF embed: create the iframe only on first "View PDF" click.
+  document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const viewer = btn.closest('.pdf-viewer');
+      const wrap = viewer.querySelector('.pdf-frame-wrap');
+      if (!wrap.querySelector('iframe')) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'pdf-iframe';
+        iframe.src = viewer.dataset.pdfUrl;
+        iframe.title = viewer.dataset.pdfTitle || 'PDF';
+        wrap.appendChild(iframe);
+      }
+      const show = wrap.hidden;
+      wrap.hidden = !show;
+      btn.setAttribute('aria-expanded', String(show));
+    });
+  });
+</script>
+</BaseLayout>

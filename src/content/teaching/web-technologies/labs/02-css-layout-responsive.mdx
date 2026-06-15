@@ -1,0 +1,57 @@
+---
+title: "Lab 2: CSS Layout & Responsive Design"
+type: lab
+order: 2
+repo_url: "https://github.com/giis-uniovi/webtech-lab2"
+pdf_url: ""
+---
+
+## Introduction
+
+CSS controls the visual presentation of HTML. In this lab you will apply:
+
+- The **Box Model** (margin, border, padding, content)
+- **Flexbox** for one-dimensional layouts
+- **CSS Grid** for two-dimensional layouts
+- **Media queries** for responsive breakpoints
+
+**CSS Grid — responsive card layout**
+
+```css
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 2px 2px 0 #ccc;
+}
+```
+
+<Exercise title="Exercise 2.1 — Responsive Portfolio Grid">
+
+Using CSS Grid, create a card layout that:
+
+- Displays **3 columns** on desktop (≥ 900px)
+- Collapses to **2 columns** on tablet (600px – 899px)
+- Shows **1 column** on mobile (under 600px)
+
+Each card should contain a title, a short description, and a "View Project" link.
+
+</Exercise>
+
+<Exercise title="Exercise 2.2 — Dark Mode Toggle">
+
+Add a light/dark theme toggle to your page using CSS custom properties:
+
+- Define `--color-bg` and `--color-text` in `:root`
+- Override them under a `[data-theme="dark"]` selector
+- Use JavaScript to toggle the `data-theme` attribute on `<html>`
+
+</Exercise>

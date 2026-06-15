@@ -1,0 +1,17 @@
+/* =========================================================
+   Talks
+   ========================================================= */
+.talk-card > img {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.talk-meta {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

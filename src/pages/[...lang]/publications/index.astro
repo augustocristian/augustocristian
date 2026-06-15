@@ -1,0 +1,95 @@
+---
+// Publications page: filter bar, full cards, detail overlay <dialog>.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import PubCard from '../../../components/PubCard.astro';
+import PubDetailTemplate from '../../../components/PubDetailTemplate.astro';
+import FilterBar from '../../../components/FilterBar.astro';
+import { langStaticPaths, loadI18n, prefixFor } from '../../../lib/i18n.js';
+import { loadCoauthors, loadProjects, loadPublications } from '../../../lib/data.js';
+import { buildPublicationViewModels, buildAuthor, byDateDesc } from '../../../lib/viewmodels.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const prefix = prefixFor(lang);
+const coauthors = loadCoauthors();
+const projects = loadProjects();
+const projectsById = Object.fromEntries(projects.map((p) => [p.id, p]));
+
+const publications = buildPublicationViewModels(loadPublications(), coauthors, projectsById, lang, prefix, t);
+const allPublications = [...publications].sort(byDateDesc('date'));
+
+const pubAuthorKeys = new Set(allPublications.flatMap((p) => p.data_authors.split(' ').filter(Boolean)));
+const filterYears = [...new Set(allPublications.map((p) => p.year))].sort((a, b) => Number(b) - Number(a));
+const filterQuartiles = ['Q1', 'Q2', 'Q3', 'Q4'].filter((q) => allPublications.some((p) => p.quartile === q));
+const filterAuthorsList = Object.keys(coauthors)
+  .filter((key) => pubAuthorKeys.has(key))
+  .map((key) => ({ key, ...buildAuthor(coauthors, key) }));
+
+const filterGroups = [
+  { label: t.filter_year, filter: 'year',
+    options: filterYears.map((y) => ({ value: y, label: y })) },
+  { label: t.filter_type, filter: 'type',
+    options: [
+      { value: 'journal', label: t.filter_type_journal },
+      { value: 'conference', label: t.filter_type_conference },
+    ] },
+  { label: t.filter_authors, filter: 'authors', kind: 'author',
+    options: filterAuthorsList.map((a) => ({ value: a.key, label: a.name, avatar_path: a.avatar_path, initials: a.initials })) },
+  ...(filterQuartiles.length > 0
+    ? [{ label: t.filter_quartile, filter: 'quartile',
+         options: filterQuartiles.map((q) => ({ value: q, label: q })) }]
+    : []),
+];
+---
+<BaseLayout lang={lang} t={t} pagePath="publications/" title={t.page_pubs_heading} description={t.meta_desc_publications}>
+<main id="main">
+  <PageHeader eyebrow={t.page_pubs_eyebrow} heading={t.page_pubs_heading} description={t.page_pubs_desc} />
+
+  <section class="section">
+    <div class="container">
+      <div class="pub-layout">
+
+        <aside class="pub-filters">
+          <FilterBar variant="sidebar" heading={t.filters_heading} showCount={false} pageSize={10}
+                     groups={filterGroups} target="#pub-list" total={allPublications.length}
+                     resetLabel={t.filter_reset} />
+        </aside>
+
+        <div class="pub-results">
+          <div id="pub-list">
+            {allPublications.map((pub) => (
+              <div class="pub-item" data-filter-item
+                   data-year={pub.year}
+                   data-type={pub.type}
+                   data-authors={pub.data_authors}
+                   data-quartile={pub.quartile}>
+                <PubCard pub={pub} t={t} />
+                <PubDetailTemplate pub={pub} t={t} />
+              </div>
+            ))}
+          </div>
+          <div class="pub-results-footer">
+            <p class="filter-results-line" data-count-for="#pub-list">
+              {t.filter_showing} <strong class="filter-range">1–{Math.min(10, allPublications.length)}</strong> {t.filter_of} <strong class="filter-count-n">{allPublications.length}</strong> {t.filter_results}
+            </p>
+            <nav class="pager" data-pager-for="#pub-list" aria-label={t.pager_aria}
+                 data-label-next={t.pager_next} data-label-last={t.pager_last}></nav>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Publication detail dialog (native <dialog> for built-in accessibility) -->
+<dialog id="pub-overlay" class="pub-overlay" aria-label={t.pub_overlay_aria}>
+  <button class="pub-overlay-close" id="pub-overlay-close" aria-label={t.pub_detail_close}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="pub-overlay-body" id="pub-overlay-body"></div>
+</dialog>
+</BaseLayout>

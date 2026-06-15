@@ -1,0 +1,73 @@
+# Certifications and awards, rendered in this order.
+# `url` and `summary` are optional — leave `url: ""` if there's nothing to link to.
+# `icon` is optional — point it at an SVG/PNG under src/img/org/, or remove the line.
+# Translatable fields: title, summary (use _es / _it suffix for proper text fields).
+
+- title: "Deep Learning Fundamentals"
+  title_es: "Fundamentos de Deep Learning"
+  title_it: "Fondamenti di Deep Learning"
+  url: ""
+  date: 2022-09-29
+  awarder: "Nvidia"
+  icon: "img/org/org-nvidia.svg"
+
+- title: "First Certificate in English"
+  url: "https://www.cambridgeenglish.org/exams-and-tests/first/"
+  date: 2022-04-01
+  awarder: "Cambridge English Language Assessment"
+  icon: "img/org/org-cambridge.svg"
+
+- title: "Azure DP-900"
+  url: "https://www.credly.com/badges/169376f3-85bd-4c34-b0b2-de09a7a4f976?source=linked_in_profile"
+  date: 2022-01-18
+  awarder: "Microsoft"
+  icon: "img/org/org-microsoft.svg"
+
+- title: "Azure SC-900"
+  url: "https://www.credly.com/badges/543c9244-5e58-43c8-80f7-75e78349f936?source=linked_in_profile"
+  date: 2022-01-21
+  awarder: "Microsoft"
+  icon: "img/org/org-microsoft.svg"
+
+- title: "Azure PL-900"
+  url: "https://www.credly.com/badges/7cc83dff-338b-4de9-a41c-a9c40b40a438?source=linked_in_profile"
+  date: 2022-01-21
+  awarder: "Microsoft"
+  icon: "img/org/org-microsoft.svg"
+
+- title: "Azure AI-900"
+  url: "https://www.credly.com/badges/f009557b-5cac-4090-8030-b4b88a4dc988?source=linked_in_profile"
+  date: 2021-07-07
+  awarder: "Microsoft"
+  icon: "img/org/org-microsoft.svg"
+
+- title: "Azure AZ-900"
+  url: "https://www.credly.com/badges/c6e86525-186d-4b17-b99d-1b6b9dcc7fbd?source=linked_in_profile"
+  date: 2021-06-25
+  awarder: "Microsoft"
+  icon: "img/org/org-microsoft.svg"
+
+- title: "ISTQB Certified Tester"
+  title_es: "Tester Certificado ISTQB"
+  title_it: "Tester Certificato ISTQB"
+  url: "https://isqi.org/en/"
+  date: 2021-01-01
+  awarder: "ISQI"
+  icon: "img/org/org-isqi.svg"
+  summary: "Credential Number: 20-CTFL-188015-09"
+  summary_es: "Número de Credencial: 20-CTFL-188015-09"
+  summary_it: "Numero di Credenziale: 20-CTFL-188015-09"
+
+- title: "Test Process and QA Team Management"
+  title_es: "Gestión de Procesos de Prueba y Equipos de QA"
+  title_it: "Gestione dei Processi di Test e Team QA"
+  url: "https://www.nexoqa.com/es-training.html"
+  date: 2020-12-03
+  awarder: "NexoQA"
+  icon: "img/org/org-nexoqa.svg"
+
+- title: "Advanced Agile Testing + DevTestOps"
+  url: "https://www.nexoqa.com/es-training.html"
+  date: 2020-12-18
+  awarder: "NexoQA"
+  icon: "img/org/org-nexoqa.svg"

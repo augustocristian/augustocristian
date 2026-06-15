@@ -1,0 +1,9 @@
+---
+// Comma-separated list of author chips. Separators live inside JSX
+// expressions so compressHTML cannot collapse them.
+import AuthorChip from './AuthorChip.astro';
+const { authors = [] } = Astro.props;
+---
+{authors.map((author, i) => (
+  <Fragment><AuthorChip author={author} />{i < authors.length - 1 && ', '}</Fragment>
+))}

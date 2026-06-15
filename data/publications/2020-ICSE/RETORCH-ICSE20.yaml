@@ -1,0 +1,28 @@
+﻿type: conference
+authors: [augusto]
+date: 2020-07-06
+venue_short: "ICSE20 (C4)"
+core: "A*"
+location: "Seoul, South Korea"
+abstract: >-
+  Virtualization and containerization have been two disruptive technologies in the past few
+  years. Both technologies have allowed isolating the applications with fewer resources and
+  have impacted fields such as Software Testing. In the field of testing, the execution of
+  the containerized/virtualized test suite has achieved great savings, but when the
+  complexity increases or the cost of deployment rises, there are open challenges like the
+  efficient execution of End to End (E2E) test suites. This paper proposes a research
+  problem and a feasible solution that looks to improve resource usage in the E2E tests,
+  towards smart resource identification and a proper organization of its execution in order
+  to achieve efficient and effective resource usage. The resources are characterized by a
+  series of attributes that provide information about the resource and its usage during the
+  E2E testing phase. The test cases are grouped and scheduled with the resources (i.e.
+  parallelized in the same machine or executed in a fixed arrangement), achieving an
+  efficient test suite execution and reducing its total cost/time.
+tags: [Orchestration, End to End Testing, Efficient use of resources, Containerization]
+featured: false
+links:
+  pdf: "http://hdl.handle.net/10651/58377"
+  poster: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/58377/2020_07_ICSE20_RETORCH_Poster.pdf?sequence=6&isAllowed=y"
+projects: [testbus]
+lat: 37.5665
+lng: 126.9780

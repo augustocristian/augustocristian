@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import TalkCard from '../../../components/TalkCard.astro';
+import { langStaticPaths, loadI18n } from '../../../lib/i18n.js';
+import { loadTalks } from '../../../lib/data.js';
+import { buildTalkViewModels } from '../../../lib/viewmodels.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const talks = buildTalkViewModels(loadTalks(), lang, t);
+---
+<BaseLayout lang={lang} t={t} pagePath="talks/" title={t.page_talks_heading} description={t.meta_desc_talks}>
+<main id="main">
+  <PageHeader eyebrow={t.page_talks_eyebrow} heading={t.page_talks_heading} description={t.page_talks_desc} />
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2">
+        {talks.map((talk) => <TalkCard talk={talk} t={t} />)}
+      </div>
+    </div>
+  </section>
+</main>
+</BaseLayout>

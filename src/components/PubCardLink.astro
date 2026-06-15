@@ -1,0 +1,18 @@
+---
+// Linked publication card used on the homepage — navigates to the detail
+// overlay on /publications/. `excerpt`/`tags` toggle the optional rows
+// (featured cards show both; the "latest" list shows neither).
+import PubCardHead from './PubCardHead.astro';
+const { pub, excerpt = false, tags = false } = Astro.props;
+---
+<a class="card-link" href={pub.pub_page_url}>
+  <article class="card">
+    <PubCardHead pub={pub} />
+    {excerpt && <p>{pub.excerpt}</p>}
+    {tags && pub.has_tags && (
+      <div class="tag-row">
+        {pub.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+  </article>
+</a>

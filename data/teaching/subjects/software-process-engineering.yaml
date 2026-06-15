@@ -1,0 +1,5 @@
+title: "Software Process Engineering"
+title_es: "Ingeniería del Proceso Software"
+title_it: "Ingegneria del Processo Software"
+order: 2
+# Session content lives in src/content/teaching/software-process-engineering/ (MDX files).

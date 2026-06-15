@@ -1,0 +1,35 @@
+title: "8th International Workshop on Artificial Intelligence in Software Testing (AI TEST 2026)"
+title_es: "8.º Taller Internacional sobre Inteligencia Artificial en las Pruebas de Software (AI TEST 2026)"
+title_it: "8° Workshop Internazionale sull'Intelligenza Artificiale nel Software Testing (AI TEST 2026)"
+event_url: "https://cisose.fit.ac.jp/aitest/index.php/committees/"
+location: "Japan"
+location_es: "Japón"
+location_it: "Giappone"
+summary: "Program Committee Member at AI TEST 2026."
+summary_es: "Miembro del Comité de Programa en AI TEST 2026."
+summary_it: "Membro del Comitato di Programma di AI TEST 2026."
+abstract: >-
+  AI TEST is an international workshop focused on the intersection of Artificial
+  Intelligence and Software Testing. It gathers researchers and practitioners to
+  discuss the latest advances in applying AI techniques to testing activities, as
+  well as the challenges of testing AI-based systems. As a Program Committee Member,
+  I contribute to the scientific review process by evaluating submitted papers.
+abstract_es: >-
+  AI TEST es un taller internacional centrado en la intersección de la Inteligencia
+  Artificial y las Pruebas de Software. Reúne a investigadores y profesionales para
+  discutir los últimos avances en la aplicación de técnicas de IA a las actividades
+  de prueba, así como los retos de probar sistemas basados en IA. Como miembro del
+  Comité de Programa, contribuyo al proceso de revisión científica evaluando los
+  trabajos enviados.
+abstract_it: >-
+  AI TEST è un workshop internazionale focalizzato sull'intersezione tra Intelligenza
+  Artificiale e Software Testing. Riunisce ricercatori e professionisti per discutere
+  i più recenti progressi nell'applicazione di tecniche AI alle attività di test, nonché
+  le sfide del testing di sistemi basati su AI. Come membro del Comitato di Programma,
+  contribuisco al processo di revisione scientifica valutando i lavori sottomessi.
+date_start: 2026-01-01
+date_end: 2026-12-31
+image: "img/talks/aitest26.png"
+links:
+  - label: "Committees"
+    url: "https://cisose.fit.ac.jp/aitest/index.php/committees/"

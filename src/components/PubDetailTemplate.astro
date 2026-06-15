@@ -1,0 +1,59 @@
+---
+// Inert <template> with the detail-overlay content for one publication.
+// controller.js clones it into the #pub-overlay <dialog> on card click.
+import PubBadges from './PubBadges.astro';
+import AuthorList from './AuthorList.astro';
+import LinkButtonRow from './LinkButtonRow.astro';
+const { pub, t } = Astro.props;
+---
+<template class="pub-detail-tpl">
+<div class="pub-detail">
+
+  <PubBadges pub={pub} class="pub-detail-chips" />
+
+  <h2 class="pub-detail-title">{pub.title}</h2>
+  <p class="pub-venue pub-detail-venue">{pub.venue} — {pub.date_formatted}</p>
+  <p class="pub-authors"><AuthorList authors={pub.authors} /></p>
+
+  <div class="pub-detail-section">
+    <h3 class="pub-detail-section-head">{t.pub_detail_abstract}</h3>
+    <p class="pub-detail-abstract">{pub.abstract}</p>
+  </div>
+
+  {pub.has_pub_projects && (
+    <div class="pub-detail-section">
+      <h3 class="pub-detail-section-head">{t.pub_detail_projects}</h3>
+      <div class="pub-detail-projects">
+        {pub.pub_projects.map((proj) => (
+          <a class="pub-detail-project-card" href={proj.url}>
+            {proj.has_image
+              ? <img class="pub-detail-project-img" src={proj.image} alt={proj.title} />
+              : <div class="pub-detail-project-placeholder">{proj.title}</div>}
+            <div class="pub-detail-project-info">
+              <span class="pub-detail-project-title">{proj.title}</span>
+              {proj.has_full_title && <span class="pub-detail-project-subtitle">{proj.full_title}</span>}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {pub.has_related_pubs && (
+    <div class="pub-detail-section">
+      <h3 class="pub-detail-section-head">{t.pub_detail_related}</h3>
+      <ul class="pub-detail-related-list">
+        {pub.related_pubs.map((rel) => (
+          <li class="pub-detail-related-item">
+            <a class="pub-detail-related-link" href={rel.pub_page_url}>{rel.title}</a>
+            <span class="pub-detail-related-meta">{rel.venue_short} · {rel.year}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <LinkButtonRow links={pub.links} class="pub-detail-actions" />
+
+</div>
+</template>

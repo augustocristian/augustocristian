@@ -1,0 +1,63 @@
+---
+// Shared faceted-filter panel, driven client-side by initFilters().
+//
+// Props:
+//   groups        [{ label, filter, kind?: 'text'|'author'|'logo',
+//                    options: [{ value, label?, avatar_path?, initials?, logo_path?, title? }] }]
+//                 `filter` must equal the data-* attribute name on the items.
+//   target        CSS selector of the list whose [data-filter-item] children get filtered.
+//   variant       'panel' (default, horizontal boxed bar) | 'sidebar' (vertical
+//                 checkbox groups — desktop left column, stacks on top on mobile).
+//   heading       optional panel heading (used by the sidebar variant).
+//   pageSize      paginate the target list client-side (0 = no pagination); the
+//                 page expects a matching [data-pager-for]/[data-count-for] footer.
+//   total         total item count (initial value of the counter).
+//   showCount     render the count inside the bar (default true; sidebar pages
+//                 usually show the count in the results footer instead).
+//   countPrefix   text before the counter ('' to omit), countSuffix after it.
+//   resetLabel    label of the reset button.
+//   searchable    render a text search input (matches data-[searchField]).
+//   searchField / searchPlaceholder
+import AuthorAvatar from './AuthorAvatar.astro';
+
+const {
+  groups = [], target, total,
+  variant = 'panel', heading = '', pageSize = 0, showCount = true,
+  countPrefix = '', countSuffix = '', resetLabel,
+  searchable = false, searchField = '', searchPlaceholder = '',
+} = Astro.props;
+---
+<div class={`filter-bar${variant === 'sidebar' ? ' filter-bar--sidebar' : ''}`}
+     data-filter-root data-target={target}
+     data-search-field={searchField || undefined}
+     data-page-size={pageSize || undefined}>
+  {heading && <p class="filter-heading">{heading}</p>}
+  {groups.map((group) => (
+    <div class="filter-group">
+      <span class="filter-label">{group.label}</span>
+      <div class="filter-buttons">
+        {group.options.map((o) => (
+          group.kind === 'logo' ? (
+            <button class="filter-btn filter-btn--logo" data-filter={group.filter} data-value={o.value} title={o.title}>
+              <img src={o.logo_path} alt={o.title} class="filter-logo" />
+            </button>
+          ) : group.kind === 'author' ? (
+            <button class="filter-btn filter-btn--author" data-filter={group.filter} data-value={o.value}>
+              <AuthorAvatar name={o.label} avatar_path={o.avatar_path} initials={o.initials} />
+              {o.label}
+            </button>
+          ) : (
+            <button class="filter-btn" data-filter={group.filter} data-value={o.value}>{o.label}</button>
+          )
+        ))}
+      </div>
+    </div>
+  ))}
+  <div class="filter-footer">
+    {searchable && <input class="filter-search" type="text" data-search placeholder={searchPlaceholder} aria-label={searchPlaceholder} />}
+    <div class="filter-meta">
+      {showCount && <span class="filter-count">{countPrefix && `${countPrefix} `}<strong class="filter-count-n">{total}</strong>{countSuffix && ` ${countSuffix}`}</span>}
+      <button class="filter-reset">{resetLabel}</button>
+    </div>
+  </div>
+</div>

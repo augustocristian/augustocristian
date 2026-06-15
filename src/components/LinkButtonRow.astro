@@ -1,0 +1,13 @@
+---
+// Row of small icon buttons from a links array ({url, label, icon_svg}) —
+// used by publication/talk cards and the detail overlay. Renders nothing
+// when empty; `class` appends extra classes to the row.
+const { links = [], class: className = '' } = Astro.props;
+---
+{links.length > 0 && (
+  <div class={`btn-row${className ? ` ${className}` : ''}`}>
+    {links.map((l) => (
+      <a class="btn btn-sm" href={l.url} target="_blank" rel="noopener"><Fragment set:html={l.icon_svg} /> {l.label}</a>
+    ))}
+  </div>
+)}

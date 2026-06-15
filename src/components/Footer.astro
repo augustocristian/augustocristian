@@ -1,0 +1,15 @@
+---
+import { loadProfile } from '../lib/data.js';
+import SocialLinks from './SocialLinks.astro';
+
+const profile = loadProfile();
+const currentYear = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <SocialLinks />
+    <p class="footer-note">
+      &copy; {currentYear} {profile.name}. <a href={profile.footer.license_url} target="_blank" rel="license noopener">{profile.footer.copyright}</a>.
+    </p>
+  </div>
+</footer>

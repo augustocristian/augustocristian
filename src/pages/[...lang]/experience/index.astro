@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import AuthorChip from '../../../components/AuthorChip.astro';
+import TimelineItem from '../../../components/TimelineItem.astro';
+import { langStaticPaths, loadI18n } from '../../../lib/i18n.js';
+import { loadEducation, loadExperience, loadAwards, loadLanguages, loadCoauthors } from '../../../lib/data.js';
+import { buildEducationViewModels, buildExperienceViewModels, buildAwardViewModels } from '../../../lib/viewmodels.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const coauthors = loadCoauthors();
+const education = buildEducationViewModels(loadEducation(), lang, t);
+const experience = buildExperienceViewModels(loadExperience(), lang, t, coauthors);
+const awards = buildAwardViewModels(loadAwards(), lang, t);
+const languages = loadLanguages();
+---
+<BaseLayout lang={lang} t={t} pagePath="experience/" title={t.page_exp_heading} description={t.meta_desc_experience}>
+<main id="main">
+  <PageHeader eyebrow={t.page_exp_eyebrow} heading={t.page_exp_heading} description={t.page_exp_desc} />
+
+  <section class="section">
+    <div class="container">
+      <SectionHead heading={t.exp_education} />
+      <div class="timeline">
+        {education.map((edu) => (
+          <TimelineItem dateRange={edu.date_range} heading={edu.area}>
+            <Fragment slot="org">
+              {edu.has_institution_logo && <img src={`/${edu.institution_logo}`} alt="" class="timeline-org-logo" />}
+              {edu.institution}
+            </Fragment>
+            {edu.has_summary && <div class="timeline-summary" set:html={edu.summary_html} />}
+            {edu.has_button && <a class="btn btn-sm btn-outline" href={edu.button.url} target="_blank" rel="noopener">{edu.button.text}</a>}
+          </TimelineItem>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <SectionHead heading={t.exp_work} />
+      <div class="timeline">
+        {experience.map((exp) => (
+          <TimelineItem dateRange={exp.date_range} heading={exp.position}>
+            <Fragment slot="org">
+              {exp.org_logos.map((logo) => <img src={`/${logo.path}`} alt="" class="timeline-org-logo" />)}
+              <a href={exp.company_url} target="_blank" rel="noopener">{exp.company_name}</a>{exp.location && ` · ${exp.location}`}
+            </Fragment>
+            {exp.has_degrees && (
+              <div class="degree-chips">
+                {exp.degrees.map((d) => (
+                  <span class="degree-chip">{d.has_logo && <img src={`/${d.logo}`} alt="" class="degree-chip-logo" />}{d.name}</span>
+                ))}
+              </div>
+            )}
+            {exp.has_collaborator && <p class="timeline-collaborator"><span class="timeline-collaborator-label">{t.exp_collaborator}</span> <AuthorChip author={exp.collaborator} /></p>}
+            {exp.has_subjects
+              ? <ul class="timeline-summary">{exp.subjects.map((s) => <li>{s.name}</li>)}</ul>
+              : <div class="timeline-summary" set:html={exp.summary_html} />}
+          </TimelineItem>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead heading={t.exp_awards} />
+      <div class="awards-grid">
+        {awards.map((award) => (
+          <div class="card award-card">
+            {award.has_icon && <img class="award-icon" src={`/${award.icon}`} alt="" />}
+            <div class="award-body">
+              <h4>{award.has_url
+                ? <a href={award.url} target="_blank" rel="noopener">{award.title}</a>
+                : award.title}</h4>
+              <p class="award-meta">{award.awarder} · {award.date_formatted}</p>
+              {award.has_summary && <p class="text-muted">{award.summary}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <SectionHead heading={t.exp_languages} />
+      <div class="languages-list">
+        {languages.map((language) => (
+          <div class="language-row">
+            <span class="language-name">{language.name}</span>
+            <div class="language-bar-track"><div class="language-bar-fill" style={`width: ${language.percent}%`}></div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+</BaseLayout>

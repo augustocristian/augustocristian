@@ -1,0 +1,153 @@
+﻿# ── Language metadata ──────────────────────────────────────────────────────
+lang: en
+html_lang: en
+months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+present: "Present"
+profile_role: "Assistant Professor"
+
+# ── Navigation ─────────────────────────────────────────────────────────────
+nav_home: "Home"
+nav_publications: "Publications"
+nav_talks: "Talks"
+nav_experience: "Experience"
+nav_projects: "Projects"
+nav_teaching: "Teaching"
+# Navigation aria-labels
+nav_aria_home: "Home"
+skip_to_content: "Skip to content"
+nav_aria_lang: "Language"
+nav_aria_theme: "Toggle colour theme"
+nav_aria_menu: "Toggle navigation"
+
+# ── SEO meta descriptions (one per page) ──────────────────────────────────
+meta_desc_home: "Explore Cristian Augusto's personal website: research, publications and more."
+meta_desc_publications: "Journal articles and conference papers by Cristian Augusto."
+meta_desc_talks: "Conferences and talks Cristian Augusto has participated in."
+meta_desc_experience: "Education, work experience, certifications and languages."
+meta_desc_projects: "Funded research projects and industry collaborations."
+meta_desc_teaching: "Course materials and supervised final degree projects."
+
+# ── Homepage ───────────────────────────────────────────────────────────────
+# Hero
+hero_greeting: "Hi, I'm"
+btn_view_publications: "View Publications"
+btn_download_cv: "Download CV"
+btn_view_all: "View all"
+# About section
+about_eyebrow: "About"
+about_heading: "A bit about me"
+# Globe — conference locations (section between hero and publications)
+globe_eyebrow: "Research Presence"
+globe_heading: "Where I've Presented"
+# Featured & latest publications
+featured_eyebrow: "Research"
+featured_heading: "Featured Publications"
+latest_eyebrow: "Recent work"
+latest_heading: "Latest Publications"
+# Talks preview strip
+talks_home_eyebrow: "Speaking"
+talks_home_heading: "Conferences & Talks"
+
+# ── Publications page ──────────────────────────────────────────────────────
+# Header
+page_pubs_eyebrow: "Research"
+page_pubs_heading: "Publications"
+page_pubs_desc: "A complete list of my journal articles and conference papers."
+# Filter bar
+filter_year: "Year"
+filter_type: "Type"
+filter_type_journal: "Journal"
+filter_type_conference: "Conference"
+filter_authors: "Authors"
+filter_quartile: "Quartile"
+filter_reset: "Reset filters"
+filter_showing: "Showing"
+filter_of: "of"
+filter_results: "results"
+filters_heading: "Filters"
+pager_next: "Next"
+pager_last: "Last"
+pager_aria: "Pagination"
+# Publication cards
+pub_abstract: "Abstract"
+pub_bibtex: "BibTeX"
+# Detail overlay (opened by clicking a card)
+pub_detail_abstract: "Abstract"
+pub_detail_projects: "Related Projects"
+pub_detail_related: "Related Publications"
+pub_detail_close: "Close"
+pub_overlay_aria: "Publication details"
+
+# ── Talks page ─────────────────────────────────────────────────────────────
+page_talks_eyebrow: "Speaking"
+page_talks_heading: "Conferences & Talks"
+page_talks_desc: "Events, conferences and committees I have participated in."
+talk_abstract: "Abstract"
+
+# ── Experience page ────────────────────────────────────────────────────────
+page_exp_eyebrow: "Background"
+page_exp_heading: "Experience"
+page_exp_desc: "Education, work experience, certifications and languages."
+exp_education: "Education"
+exp_work: "Work Experience"
+exp_awards: "Certifications & Awards"
+exp_languages: "Languages"
+exp_collaborator: "Collaborator:"
+
+# ── Projects page ──────────────────────────────────────────────────────────
+page_projects_eyebrow: "Research"
+page_projects_heading: "Projects"
+page_projects_desc: "Funded research projects and industry collaborations I have been part of."
+project_ongoing: "Ongoing"
+project_completed: "Completed"
+project_funding: "Funding"
+project_amount: "Amount"
+project_duration: "Duration"
+project_partners: "Partners"
+project_researchers: "Researchers"
+project_role: "Role"
+
+# ── Teaching page — index ─────────────────────────────────────────────────
+page_teaching_eyebrow: "Academia"
+page_teaching_heading: "Teaching"
+page_teaching_desc: "Course materials and supervised final degree projects."
+teaching_subject_eyebrow: "Subject"
+# TFG / TFM section headings
+teaching_students_eyebrow: "Students"
+teaching_tfg_heading: "Final Degree Projects"
+teaching_tfm_heading: "Master Degree Projects"
+teaching_no_tfgs: "No projects to display yet."
+# TFG / TFM card labels
+teaching_documentation: "Documentation"
+teaching_repository: "Repository"
+teaching_cosupervisor: "Co-supervisor:"
+teaching_abstract: "Abstract"
+# TFG / TFM filter bar
+teaching_filter_year: "Year"
+teaching_filter_institution: "Institution"
+teaching_filter_degree: "Degree"
+teaching_filter_keywords: "Keywords"
+teaching_filter_student: "Search by student…"
+teaching_filter_projects: "projects"
+teaching_filter_reset: "Reset"
+# Under-construction notice (set TEACHING_UNDER_CONSTRUCTION in src/config.js to hide)
+teaching_construction_notice: "🚧 This section is currently under construction. Materials will be added progressively."
+
+# ── Teaching page — subject pages ─────────────────────────────────────────
+# Navigation
+teaching_back: "← Back to Teaching"
+# Section tabs
+teaching_tab_theory: "Theory"
+teaching_tab_labs: "Labs"
+teaching_tab_seminars: "Seminars"
+subject_tabs_aria: "Subject sections"
+# Session actions (PDF embed + external repo link)
+teaching_unit_pdf: "Download PDF"
+teaching_view_pdf: "View PDF"
+teaching_lab_external: "View on GitHub"
+# Live listing from the external teaching-materials repository
+teaching_repo_materials: "Materials repository"
+
+# ── Shared / cross-page helpers ────────────────────────────────────────────
+pub_related_project: "Related project"
+pub_related_projects: "Related projects"

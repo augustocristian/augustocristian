@@ -1,0 +1,14 @@
+---
+// Embedded PDF for a teaching session. The iframe src is only set when the
+// user clicks "View PDF" so a page with many sessions never loads N PDFs at
+// once. The "Download PDF" link is the fallback for browsers that refuse to
+// render PDFs inline (most mobile browsers).
+const { url, title = 'PDF', t } = Astro.props;
+---
+<div class="pdf-viewer" data-pdf-url={url} data-pdf-title={title}>
+  <div class="btn-row pdf-viewer-actions">
+    <button class="btn btn-sm pdf-view-btn" type="button" aria-expanded="false">{t.teaching_view_pdf}</button>
+    <a class="btn btn-sm btn-outline" href={url} target="_blank" rel="noopener">{t.teaching_unit_pdf}</a>
+  </div>
+  <div class="pdf-frame-wrap" hidden></div>
+</div>

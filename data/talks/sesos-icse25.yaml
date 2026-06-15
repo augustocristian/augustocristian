@@ -1,0 +1,38 @@
+title: "3rd International Workshop on Systems of Systems and Ecosystems (SESOS 2025)"
+title_es: "3.er Taller Internacional sobre Sistemas de Sistemas y Ecosistemas (SESOS 2025)"
+title_it: "3° Workshop Internazionale sui Sistemi di Sistemi ed Ecosistemi (SESOS 2025)"
+event_url: "https://conf.researchr.org/committee/icse-2025/sesos-2025-proceedings-chair"
+location: "Ottawa, Canada"
+location_es: "Ottawa, Canadá"
+location_it: "Ottawa, Canada"
+summary: "Proceedings Chair at SESOS 2025, co-located with ICSE 2025."
+summary_es: "Proceedings Chair en SESOS 2025, evento colocado con ICSE 2025."
+summary_it: "Proceedings Chair a SESOS 2025, evento co-locato con ICSE 2025."
+abstract: >-
+  SESOS is a workshop co-located with the IEEE/ACM International Conference on Software
+  Engineering (ICSE) that focuses on the challenges and opportunities arising from systems
+  of systems and software ecosystems. As Proceedings Chair, I was responsible for
+  coordinating the final compilation and production of the workshop proceedings, ensuring
+  all accepted papers were correctly formatted and submitted for publication.
+abstract_es: >-
+  SESOS es un taller colocado con la Conferencia Internacional IEEE/ACM sobre Ingeniería
+  del Software (ICSE) que se centra en los retos y oportunidades que surgen de los sistemas
+  de sistemas y los ecosistemas software. Como Proceedings Chair, fui responsable de
+  coordinar la compilación final y la producción de las actas del taller, asegurando que
+  todos los artículos aceptados estuvieran correctamente formateados y enviados para su
+  publicación.
+abstract_it: >-
+  SESOS è un workshop co-locato con la Conferenza Internazionale IEEE/ACM sull'Ingegneria
+  del Software (ICSE) che si concentra sulle sfide e opportunità derivanti dai sistemi di
+  sistemi e dagli ecosistemi software. Come Proceedings Chair, sono stato responsabile del
+  coordinamento della compilazione finale e della produzione degli atti del workshop,
+  assicurando che tutti i lavori accettati fossero correttamente formattati e inviati per
+  la pubblicazione.
+date_start: 2025-04-27
+date_end: 2025-04-28
+image: "img/talks/sesos25.jpg"
+links:
+  - label: "ICSE 2025"
+    url: "https://conf.researchr.org/home/icse-2025"
+  - label: "SESOS Committee"
+    url: "https://conf.researchr.org/committee/icse-2025/sesos-2025-proceedings-chair"

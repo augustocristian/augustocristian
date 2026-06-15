@@ -1,0 +1,38 @@
+/* =========================================================
+   Footer
+   ========================================================= */
+.site-footer {
+  border-top: var(--border-w) solid var(--color-border);
+  padding-block: 2.5rem;
+  margin-top: 2rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.footer-note {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.footer-note a {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   Page header (non-home inner pages)
+   ========================================================= */
+.page-header {
+  padding-block: 3rem 1rem;
+}
+
+.page-header p {
+  max-width: 42rem;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}

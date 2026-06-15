@@ -1,0 +1,66 @@
+---
+// Shared page shell: <head> (SEO, fonts, theme FOUC guard), header, footer.
+// Props: lang ('en'|'es'|'it'), t (i18n dict), pagePath ('' | 'publications/' | …),
+// title (null → homepage title format), description.
+import '../styles/main.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { loadProfile } from '../lib/data.js';
+import { prefixFor } from '../lib/i18n.js';
+
+const { lang, t, pagePath = '', title = null, description = '' } = Astro.props;
+const profile = loadProfile();
+const prefix = prefixFor(lang);
+
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${t.profile_role}`;
+const canonical = new URL(`${prefix}${pagePath}`, profile.site_url).toString();
+const ogImage = new URL(profile.photo, profile.site_url).toString();
+const hreflangEn = new URL(`/${pagePath}`, profile.site_url).toString();
+const hreflangEs = new URL(`/es/${pagePath}`, profile.site_url).toString();
+const hreflangIt = new URL(`/it/${pagePath}`, profile.site_url).toString();
+---
+<!DOCTYPE html>
+<html lang={t.html_lang}>
+<head>
+  <meta charset="UTF-8" />
+  <!-- FOUC prevention: apply the stored theme before any CSS parses. Must stay
+       inline and synchronous — do not remove is:inline. -->
+  <script is:inline>try{var _t=localStorage.getItem('theme');if(_t==='light'||_t==='dark')document.documentElement.setAttribute('data-theme',_t)}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="en" href={hreflangEn} />
+  <link rel="alternate" hreflang="es" href={hreflangEs} />
+  <link rel="alternate" hreflang="it" href={hreflangIt} />
+  <link rel="alternate" hreflang="x-default" href={hreflangEn} />
+  <link rel="icon" type="image/png" href="/img/favicon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content={`@${profile.twitter}`} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Non-render-blocking font load: media="print" swaps to "all" once loaded -->
+  <link rel="stylesheet" media="print" onload="this.media='all'"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" /></noscript>
+
+  <slot name="head" />
+</head>
+<body>
+  <a class="skip-link" href="#main">{t.skip_to_content}</a>
+  <Header lang={lang} t={t} pagePath={pagePath} />
+  <slot />
+  <Footer />
+  <script>
+    import '../scripts/main.js';
+  </script>
+</body>
+</html>

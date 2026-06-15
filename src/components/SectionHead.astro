@@ -1,0 +1,23 @@
+---
+// Section heading: optional eyebrow + h2, optionally with a right-aligned
+// action button (rendered as the --row variant). Props arrive localized.
+import { loadIcon } from '../lib/icons.js';
+
+const { eyebrow = '', heading, actionHref = '', actionLabel = '' } = Astro.props;
+const hasAction = actionHref && actionLabel;
+const iconArrow = hasAction ? loadIcon('arrow-right') : '';
+---
+{hasAction ? (
+  <div class="section-head section-head--row">
+    <div>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2>{heading}</h2>
+    </div>
+    <a class="btn btn-outline btn-sm" href={actionHref}><Fragment set:html={iconArrow} /> {actionLabel}</a>
+  </div>
+) : (
+  <div class="section-head">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2>{heading}</h2>
+  </div>
+)}

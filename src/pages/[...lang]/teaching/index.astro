@@ -1,0 +1,79 @@
+---
+// Teaching index: subject cards + filtered TFG/TFM lists.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import ThesisSection from '../../../components/ThesisSection.astro';
+import { langStaticPaths, loadI18n, localize, prefixFor } from '../../../lib/i18n.js';
+import { loadSubjects, loadTFGs, loadTFMs, loadCoauthors } from '../../../lib/data.js';
+import { buildThesisViewModels } from '../../../lib/viewmodels.js';
+import { subjectSessionTypes } from '../../../lib/teaching.js';
+import { TEACHING_UNDER_CONSTRUCTION } from '../../../config.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const prefix = prefixFor(lang);
+const coauthors = loadCoauthors();
+
+const subjects = await Promise.all(
+  [...loadSubjects()]
+    .sort((a, b) => (a.order || 99) - (b.order || 99))
+    .filter((s) => !s.hidden)
+    .map(async (subject) => ({
+      id: subject.id,
+      title: localize(subject, 'title', lang) || subject.title,
+      subject_url: `${prefix}teaching/${subject.id}/`,
+      ...(await subjectSessionTypes(subject.id)),
+    })),
+);
+
+const tfgResult = buildThesisViewModels(loadTFGs(), coauthors, lang);
+const tfmResult = buildThesisViewModels(loadTFMs(), coauthors, lang);
+const tfgsIsAlt = subjects.length > 0 && (subjects.length - 1) % 2 === 0;
+const tfmsIsAlt = !tfgsIsAlt;
+---
+<BaseLayout lang={lang} t={t} pagePath="teaching/" title={t.page_teaching_heading} description={t.meta_desc_teaching}>
+<main id="main">
+  <PageHeader eyebrow={t.page_teaching_eyebrow} heading={t.page_teaching_heading} description={t.page_teaching_desc} />
+
+  {TEACHING_UNDER_CONSTRUCTION && (
+    <div class="construction-banner container">
+      <p>{t.teaching_construction_notice}</p>
+    </div>
+  )}
+
+  {subjects.length > 0 && (
+    <section class="section section-alt" id="subjects">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">{t.teaching_subject_eyebrow}</p>
+          <h2>{t.page_teaching_heading}</h2>
+        </div>
+        <div class="grid grid-2">
+          {subjects.map((subject) => (
+            <a class="card-link" href={subject.subject_url}>
+              <article class="card subject-card">
+                <h3>{subject.title}</h3>
+                <div class="subject-card-tags">
+                  {subject.has_theory && <span class="tag">{t.teaching_tab_theory}</span>}
+                  {subject.has_labs && <span class="tag">{t.teaching_tab_labs}</span>}
+                  {subject.has_seminars && <span class="tag">{t.teaching_tab_seminars}</span>}
+                </div>
+              </article>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <ThesisSection sectionId="tfgs" listId="tfg-list" heading={t.teaching_tfg_heading}
+                 isAlt={tfgsIsAlt} result={tfgResult} emptyMessage={t.teaching_no_tfgs} t={t} />
+
+  {tfmResult.items.length > 0 && (
+    <ThesisSection sectionId="tfms" listId="tfm-list" heading={t.teaching_tfm_heading}
+                   isAlt={tfmsIsAlt} result={tfmResult} t={t} />
+  )}
+</main>
+</BaseLayout>

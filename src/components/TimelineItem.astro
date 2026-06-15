@@ -1,0 +1,12 @@
+---
+// One entry of the education / work-experience timelines.
+// Named slot `org` holds the logo(s) + organisation line; the default slot
+// holds section-specific body content (summary, chips, buttons, …).
+const { dateRange, heading } = Astro.props;
+---
+<div class="timeline-item">
+  <p class="timeline-dates">{dateRange}</p>
+  <h3>{heading}</h3>
+  <p class="timeline-org"><slot name="org" /></p>
+  <slot />
+</div>

@@ -1,0 +1,77 @@
+name: "Cristian Augusto"
+status_emoji: "🦉"
+role: "Assistant Professor"
+tagline: "Researching resource-efficient End-to-End testing, software quality, and privacy-preserving data in the Cloud."
+tagline_es: "Investigo la eficiencia de recursos en pruebas End-to-End, calidad del software y preservación de la privacidad en la nube."
+tagline_it: "Studio l'efficienza delle risorse nel testing End-to-End, la qualità del software e la privacy-preserving data nel Cloud."
+email: "augustocristian@uniovi.es"
+photo: "img/profile.jpg"
+cv: "files/resume.pdf"
+
+site_title: "Augusto"
+site_url: "https://www.augustocristian.es/"
+site_description: "Explore Cristian Augusto's Personal Website: Click Here to see more"
+twitter: "augustocristian"
+
+organizations:
+  - name: "University of Oviedo"
+    url: "https://www.uniovi.es/en/"
+  - name: "Software Engineering Research Group (GIIS)"
+    url: "https://giis.uniovi.es/projects?lang=en"
+
+interests:
+  - "Software Engineering"
+  - "Software Testing"
+  - "Big Data"
+  - "Privacy-Preserving Data Publishing (PPDP)"
+
+social:
+  - icon: mail
+    label: "Email"
+    url: "mailto:augustocristian@uniovi.es"
+  - icon: github
+    label: "GitHub"
+    url: "https://github.com/augustocristian"
+  - icon: linkedin
+    label: "LinkedIn"
+    url: "https://www.linkedin.com/in/augustocristian/"
+  - icon: x
+    label: "X (Twitter)"
+    url: "https://twitter.com/August0cristian"
+  - icon: scholar
+    label: "Google Scholar"
+    url: "https://scholar.google.com/citations?user=oIJLk7MAAAAJ&hl=en&oi=ao"
+  - icon: orcid
+    label: "ORCID"
+    url: "https://orcid.org/0000-0001-6140-1375"
+  - icon: researchgate
+    label: "ResearchGate"
+    url: "https://www.researchgate.net/profile/Cristian-Augusto"
+  - icon: dblp
+    label: "DBLP"
+    url: "https://dblp.org/pid/241/2479.html"
+
+bio: |-
+  Cristian Augusto is an Assistant Professor at the Department of Computer Science of the
+  University of Oviedo, Asturias, Spain. Augusto has been teaching courses in software
+  engineering at various levels, and he is part of the GIIS Research group. His research
+  focuses on optimizing resource utilization in End-to-End testing, with an emphasis on an
+  optimal and cost-effective execution through test orchestration.
+
+bio_es: |-
+  Cristian Augusto es Profesor Ayudante Doctor en el Departamento de Informática de la
+  Universidad de Oviedo, Asturias, España. Imparte docencia en ingeniería del software en
+  distintos niveles y forma parte del grupo de investigación GIIS. Su investigación se centra
+  en la optimización del uso de recursos en el testing End-to-End, con énfasis en una
+  ejecución óptima y rentable mediante la orquestación de pruebas.
+
+bio_it: |-
+  Cristian Augusto è Professore Assistente presso il Dipartimento di Informatica
+  dell'Università di Oviedo, Asturie, Spagna. Tiene corsi di ingegneria del software a vari
+  livelli e fa parte del gruppo di ricerca GIIS. La sua ricerca si concentra
+  sull'ottimizzazione dell'utilizzo delle risorse nel testing End-to-End, con enfasi su
+  un'esecuzione ottimale ed economicamente efficiente attraverso l'orchestrazione dei test.
+
+footer:
+  copyright: "This work is licensed under CC BY-NC-ND"
+  license_url: "https://creativecommons.org/licenses/by-nc-nd/4.0/"

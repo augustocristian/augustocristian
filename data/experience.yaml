@@ -1,0 +1,429 @@
+# Work experience. Rendered newest-first by `date_start` (the build script sorts this
+# automatically), so you can append new entries anywhere in this list.
+# `date_end` can be left empty ("") for an ongoing position.
+# `company_logo` is optional — point it at an SVG/PNG under src/img/org/, or remove the line.
+
+- position: "Research Internship"
+  position_es: "Estancia de Investigación"
+  position_it: "Internship di Ricerca"
+  company_name: "ISTI-CNR"
+  company_url: "https://www.isti.cnr.it/en/"
+  company_logo: "img/org/org-isti.svg"
+  location: "Pisa, Italy"
+  location_es: "Pisa, Italia"
+  location_it: "Pisa, Italia"
+  collaborator: lonetti
+  date_start: 2026-03-06
+  date_end: 2026-06-06
+  summary: >-
+    Research internship with Francesca Lonetti at the Software Engineering & Dependable
+    Computing Research Lab (SECD), ISTI-CNR. Investigating the use of Large Language Models
+    in the test configuration process for system-level testing.
+  summary_es: >-
+    Estancia de investigación con Francesca Lonetti en el laboratorio de Ingeniería del
+    Software y Computación Dependable (SECD), ISTI-CNR. Investigación sobre el uso de
+    Modelos de Lenguaje de Gran Escala en el proceso de configuración de pruebas para
+    testing a nivel de sistema.
+  summary_it: >-
+    Internship di ricerca con Francesca Lonetti presso il laboratorio di Software Engineering
+    & Dependable Computing (SECD), ISTI-CNR. Ricerca sull'uso dei Large Language Models
+    nel processo di configurazione del test per il testing a livello di sistema.
+
+- position: "Assistant Professor"
+  position_es: "Profesor Ayudante Doctor"
+  position_it: "Professore Assistente"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: ""
+  date_start: 2025-09-01
+  date_end: ""
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computer Engineering (IT)"
+      name_es: "Grado en Ingeniería Informática en TI"
+      name_it: "Ingegneria Informatica (IT)"
+      logo: "img/org/org-epigijon.svg"
+  subjects:
+    - name: "Introduction to the Software Engineering Process"
+      name_es: "Introducción al Proceso Software"
+      name_it: "Introduzione al Processo Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Quality, Validation & Verification of Software"
+      name_es: "Calidad, Validación y Verificación del Software"
+      name_it: "Qualità, Validazione e Verifica del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Web Technologies"
+      name_es: "Tecnologías Web"
+      name_it: "Tecnologie Web"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Final Degree Projects"
+      name_es: "Trabajos de Fin de Grado"
+      name_it: "Progetti di Tesi"
+      logo: "img/org/org-eii.svg"
+
+- position: "Visiting Postdoctoral Researcher"
+  position_es: "Investigador Postdoctoral Visitante"
+  position_it: "Ricercatore Postdottorale Visitante"
+  company_name: "ISTI-CNR"
+  company_url: "https://www.isti.cnr.it/en/"
+  company_logo: "img/org/org-isti.svg"
+  location: "Pisa, Italy"
+  location_es: "Pisa, Italia"
+  location_it: "Pisa, Italia"
+  collaborator: lonetti
+  date_start: 2025-06-16
+  date_end: 2025-08-31
+  summary: >-
+    Research Internship with Francesca Lonetti in the Software Engineering & Dependable
+    Computing Research Lab (SECD). Researching and developing the future implications of
+    Large Language Models in Software Testing.
+  summary_es: >-
+    Estancia de investigación con Francesca Lonetti en el laboratorio de Ingeniería del
+    Software y Computación Dependable (SECD). Investigando y desarrollando las implicaciones
+    futuras de los Modelos de Lenguaje de Gran Escala en las Pruebas de Software.
+  summary_it: >-
+    Internship di ricerca con Francesca Lonetti presso il laboratorio di Software Engineering
+    & Dependable Computing (SECD). Ricerca e sviluppo sulle implicazioni future dei Large
+    Language Models nel Software Testing.
+
+- position: "Visiting Researcher"
+  position_es: "Investigador Visitante"
+  position_it: "Ricercatore Visitante"
+  company_name: "ISTI-CNR"
+  company_url: "https://www.isti.cnr.it/en/"
+  company_logo: "img/org/org-isti.svg"
+  location: "Pisa, Italy"
+  location_es: "Pisa, Italia"
+  location_it: "Pisa, Italia"
+  collaborator: bertolino
+  date_start: 2024-06-03
+  date_end: 2024-08-31
+  summary: >-
+    Research Internship with Antonia Bertolino in the Software Engineering & Dependable
+    Computing Research Lab. Researching and developing about the implications of Large
+    Language Models in System Testing.
+  summary_es: >-
+    Estancia de investigación con Antonia Bertolino en el laboratorio de Ingeniería del
+    Software y Computación Dependable. Investigando y desarrollando sobre las implicaciones
+    de los Modelos de Lenguaje de Gran Escala en las Pruebas de Sistema.
+  summary_it: >-
+    Internship di ricerca con Antonia Bertolino presso il laboratorio di Software Engineering
+    & Dependable Computing. Ricerca e sviluppo sulle implicazioni dei Large Language Models
+    nel System Testing.
+
+- position: "Visiting Researcher"
+  position_es: "Investigador Visitante"
+  position_it: "Ricercatore Visitante"
+  company_name: "ISTI-CNR"
+  company_url: "https://www.isti.cnr.it/en/"
+  company_logo: "img/org/org-isti.svg"
+  location: "Pisa, Italy"
+  location_es: "Pisa, Italia"
+  location_it: "Pisa, Italia"
+  collaborator: bertolino
+  date_start: 2023-05-24
+  date_end: 2023-08-24
+  summary: >-
+    Research Internship with Antonia Bertolino in the Software Engineering & Dependable
+    Computing Research Lab. Researching and developing a Cloud Cost Model to select a
+    cost-efficient Cloud Infrastructure for End-to-End testing.
+  summary_es: >-
+    Estancia de investigación con Antonia Bertolino en el laboratorio de Ingeniería del
+    Software y Computación Dependable. Investigando y desarrollando un Modelo de Coste en
+    la Nube para seleccionar una Infraestructura Cloud eficiente para las pruebas End-to-End.
+  summary_it: >-
+    Internship di ricerca con Antonia Bertolino presso il laboratorio di Software Engineering
+    & Dependable Computing. Ricerca e sviluppo di un modello di costo Cloud per selezionare
+    un'infrastruttura efficiente per il testing End-to-End.
+
+- position: "Substitute Professor (80.2-A LOSU)"
+  position_es: "Profesor Sustituto (80.2-A LOSU)"
+  position_it: "Professore Sostituto (80.2-A LOSU)"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Languages & Computer Systems — Dept. of Computer Science"
+  location_es: "Lenguajes y Sistemas Informáticos — Dept. de Informática"
+  location_it: "Linguaggi e Sistemi Informatici — Dip. di Informatica"
+  date_start: 2024-09-06
+  date_end: 2025-08-31
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computer Engineering (IT)"
+      name_es: "Grado en Ingeniería Informática en TI"
+      name_it: "Ingegneria Informatica (IT)"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Industrial Technologies"
+      name_es: "Tecnologías Industriales"
+      name_it: "Tecnologie Industriali"
+      logo: "img/org/org-epigijon.svg"
+  subjects:
+    - name: "Introduction to the Software Engineering Process"
+      name_es: "Introducción al Proceso Software"
+      name_it: "Introduzione al Processo Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computing Fundamentals"
+      name_es: "Fundamentos de la Informática"
+      name_it: "Fondamenti di Informatica"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Web Technologies"
+      name_es: "Tecnologías Web"
+      name_it: "Tecnologie Web"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Information Systems"
+      name_es: "Sistemas de Información"
+      name_it: "Sistemi Informativi"
+      logo: "img/org/org-epigijon.svg"
+
+- position: "Substitute Professor (80.2-A LOSU)"
+  position_es: "Profesor Sustituto (80.2-A LOSU)"
+  position_it: "Professore Sostituto (80.2-A LOSU)"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Languages & Computer Systems — Dept. of Computer Science"
+  location_es: "Lenguajes y Sistemas Informáticos — Dept. de Informática"
+  location_it: "Linguaggi e Sistemi Informatici — Dip. di Informatica"
+  date_start: 2023-09-01
+  date_end: 2024-08-31
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computer Engineering (IT)"
+      name_es: "Grado en Ingeniería Informática en TI"
+      name_it: "Ingegneria Informatica (IT)"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Industrial Technologies"
+      name_es: "Tecnologías Industriales"
+      name_it: "Tecnologie Industriali"
+      logo: "img/org/org-epigijon.svg"
+  subjects:
+    - name: "Computing Fundamentals"
+      name_es: "Fundamentos de la Informática"
+      name_it: "Fondamenti di Informatica"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Introduction to the Software Engineering Process"
+      name_es: "Introducción al Proceso Software"
+      name_it: "Introduzione al Processo Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Software Architecture"
+      name_es: "Arquitectura del Software"
+      name_it: "Architettura del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Social, Legal, Ethical & Professional Issues in Computing"
+      name_es: "Aspectos Sociales, Legales, Éticos y Profesionales de la Informática"
+      name_it: "Aspetti Sociali, Legali, Etici e Professionali dell'Informatica"
+      logo: "img/org/org-eii.svg"
+    - name: "Web Technologies"
+      name_es: "Tecnologías Web"
+      name_it: "Tecnologie Web"
+      logo: "img/org/org-epigijon.svg"
+
+- position: "Interim Teaching Professor"
+  position_es: "Profesor Docente Interino"
+  position_it: "Professore Docente Interinale"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Languages & Computer Systems — Dept. of Computer Science"
+  location_es: "Lenguajes y Sistemas Informáticos — Dept. de Informática"
+  location_it: "Linguaggi e Sistemi Informatici — Dip. di Informatica"
+  date_start: 2022-09-01
+  date_end: 2023-08-31
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computer Engineering (IT)"
+      name_es: "Grado en Ingeniería Informática en TI"
+      name_it: "Ingegneria Informatica (IT)"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Industrial Technologies"
+      name_es: "Tecnologías Industriales"
+      name_it: "Tecnologie Industriali"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Bachelor's Degree in Public Administration Management"
+      name_es: "Grado en Gestión y Administración Pública"
+      name_it: "Laurea in Gestione e Amministrazione Pubblica"
+      logo: "img/org/org-uniovi.svg"
+  subjects:
+    - name: "Computing Fundamentals"
+      name_es: "Fundamentos de la Informática"
+      name_it: "Fondamenti di Informatica"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Administrative Information Management — Jovellanos Faculty (Coordinator)"
+      name_es: "Gestión de la Información Administrativa — Fac. Jovellanos (Coordinador)"
+      name_it: "Gestione dell'Informazione Amministrativa — Fac. Jovellanos (Coordinatore)"
+      logo: "img/org/org-uniovi.svg"
+    - name: "System Administration & Networks"
+      name_es: "Administración de Sistemas y Redes"
+      name_it: "Amministrazione di Sistemi e Reti"
+      logo: "img/org/org-eii.svg"
+    - name: "Information Systems"
+      name_es: "Sistemas de Información"
+      name_it: "Sistemi Informativi"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Software Architecture"
+      name_es: "Arquitectura del Software"
+      name_it: "Architettura del Software"
+      logo: "img/org/org-eii.svg"
+
+- position: "Teaching Collaborator"
+  position_es: "Profesor Colaborador"
+  position_it: "Professore Collaboratore"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Dept. of Computer Science"
+  location_es: "Dept. de Informática"
+  location_it: "Dip. di Informatica"
+  date_start: 2021-10-10
+  date_end: 2022-01-25
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+  subjects:
+    - name: "Quality, Validation & Verification of Software"
+      name_es: "Calidad, Validación y Verificación del Software"
+      name_it: "Qualità, Validazione e Verifica del Software"
+      logo: "img/org/org-eii.svg"
+
+- position: "Interim Teaching Professor"
+  position_es: "Profesor Docente Interino"
+  position_it: "Professore Docente Interinale"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Computer Science & AI — Dept. of Computer Science"
+  location_es: "Informática e Inteligencia Artificial — Dept. de Informática"
+  location_it: "Informatica e AI — Dip. di Informatica"
+  date_start: 2020-09-28
+  date_end: 2021-08-31
+  degrees:
+    - name: "Software Engineering Degree"
+      name_es: "Grado en Ingeniería Informática del Software"
+      name_it: "Laurea in Ingegneria del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Computer Engineering (IT)"
+      name_es: "Grado en Ingeniería Informática en TI"
+      name_it: "Ingegneria Informatica (IT)"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Industrial Technologies"
+      name_es: "Tecnologías Industriales"
+      name_it: "Tecnologie Industriali"
+      logo: "img/org/org-epigijon.svg"
+  subjects:
+    - name: "Computing Fundamentals"
+      name_es: "Fundamentos de la Informática"
+      name_it: "Fondamenti di Informatica"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Quality, Validation & Verification of Software"
+      name_es: "Calidad, Validación y Verificación del Software"
+      name_it: "Qualità, Validazione e Verifica del Software"
+      logo: "img/org/org-eii.svg"
+    - name: "Operating Systems"
+      name_es: "Sistemas Operativos"
+      name_it: "Sistemi Operativi"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Information Systems"
+      name_es: "Sistemas de Información"
+      name_it: "Sistemi Informativi"
+      logo: "img/org/org-epigijon.svg"
+    - name: "Databases"
+      name_es: "Bases de Datos"
+      name_it: "Basi di Dati"
+      logo: "img/org/org-epigijon.svg"
+
+- position: "Interim Teaching Professor"
+  position_es: "Profesor Docente Interino"
+  position_it: "Professore Docente Interinale"
+  company_name: "University of Oviedo"
+  company_name_es: "Universidad de Oviedo"
+  company_name_it: "Università di Oviedo"
+  company_url: "https://www.uniovi.es/"
+  company_logo: "img/org/org-uniovi.svg"
+  location: "Computer Science & AI — Dept. of Computer Science"
+  location_es: "Informática e Inteligencia Artificial — Dept. de Informática"
+  location_it: "Informatica e AI — Dip. di Informatica"
+  date_start: 2020-01-20
+  date_end: 2020-08-31
+  summary: |-
+    Subjects:
+    - System Administration & Networks — Software Engineering Degree
+    - Social, Legal, Ethical & Professional Issues in Computing — Software Engineering Degree
+    - Operating Systems — Software Engineering Degree
+  summary_es: |-
+    Asignaturas:
+    - Administración de Sistemas y Redes — Grado en Ingeniería Informática del Software
+    - Aspectos Sociales, Legales, Éticos y Profesionales de la Informática — Grado en Ingeniería Informática del Software
+    - Sistemas Operativos — Grado en Ingeniería Informática del Software
+  summary_it: |-
+    Materie:
+    - Amministrazione di Sistemi e Reti — Laurea in Ingegneria del Software
+    - Aspetti Sociali, Legali, Etici e Professionali dell'Informatica — Laurea in Ingegneria del Software
+    - Sistemi Operativi — Laurea in Ingegneria del Software
+
+- position: "Researcher"
+  position_es: "Investigador"
+  position_it: "Ricercatore"
+  company_name: "Software Engineering Research Group (GIIS)"
+  company_name_es: "Grupo de Investigación en Ingeniería del Software (GIIS)"
+  company_name_it: "Gruppo di Ricerca in Ingegneria del Software (GIIS)"
+  company_url: "https://www.giis.uniovi.es/"
+  company_logo: "img/org/org-giis.svg"
+  location: "Gijón, Asturias"
+  date_start: 2018-11-08
+  date_end: ""
+  summary: >-
+    Actively involved in research endeavors focusing on Software Engineering and Testing.
+  summary_es: >-
+    Participación activa en actividades de investigación centradas en la Ingeniería del
+    Software y las Pruebas de Software.
+  summary_it: >-
+    Attivamente coinvolto in attività di ricerca focalizzate sull'Ingegneria del Software
+    e il Software Testing.
+
+- position: "Collaborator Professor"
+  position_es: "Profesor Colaborador"
+  position_it: "Professore Collaboratore"
+  company_name: "International University of Valencia"
+  company_name_es: "Universidad Internacional de Valencia"
+  company_name_it: "Università Internazionale di Valencia"
+  company_url: "https://www.universidadviu.com/"
+  company_logo: "img/org/org-viu.svg"
+  location: ""
+  date_start: 2019-01-01
+  date_end: 2021-08-31
+  summary: >-
+    Co-director of several Msc. Degree Projects and imparting seminars about Privacy
+    Preserving Data Publishing.
+  summary_es: >-
+    Codirección de varios Trabajos de Fin de Máster e impartición de seminarios sobre
+    Publicación de Datos con Preservación de la Privacidad.
+  summary_it: >-
+    Co-direzione di diversi Progetti di Tesi Magistrale e docenza di seminari sulla
+    Pubblicazione di Dati con Preservazione della Privacy.

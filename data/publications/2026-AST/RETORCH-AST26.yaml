@@ -1,0 +1,46 @@
+type: conference
+authors:
+  - augusto
+  - bertolino
+  - deangelis
+  - claudio
+  - lonetti
+  - moranjesus
+date: 2026-04-26
+venue_short: "AST'26 (C10)"
+core: "C"
+location: "Rio de Janeiro, Brazil"
+title: >-
+  A Framework for Similarity-based and Resource-aware Orchestration of End-to-End Test Cases
+abstract: >-
+  Continuous integration environments are characterized by the execution of the test suite at
+  each repository change, which can dramatically increase total project costs, making it not
+  feasible to test the system adequately. Several testing optimization techniques exist, which
+  generally focus on optimizing test execution either by parallelizing and sharing test
+  resources or by improving how the test suite is executed through regression batching,
+  prioritization, or test suite reduction. This work introduces Simphony, a framework for
+  end-to-end testing that combines both perspectives to optimize end-to-end test execution in
+  terms of time, test resource redeployments, and test-case execution efficiency. Simphony
+  combines a similarity-based test strategy with resource-aware orchestration: it first
+  analyzes test case similarities, then selects and applies the most suitable test regression
+  strategy, and finally schedules test execution based on resource compatibility, maximizing
+  parallelism and minimizing the number of test resource redeployments. The framework is
+  evaluated on a real-world application from a European project. The evaluation results show
+  that Simphony helps reduce the number of test resource redeployments and execution time,
+  while it either preserves code-coverage metrics or manifests only small reduced impacts.
+  Concisely, prioritization reduces the time to reach maximum coverage, whereas reduction
+  achieves a trade-off between test coverage and execution time. These results show that
+  combining regression strategies with resource-based orchestration can address time-budget
+  constraints in continuous integration environments for end-to-end testing.
+links:
+  pdf:     "https://digibuo.uniovi.es/dspace/handle/10651/84683"
+  slides:  "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/84683/2026_AST_SIMPHONY_presentation.pdf?sequence=3&isAllowed=y"
+  dataset: "https://doi.org/10.5281/zenodo.17442306"
+  code:    "https://github.com/giis-uniovi/retorch-simphony-rp"
+tags:
+  - Software Testing
+  - End-to-End Testing
+  - Test Orchestration
+featured: false
+lat: -22.9068
+lng: -43.1729

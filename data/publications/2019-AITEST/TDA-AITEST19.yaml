@@ -1,0 +1,28 @@
+﻿type: conference
+authors: [augusto, moranjesus, claudio, tuya]
+date: 2019-04-04
+venue_short: "AITEST19 (C1)"
+location: "San Francisco, USA"
+abstract: >-
+  In recent years, data published and shared with third parties to develop artificial
+  intelligence (AI) tools and services has significantly increased. When there are
+  regulatory or internal requirements regarding privacy of data, anonymization techniques
+  are used to maintain privacy by transforming the data. The side-effect is that the
+  anonymization may lead to useless data to train and test the AI because it is highly
+  dependent on the quality of the data. To overcome this problem, we propose a test-driven
+  anonymization approach for artificial intelligence tools. The approach tests different
+  anonymization efforts to achieve a trade-off in terms of privacy (non-functional quality)
+  and functional suitability of the artificial intelligence technique (functional quality).
+  The approach has been validated by means of two real-life datasets in the domains of
+  healthcare and health insurance. Each of these datasets is anonymized with several privacy
+  protections and then used to train classification AIs. The results show how we can
+  anonymize the data to achieve an adequate functional suitability in the AI context while
+  maintaining the privacy of the anonymized data as high as possible.
+tags: []
+featured: false
+links:
+  pdf: "http://hdl.handle.net/10651/52773"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/52773/2019_04_AITEST19_TDA_Presentation.pdf?sequence=6&isAllowed=y"
+projects: [testeamos]
+lat: 37.7749
+lng: -122.4194

@@ -1,0 +1,34 @@
+﻿type: conference
+authors: [augusto, moranjesus, claudio, tuya]
+date: 2024-08-29
+venue_short: "SEAA24 (C7)"
+core: "B"
+location: "Paris, France"
+abstract: >-
+  Continuous integration practices have transformed software development, but executing test
+  suites of modern software developments addresses new challenges due to its complexity and
+  its huge number of test cases. Certain test levels, like End-to-end testing, are even more
+  challenging due to long execution times and resource-intensive requirements, moreover when
+  we have many End-to-end test suites. Those E2E test suites are executed sequentially and
+  in parallel over the same infrastructure and can be executed several times (e.g., due to
+  some tester consecutive contributions, or version changes performed by automation
+  engines). In previous works, we presented a framework that optimizes E2E test execution by
+  characterizing Resources and grouping/scheduling test cases, based on their compatible
+  usage. However, the approach only optimizes a single test suite execution and neglects
+  other executions or test suites that can share Resources and lead to savings in terms of
+  time and number of Resource redeployments. In this work, we present a new Resource
+  allocation strategy, materialized through a Resource Dispatcher entity. The Resource
+  Dispatcher centralizes the Resource management and allocates the test Resources to the
+  different test suites executed in the continuous integration system, according to their
+  compatible usage. Our approach seeks efficient Resource sharing among test cases, test
+  suites, and suite executions, reducing the need for Resource redeployments and improving
+  the execution time. We have conducted a proof of concept, based on real-world continuous
+  integration data, that shows savings in both Resource redeployments and execution time.
+tags: [Continuous integration, Continuous testing, End-to-End testing, Software testing, Test orchestration, Testing in the cloud]
+featured: false
+links:
+  pdf: "https://hdl.handle.net/10651/74729"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/74729/2024_08_SSEA_Presentation_RUO.pdf?sequence=4&isAllowed=y"
+projects: [equavel]
+lat: 48.8566
+lng: 2.3522

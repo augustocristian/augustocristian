@@ -1,0 +1,36 @@
+﻿type: conference
+authors: [augusto]
+date: 2023-10-09
+venue_short: "ISSREW 2023 (C6)"
+location: "Firenze, Italy"
+abstract: >-
+  End-to-end (E2E) testing is costly because of the complex and expensive resources that are
+  required during the test execution coupled with the long execution times required. This
+  becomes even more challenging when E2E test suites are integrated into a continuous
+  integration (CI/CD) environment, where they are executed with each repository change.
+  Migrating E2E test suite execution to the Cloud is an acknowledged trend to achieve a
+  better cost. However, this also introduces new challenges in addition to those faced
+  on-premises, such as selecting the most suitable services from the wide range offered by
+  Cloud Providers, which is even more difficult considering how the test resources use the
+  Cloud infrastructure. This thesis aims to achieve an efficient execution of the E2E test
+  suites, reducing the number of unnecessary test resource redeployments, and the execution
+  time, and improving the efficiency of selecting the Cloud infrastructure that best aligns
+  with the testing objectives. We present an orchestration approach that aims to enable
+  resource sharing and avoid unnecessary redeployments. This process involves phases like
+  the characterization of the test resources required by the test cases and a grouping of
+  the test cases with compatible resource usage and its scheduling in sequential-parallel to
+  reduce redeployments-time. The orchestration approach has evolved to execute this
+  orchestrated test suite in the Cloud, introducing a model of the E2E test suite execution
+  in the Cloud, which allows us to represent both the test and the Cloud configuration.
+  Using the model, we estimate and compare different Cloud infrastructures in terms of
+  overall cost (billed by the Cloud Provider), but also the cost invested in testing and
+  unused infrastructure (overprovisioning) to select the infrastructure best aligned with
+  the testing objectives.
+tags: [Software Reliability, Software Testing, Cloud Computing, End-to-End Testing, Resource Optimization]
+featured: false
+links:
+  pdf: "https://hdl.handle.net/10651/72390"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/72390/2023_09_ISSRE23_RETORCH_Presentation.pdf?sequence=5&isAllowed=y"
+projects: [equavel]
+lat: 43.7696
+lng: 11.2558

@@ -1,0 +1,13 @@
+---
+// Social icon row from profile.yaml — shared by the hero and the footer.
+import { loadProfile } from '../lib/data.js';
+import { loadIcon } from '../lib/icons.js';
+
+const profile = loadProfile();
+const social = profile.social.map((s) => ({ ...s, icon_svg: loadIcon(s.icon) }));
+---
+<div class="social-row">
+  {social.map((s) => (
+    <a class="social-link" href={s.url} target="_blank" rel="noopener" aria-label={s.label} set:html={s.icon_svg} />
+  ))}
+</div>

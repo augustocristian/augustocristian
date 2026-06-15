@@ -1,0 +1,73 @@
+/* =========================================================
+   Responsive breakpoints
+   ========================================================= */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    order: 2;
+  }
+
+  .hero-photo-wrap {
+    order: 1;
+    width: min(60%, 240px);
+  }
+
+  .hero-tagline {
+    margin-inline: auto;
+  }
+
+  .social-row,
+  .btn-row {
+    justify-content: center;
+  }
+
+  .grid-2,
+  .grid-3,
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav-links {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    border-bottom: var(--border-w) solid var(--color-border);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    display: none;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .section {
+    padding-block: 2.5rem;
+  }
+}
+
+/* Publications filter sidebar stacks on top for small screens */
+@media (max-width: 900px) {
+  .pub-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pub-filters {
+    position: static;
+  }
+}

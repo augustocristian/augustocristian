@@ -1,0 +1,54 @@
+# Education history, most recent first.
+# To add a new entry, copy one of the blocks below and fill in the fields.
+# `date_end` can be left empty ("") for ongoing studies.
+# `button` is optional — remove it if there's nothing to link to.
+# Translatable fields: area, institution, summary, button_text (use _es / _it suffix).
+
+- area: "PhD in Computer Science"
+  area_es: "Doctorado en Informática"
+  area_it: "Dottorato in Informatica"
+  institution: "University of Oviedo"
+  institution_es: "Universidad de Oviedo"
+  institution_it: "Università di Oviedo"
+  institution_logo: "img/org/org-uniovi.svg"
+  date_start: 2020-09-01
+  date_end: 2025-06-02
+  summary: >-
+    Thesis on _Resource Characterization and Optimization for End-to-End Testing_. Supervised
+    by [Prof Claudio de la Riva](https://orcid.org/0000-0001-5592-9683).
+  summary_es: >-
+    Tesis sobre _Caracterización y Optimización de Recursos para las Pruebas End-to-End_.
+    Supervisada por el [Prof. Claudio de la Riva](https://orcid.org/0000-0001-5592-9683).
+  summary_it: >-
+    Tesi su _Caratterizzazione e Ottimizzazione delle Risorse per il Testing End-to-End_.
+    Supervisore: [Prof. Claudio de la Riva](https://orcid.org/0000-0001-5592-9683).
+  button:
+    text: "Read Thesis"
+    url: "https://hdl.handle.net/10651/79929"
+  button_text_es: "Leer Tesis"
+  button_text_it: "Leggi Tesi"
+
+- area: "MSc. Degree in Computer Engineering"
+  area_es: "Máster en Ingeniería Informática"
+  area_it: "Laurea Magistrale in Ingegneria Informatica"
+  institution: "University of Oviedo"
+  institution_es: "Universidad de Oviedo"
+  institution_it: "Università di Oviedo"
+  institution_logo: "img/org/org-uniovi.svg"
+  date_start: 2018-09-01
+  date_end: 2020-07-23
+  button:
+    text: "Read MsC. Dis."
+    url: "http://hdl.handle.net/10651/56205"
+  button_text_es: "Leer TFM"
+  button_text_it: "Leggi TFM"
+
+- area: "BSc in Computer Engineering in Information Technology"
+  area_es: "Grado en Ingeniería Informática en Tecnologías de la Información"
+  area_it: "Laurea Triennale in Ingegneria Informatica — Tecnologie dell'Informazione"
+  institution: "University of Oviedo"
+  institution_es: "Universidad de Oviedo"
+  institution_it: "Università di Oviedo"
+  institution_logo: "img/org/org-uniovi.svg"
+  date_start: 2013-09-01
+  date_end: 2018-07-18

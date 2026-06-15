@@ -1,0 +1,9 @@
+---
+// Accent-bordered exercise callout used inside teaching MDX content:
+// <Exercise title="Exercise 1.1">…markdown…</Exercise>
+const { title = '' } = Astro.props;
+---
+<div class="lab-section lab-section--exercise">
+  {title && <h4 class="lab-exercise-title">{title}</h4>}
+  <div class="lab-exercise-content"><slot /></div>
+</div>

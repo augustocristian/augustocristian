@@ -1,0 +1,8 @@
+# Spoken languages and proficiency (0-100).
+
+- name: "Spanish"
+  percent: 100
+- name: "English"
+  percent: 75
+- name: "Italian"
+  percent: 25

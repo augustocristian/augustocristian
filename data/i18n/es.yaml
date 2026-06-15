@@ -1,0 +1,152 @@
+﻿# ── Metadatos de idioma ────────────────────────────────────────────────────
+lang: es
+html_lang: es
+months: ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."]
+present: "Actualidad"
+profile_role: "Profesor Ayudante Doctor"
+
+# ── Navegación ─────────────────────────────────────────────────────────────
+nav_home: "Inicio"
+nav_publications: "Publicaciones"
+nav_talks: "Conferencias"
+nav_experience: "Experiencia"
+nav_projects: "Proyectos"
+nav_teaching: "Docencia"
+# Etiquetas aria de navegación
+nav_aria_home: "Inicio"
+skip_to_content: "Saltar al contenido"
+nav_aria_lang: "Idioma"
+nav_aria_theme: "Cambiar tema de color"
+nav_aria_menu: "Abrir/cerrar navegación"
+
+# ── Metadescripciones SEO (una por página) ─────────────────────────────────
+meta_desc_home: "Explora el sitio web personal de Cristian Augusto: investigación, publicaciones y más."
+meta_desc_publications: "Artículos de revista y ponencias de Cristian Augusto."
+meta_desc_talks: "Conferencias y eventos en los que ha participado Cristian Augusto."
+meta_desc_experience: "Formación académica, experiencia laboral, certificaciones e idiomas."
+meta_desc_projects: "Proyectos de investigación financiados y colaboraciones industriales."
+meta_desc_teaching: "Materiales docentes y Trabajos Fin de Máster supervisados."
+
+# ── Página de inicio ───────────────────────────────────────────────────────
+# Héroe
+hero_greeting: "Hola, soy"
+btn_view_publications: "Ver publicaciones"
+btn_download_cv: "Descargar CV"
+btn_view_all: "Ver todo"
+# Sección «Sobre mí»
+about_eyebrow: "Sobre mí"
+about_heading: "Un poco sobre mí"
+# Globo — ubicaciones de conferencias
+globe_eyebrow: "Presencia Internacional"
+globe_heading: "Dónde He Presentado"
+# Publicaciones destacadas y recientes
+featured_eyebrow: "Investigación"
+featured_heading: "Publicaciones destacadas"
+latest_eyebrow: "Trabajo reciente"
+latest_heading: "Últimas publicaciones"
+# Vista previa de conferencias
+talks_home_eyebrow: "Eventos"
+talks_home_heading: "Conferencias y Charlas"
+
+# ── Página de publicaciones ────────────────────────────────────────────────
+# Encabezado
+page_pubs_eyebrow: "Investigación"
+page_pubs_heading: "Publicaciones"
+page_pubs_desc: "Lista completa de mis artículos de revista y ponencias en conferencias."
+# Barra de filtros
+filter_year: "Año"
+filter_type: "Tipo"
+filter_type_journal: "Revista"
+filter_type_conference: "Conferencia"
+filter_authors: "Autores"
+filter_quartile: "Cuartil"
+filter_reset: "Restablecer filtros"
+filter_showing: "Mostrando"
+filter_of: "de"
+filter_results: "resultados"
+filters_heading: "Filtros"
+pager_next: "Siguiente"
+pager_last: "Última"
+pager_aria: "Paginación"
+# Tarjetas de publicación
+pub_abstract: "Resumen"
+pub_bibtex: "BibTeX"
+# Panel de detalle (se abre al hacer clic en una tarjeta)
+pub_detail_abstract: "Resumen"
+pub_detail_projects: "Proyectos Relacionados"
+pub_detail_related: "Publicaciones Relacionadas"
+pub_detail_close: "Cerrar"
+pub_overlay_aria: "Detalles de publicación"
+
+# ── Página de conferencias ─────────────────────────────────────────────────
+page_talks_eyebrow: "Eventos"
+page_talks_heading: "Conferencias y Charlas"
+page_talks_desc: "Eventos, conferencias y comités en los que he participado."
+talk_abstract: "Resumen"
+
+# ── Página de experiencia ──────────────────────────────────────────────────
+page_exp_eyebrow: "Trayectoria"
+page_exp_heading: "Experiencia"
+page_exp_desc: "Formación académica, experiencia laboral, certificaciones e idiomas."
+exp_education: "Formación"
+exp_work: "Experiencia laboral"
+exp_awards: "Certificaciones y premios"
+exp_languages: "Idiomas"
+exp_collaborator: "Colaborador:"
+
+# ── Página de proyectos ────────────────────────────────────────────────────
+page_projects_eyebrow: "Financiación"
+page_projects_heading: "Proyectos"
+page_projects_desc: "Proyectos de investigación financiados y colaboraciones industriales en los que he participado."
+project_ongoing: "En curso"
+project_completed: "Completado"
+project_funding: "Financiación"
+project_amount: "Importe"
+project_duration: "Duración"
+project_partners: "Socios"
+project_researchers: "Investigadores"
+project_role: "Rol"
+
+# ── Página de docencia — índice ────────────────────────────────────────────
+page_teaching_eyebrow: "Academia"
+page_teaching_heading: "Docencia"
+page_teaching_desc: "Materiales docentes y Trabajos Fin de Máster supervisados."
+teaching_subject_eyebrow: "Asignatura"
+# Encabezados TFG / TFM
+teaching_students_eyebrow: "Estudiantes"
+teaching_tfg_heading: "Trabajos Fin de Grado"
+teaching_tfm_heading: "Trabajos Fin de Máster"
+teaching_no_tfgs: "No hay proyectos todavía."
+# Etiquetas de tarjeta TFG / TFM
+teaching_documentation: "Documentación"
+teaching_repository: "Repositorio"
+teaching_cosupervisor: "Cotutor:"
+teaching_abstract: "Resumen"
+# Filtros TFG / TFM
+teaching_filter_year: "Año"
+teaching_filter_institution: "Institución"
+teaching_filter_degree: "Grado"
+teaching_filter_keywords: "Palabras clave"
+teaching_filter_student: "Buscar por alumno…"
+teaching_filter_projects: "proyectos"
+teaching_filter_reset: "Restablecer"
+teaching_construction_notice: "🚧 Esta sección está en construcción. Los materiales se irán añadiendo progresivamente."
+
+# ── Página de docencia — páginas de asignatura ────────────────────────────
+# Navegación
+teaching_back: "← Volver a Docencia"
+# Pestañas de sección
+teaching_tab_theory: "Teoría"
+teaching_tab_labs: "Laboratorio"
+teaching_tab_seminars: "Seminarios"
+subject_tabs_aria: "Secciones de la asignatura"
+# Acciones de sesión (PDF incrustado + enlace a repositorio externo)
+teaching_unit_pdf: "Descargar PDF"
+teaching_view_pdf: "Ver PDF"
+teaching_lab_external: "Ver en GitHub"
+# Listado en vivo del repositorio externo de materiales docentes
+teaching_repo_materials: "Repositorio de materiales"
+
+# ── Auxiliares compartidos ─────────────────────────────────────────────────
+pub_related_project: "Proyecto relacionado"
+pub_related_projects: "Proyectos relacionados"

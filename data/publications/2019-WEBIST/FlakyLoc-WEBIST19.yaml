@@ -1,0 +1,28 @@
+﻿type: conference
+authors: [moranjesus, augusto, bertolino, claudio, tuya]
+date: 2019-09-18
+venue_short: "WEBIST19 (C3)"
+location: "Vienna, Austria"
+abstract: >-
+  Testing web applications is a challenging practice because it involves managing
+  asynchronous requests between clients and servers, the integration of heterogeneous
+  technologies, and concurrent accesses to the resources. Therefore, rerunning the test
+  cases of these applications under the same conditions is difficult as one test case can be
+  executed in many different ways according to several environmental factors like memory,
+  screen size or network. Moreover, some of these test cases could be flaky, i.e., due to
+  environmental factors the test outcome can vary even though the application did not
+  change. Understanding which factors are the root cause of flakiness is very important for
+  web developers to both prevent and fix flakiness. This paper introduces a technique to
+  locate the root causes of flakiness based on a characterization of the different
+  environmental factors that are not controlled during the testing of web applications. The
+  root cause of flakiness is located by a spectrum-based localization technique that
+  analyses the execution of the same flaky test under different environmental factors that
+  can trigger the flakiness. The technique is illustrated on an educational web platform
+  named FullTeaching.
+tags: [Software Testing and Debugging, Spectrum-based Localization, Web Applications, Test Flakiness]
+featured: false
+links:
+  pdf: "http://hdl.handle.net/10651/54569"
+projects: [testeamos]
+lat: 48.2082
+lng: 16.3738

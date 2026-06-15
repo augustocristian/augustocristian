@@ -1,0 +1,13 @@
+---
+// Avatar + name chip for one author ({name, url, avatar_path, initials, bold}
+// from buildAuthor). The site owner renders bold and unlinked.
+import AuthorAvatar from './AuthorAvatar.astro';
+const { author } = Astro.props;
+---
+<span class="author-chip"><AuthorAvatar name={author.name} avatar_path={author.avatar_path} initials={author.initials} />{
+  author.bold
+    ? <strong>{author.name}</strong>
+    : author.url
+      ? <a href={author.url} target="_blank" rel="noopener">{author.name}</a>
+      : <span>{author.name}</span>
+}</span>

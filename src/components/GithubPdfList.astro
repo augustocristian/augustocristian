@@ -1,0 +1,46 @@
+---
+// Live PDF listing from the external teaching-materials repository (one folder
+// per subject id), fetched client-side via the GitHub Contents API so new PDFs
+// appear without a site rebuild. Renders nothing while TEACHING_REPO.enabled
+// is false; hides itself on any fetch error (repo missing, rate limit…).
+import { TEACHING_REPO } from '../config.js';
+const { subjectId, t } = Astro.props;
+---
+{TEACHING_REPO.enabled && (
+  <Fragment>
+  <section class="repo-pdf-section" hidden
+           data-owner={TEACHING_REPO.owner}
+           data-repo={TEACHING_REPO.repo}
+           data-branch={TEACHING_REPO.branch}
+           data-path={subjectId}>
+    <h2 class="repo-pdf-heading">{t.teaching_repo_materials}</h2>
+    <ul class="repo-pdf-list"></ul>
+  </section>
+
+  <script>
+    const section = document.querySelector('.repo-pdf-section');
+    if (section instanceof HTMLElement) {
+      const { owner, repo, branch, path } = section.dataset;
+      fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`)
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+        .then((files) => {
+          const pdfs = files.filter((f) => f.type === 'file' && f.name.toLowerCase().endsWith('.pdf'));
+          if (!pdfs.length) return;
+          const list = section.querySelector('.repo-pdf-list');
+          for (const f of pdfs) {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = f.download_url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = f.name.replace(/\.pdf$/i, '');
+            li.appendChild(a);
+            list.appendChild(li);
+          }
+          section.hidden = false;
+        })
+        .catch(() => { /* repo missing or rate-limited — stay hidden */ });
+    }
+  </script>
+  </Fragment>
+)}

@@ -1,0 +1,8 @@
+---
+// Circular author avatar — photo when available, initials otherwise.
+// Props come from a structured author object (buildAuthor in viewmodels).
+const { name, avatar_path = '', initials } = Astro.props;
+---
+{avatar_path
+  ? <img class="author-avatar" src={avatar_path} alt={name} />
+  : <span class="author-avatar author-initials" aria-hidden="true">{initials}</span>}

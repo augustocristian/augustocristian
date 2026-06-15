@@ -1,0 +1,27 @@
+type: journal
+authors: [augusto, moranjesus, bertolino, claudio, tuya]
+date: 2025-03-01
+venue_short: "JSS, Q1 (J3)"
+quartile: "Q1"
+abstract: >-
+  Moving testing to the Cloud overcomes time/resource constraints by leveraging an unlimited
+  and elastic infrastructure, especially for testing levels like End-to-End (E2E) that
+  require a high number of resources and/or execution time. However, it introduces new
+  challenges to those already faced on-premises, like selecting the most suitable Cloud
+  infrastructure and billing scheme. We propose the RETORCH* test execution model that
+  estimates and compares the monetary cost of executing an E2E test suite with different
+  Cloud alternatives, billing schemes, and test configurations. RETORCH* goes beyond the
+  mere cost billed, and selects the solution that best aligns with the test team strategy
+  using the data of on-premises prior executions and the tester's experience. This cost is
+  broken down into the cost incurred to execute the test suite (testing cost) and possible
+  unused infrastructure (overprovisioning cost). Based on these distinct costs, the test
+  team can compare different Cloud and test configurations. RETORCH* has been evaluated
+  using a real-world application's E2E test suite. We analyze how the different decisions
+  taken when the suite is migrated to the Cloud impact the cost, highlighting how RETORCH*
+  can help the tester during Cloud and test configuration to make a more informed decision.
+tags: [Continuous integration, Continuous testing, End-to-end testing, Software testing, Test orchestration, Testing in the Cloud]
+featured: true
+links:
+  pdf: "https://hdl.handle.net/10651/75794"
+  code: "https://github.com/giis-uniovi/retorchx-rp"
+projects: [equavel]

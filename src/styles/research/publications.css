@@ -1,0 +1,369 @@
+/* =========================================================
+   Publications page layout — filter sidebar (left on desktop,
+   stacked on top on small screens) + flat result list.
+   ========================================================= */
+.pub-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.pub-filters {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-4));
+}
+
+/* =========================================================
+   Publication list — flat rows separated by hairlines
+   ========================================================= */
+#pub-list {
+  display: flex;
+  flex-direction: column;
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
+}
+
+.pub-item {
+  border-bottom: var(--border-w) solid var(--color-border);
+  padding-block: var(--space-5);
+}
+
+.pub-item:first-child {
+  padding-top: 0;
+}
+
+/* Rows open the detail overlay on click — highlight the title on hover */
+.pub-card h3 {
+  font-size: var(--step-1);
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.pub-card:hover h3 {
+  color: var(--color-accent);
+}
+
+.pub-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.pub-card-head h3 {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+/* ── Author chips ─────────────────────────────────────── */
+.pub-authors {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.pub-authors a {
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-2);
+}
+
+.author-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  vertical-align: middle;
+  white-space: nowrap;
+  flex-wrap: nowrap;    /* prevent avatar/name ever splitting onto separate lines */
+  word-break: keep-all;
+}
+
+.author-avatar {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-w) solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.author-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Venue & abstract ─────────────────────────────────── */
+.pub-venue {
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.pub-abstract-details {
+  margin-bottom: 0.75rem;
+}
+
+.pub-abstract-details summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.pub-abstract-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.pub-abstract-details summary::before {
+  content: "▶";
+  font-size: 0.65rem;
+  transition: transform var(--dur-2) var(--ease-out);
+  color: var(--color-accent);
+}
+
+.pub-abstract-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.pub-abstract {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   Results footer — range line + pagination
+   ========================================================= */
+.pub-results-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.filter-results-line {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* =========================================================
+   Publication detail <dialog>
+   ========================================================= */
+.pub-overlay {
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0;
+  max-width: 720px;
+  width: calc(100% - 2rem);
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-3);
+  /* Remove default UA dialog positioning so browser centers it */
+}
+
+.pub-overlay::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.pub-overlay-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 1;
+  margin: 1rem 1rem -2.5rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background var(--dur-1), color var(--dur-1);
+}
+
+.pub-overlay-close:hover {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.pub-overlay-close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.pub-overlay-body {
+  padding: 1.25rem 2rem 2rem;
+}
+
+/* ── Detail panel content ─────────────────────────────── */
+.pub-detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.pub-detail-title {
+  font-size: clamp(1.3rem, 3vw, 1.85rem);
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.pub-detail-venue {
+  margin-bottom: 0.6rem;
+}
+
+.pub-detail .pub-authors {
+  margin-bottom: 1.25rem;
+}
+
+.pub-detail-section {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.pub-detail-section-head {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.pub-detail-abstract {
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Project cards ─────────────────────────────────────── */
+.pub-detail-projects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pub-detail-project-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: var(--color-bg);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: border-color var(--dur-1), background var(--dur-1);
+  max-width: 300px;
+}
+
+.pub-detail-project-card:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.pub-detail-project-img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem;
+}
+
+.pub-detail-project-placeholder {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 0.7rem;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.pub-detail-project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pub-detail-project-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.pub-detail-project-subtitle {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.3;
+}
+
+/* ── Related publications list ─────────────────────────── */
+.pub-detail-related-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pub-detail-related-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.pub-detail-related-link {
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-detail-related-link:hover {
+  color: var(--color-accent);
+}
+
+.pub-detail-related-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Action buttons ────────────────────────────────────── */
+.pub-detail-actions {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}

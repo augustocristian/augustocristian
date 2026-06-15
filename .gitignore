@@ -1,20 +1,15 @@
-# Created by https://www.toptal.com/developers/gitignore/api/intellij,hugo,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=intellij,hugo,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/intellij,node,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=intellij,node,visualstudiocode
 
-### Hugo ###
-# Generated files by hugo
-/public/
-/resources/_gen/
-/assets/jsconfig.json
-hugo_stats.json
+### Node ###
+node_modules/
 
-# Executable may be added to repository
-hugo.exe
-hugo.darwin
-hugo.linux
+### Site build output ###
+/dist/
+/docs/
 
-# Temporary lock file while building
-/.hugo_build.lock
+### Astro ###
+.astro/
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -149,3 +144,13 @@ fabric.properties
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,hugo,visualstudiocode
+.idea/
+.idea/.gitignore
+.idea/modules.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/vcs.xml
+.idea/misc.xml
+
+#Claude
+.agents
+.claude

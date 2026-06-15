@@ -1,0 +1,33 @@
+﻿type: conference
+authors: [augusto, moranjesus, bertolino, claudio, tuya]
+date: 2025-01-25
+venue_short: "ICTSS24 (C8)"
+core: "B"
+location: "London, United Kingdom"
+abstract: >-
+  Large language models (LLMs) based on transformer architecture have revolutionized natural
+  language processing (NLP), demonstrating excellent capabilities in understanding and
+  generating human-like text. In Software Engineering, LLMs have been applied in code
+  generation, documentation, and report writing tasks, to support the developer and reduce
+  the amount of manual work. In Software Testing, one of the cornerstones of Software
+  Engineering, LLMs have been explored for generating test code, test inputs, automating the
+  oracle process or generating test scenarios. However, their application to high-level
+  testing stages such as system testing, in which a deep knowledge of the business and the
+  technological stack is needed, remains largely unexplored. This paper presents an
+  exploratory study about how LLMs can support system test development. Given that LLM
+  performance depends on input data quality, the study focuses on how to query general
+  purpose LLMs to first obtain test scenarios and then derive test cases from them. The
+  study evaluates two popular LLMs (GPT-4o and GPT-4o-mini), using as a benchmark a European
+  project demonstrator. The study compares two different prompt strategies and employs
+  well-established prompt patterns, showing promising results as well as room for
+  improvement in the application of LLMs to support system testing.
+tags: [End-to-End testing, Software testing, Large Language Models, LLMs]
+featured: false
+links:
+  pdf: "https://hdl.handle.net/10651/76363"
+  code: "https://github.com/giis-uniovi/retorch-llm-rp"
+  dataset: "https://zenodo.org/records/13761150"
+  slides: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/76363/2024_10_ICTSS_Presentation.pdf?sequence=6&isAllowed=y"
+projects: [equavel]
+lat: 51.5074
+lng: -0.1278

@@ -1,0 +1,135 @@
+/* =========================================================
+   Globe — scroll driver + sticky container
+   ========================================================= */
+
+.globe-scroll-driver {
+  height: 350vh;
+  position: relative;
+}
+
+.globe-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.globe-sticky-head {
+  padding-top: 2rem;
+  padding-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.globe-sticky-head .eyebrow { margin-bottom: 0.25rem; }
+.globe-sticky-head h2       { margin-bottom: 0; }
+
+.globe-viz-wrap {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  cursor: grab;
+}
+
+.globe-viz-wrap:active { cursor: grabbing; }
+
+#globe-viz {
+  width: 100%;
+  height: 100%;
+}
+
+#globe-viz canvas {
+  display: block !important;
+}
+
+/* =========================================================
+   SVG overlay — dashed connector lines + dots at geo points
+   ========================================================= */
+.globe-overlay-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+.globe-connector {
+  stroke: var(--color-accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.55;
+}
+
+.globe-connector-dot {
+  fill: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* =========================================================
+   Margin labels — positioned by JS close to the globe edge
+   ========================================================= */
+.globe-labels-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.globe-pin-label {
+  position: absolute;
+  background: var(--color-surface);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  line-height: 1.3;
+  box-shadow: var(--shadow-1);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: border-color var(--dur-1);
+}
+
+.globe-pin-label:hover {
+  border-color: var(--color-accent);
+}
+
+.globe-pin-label--emerge {
+  animation: pin-emerge var(--dur-3) var(--ease-out) both;
+}
+
+@keyframes pin-emerge {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.globe-pin-acronym {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.globe-pin-extra {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.globe-pin-meta {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 720px) {
+  .globe-viz-wrap { height: 380px; }
+}
