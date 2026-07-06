@@ -1,5 +1,5 @@
 ---
-// Homepage: hero, about, scroll-driven globe, featured/latest pubs, talks.
+// Homepage: hero, about, featured/latest pubs, talks.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PubCardLink from '../../components/PubCardLink.astro';
 import TalkCard from '../../components/TalkCard.astro';
@@ -7,7 +7,7 @@ import SectionHead from '../../components/SectionHead.astro';
 import SocialLinks from '../../components/SocialLinks.astro';
 import { langStaticPaths, loadI18n, localize, prefixFor } from '../../lib/i18n.js';
 import { loadProfile, loadCoauthors, loadProjects, loadPublications, loadTalks } from '../../lib/data.js';
-import { buildPublicationViewModels, buildTalkViewModels, buildMapLocations, byDateDesc } from '../../lib/viewmodels.js';
+import { buildPublicationViewModels, buildTalkViewModels, byDateDesc } from '../../lib/viewmodels.js';
 import { richTextBlocks, escapeHtml } from '../../lib/richtext.js';
 import { loadIcon } from '../../lib/icons.js';
 
@@ -25,8 +25,6 @@ const publications = buildPublicationViewModels(loadPublications(), coauthors, p
 const featuredPublications = publications.filter((p) => p.featured).sort(byDateDesc('date'));
 const latestPublications = publications.filter((p) => !p.featured).sort(byDateDesc('date')).slice(0, 5);
 const talks = buildTalkViewModels(loadTalks(), lang, t);
-const mapLocations = buildMapLocations(publications, prefix);
-
 const bioParagraphs = richTextBlocks(localize(profile, 'bio', lang));
 const organizationsHtml = profile.organizations
   .map((org) => `<a href="${org.url}" target="_blank" rel="noopener">${escapeHtml(org.name)}</a>`)
@@ -62,24 +60,6 @@ const iconDownload = loadIcon('download');
       </div>
     </div>
   </section>
-
-  {mapLocations.length > 0 && (
-    <Fragment>
-    <!-- Scroll driver — provides 3× viewport of scroll space for one full rotation -->
-    <div class="globe-scroll-driver" id="globe-scroll-driver">
-      <div class="globe-sticky" id="globe-sticky">
-        <div class="globe-sticky-head container">
-          <p class="eyebrow">{t.globe_eyebrow}</p>
-          <h2>{t.globe_heading}</h2>
-        </div>
-        <div class="globe-viz-wrap">
-          <div id="globe-viz"></div>
-        </div>
-      </div>
-    </div>
-    <script is:inline set:html={`window.GLOBE_LOCATIONS=${JSON.stringify(mapLocations)};`} />
-    </Fragment>
-  )}
 
   <section class="section section-alt">
     <div class="container">

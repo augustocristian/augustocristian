@@ -37,8 +37,6 @@ btn_view_all: "Ver todo"
 about_eyebrow: "Sobre mí"
 about_heading: "Un poco sobre mí"
 # Globo — ubicaciones de conferencias
-globe_eyebrow: "Presencia Internacional"
-globe_heading: "Dónde He Presentado"
 # Publicaciones destacadas y recientes
 featured_eyebrow: "Investigación"
 featured_heading: "Publicaciones destacadas"

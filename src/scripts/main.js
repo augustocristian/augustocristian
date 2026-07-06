@@ -10,10 +10,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilters();
   initScrollReveal();
   initPubDetail();
-
-  // Globe.js is only needed on the homepage — dynamic import keeps it out of
-  // every other page's module graph entirely.
-  if (document.getElementById('globe-viz')) {
-    import('./globe.js').then(({ initGlobe }) => initGlobe());
-  }
 });

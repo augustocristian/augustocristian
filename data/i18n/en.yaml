@@ -37,8 +37,6 @@ btn_view_all: "View all"
 about_eyebrow: "About"
 about_heading: "A bit about me"
 # Globe — conference locations (section between hero and publications)
-globe_eyebrow: "Research Presence"
-globe_heading: "Where I've Presented"
 # Featured & latest publications
 featured_eyebrow: "Research"
 featured_heading: "Featured Publications"
