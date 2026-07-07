@@ -19,6 +19,7 @@ const nav = [
   { url: `${prefix}projects/`,     label: t.nav_projects },
   { url: `${prefix}teaching/`,     label: t.nav_teaching },
   { url: `${prefix}experience/`,   label: t.nav_experience },
+  { url: `${prefix}github/`,       label: t.nav_github },
 ].map((item) => ({ ...item, active: item.url === currentUrl }));
 
 const links = langLinks(lang, pagePath);

@@ -152,6 +152,11 @@
   border-radius: var(--radius-sm);
   background: var(--color-surface);
   padding: 0.35rem;
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+
+.award-card:hover .award-icon {
+  border-color: var(--color-border-strong);
 }
 
 .award-body h4 {

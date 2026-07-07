@@ -4,6 +4,8 @@ student: "Irene Bello Díaz"
 year: 2022
 degree: "Software Engineering"
 degree_es: "Ingeniería Informática del Software"
+degree_it: "Ingegneria Informatica del Software"
+degree_logo: "img/org/org-eii.svg"
 institution_logo: "img/org/org-uniovi.svg"
 cosupervisor: moranjesus
 keywords: []
@@ -11,3 +13,5 @@ abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: "https://www.linkedin.com/in/irene-bello-b9985b224/"

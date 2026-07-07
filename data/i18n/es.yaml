@@ -12,6 +12,7 @@ nav_talks: "Conferencias"
 nav_experience: "Experiencia"
 nav_projects: "Proyectos"
 nav_teaching: "Docencia"
+nav_github: "GitHub"
 # Etiquetas aria de navegación
 nav_aria_home: "Inicio"
 skip_to_content: "Saltar al contenido"
@@ -26,6 +27,7 @@ meta_desc_talks: "Conferencias y eventos en los que ha participado Cristian Augu
 meta_desc_experience: "Formación académica, experiencia laboral, certificaciones e idiomas."
 meta_desc_projects: "Proyectos de investigación financiados y colaboraciones industriales."
 meta_desc_teaching: "Materiales docentes y Trabajos Fin de Máster supervisados."
+meta_desc_github: "Software de código abierto y repositorios de Cristian Augusto en GitHub."
 
 # ── Página de inicio ───────────────────────────────────────────────────────
 # Héroe
@@ -133,17 +135,35 @@ teaching_construction_notice: "🚧 Esta sección está en construcción. Los ma
 # ── Página de docencia — páginas de asignatura ────────────────────────────
 # Navegación
 teaching_back: "← Volver a Docencia"
-# Pestañas de sección
+# Grupos de lecciones (encabezados de la barra lateral)
 teaching_tab_theory: "Teoría"
 teaching_tab_labs: "Laboratorio"
 teaching_tab_seminars: "Seminarios"
-subject_tabs_aria: "Secciones de la asignatura"
-# Acciones de sesión (PDF incrustado + enlace a repositorio externo)
+# Barra lateral de lecciones + paginador
+subject_nav_aria: "Navegación de lecciones"
+teaching_lessons: "Lecciones"
+teaching_prev_lesson: "Anterior"
+teaching_next_lesson: "Siguiente"
+# Acciones de sesión (PDF incrustado + vídeo + enlace a repositorio externo)
 teaching_unit_pdf: "Descargar PDF"
 teaching_view_pdf: "Ver PDF"
+teaching_watch_video: "Ver vídeo"
 teaching_lab_external: "Ver en GitHub"
 # Listado en vivo del repositorio externo de materiales docentes
 teaching_repo_materials: "Repositorio de materiales"
+
+# ── Página de GitHub ───────────────────────────────────────────────────────
+page_github_eyebrow: "Código abierto"
+page_github_heading: "GitHub"
+page_github_desc: "Mi trabajo de código abierto: herramientas, prototipos de investigación y material docente."
+github_profile_button: "Ver perfil en GitHub"
+github_followers: "seguidores"
+github_repos_label: "repositorios públicos"
+github_repos_eyebrow: "Repositorios"
+github_repos_heading: "Repositorios destacados"
+github_stat_stars: "Estrellas"
+github_stat_forks: "Forks"
+github_stat_language: "Lenguaje principal"
 
 # ── Auxiliares compartidos ─────────────────────────────────────────────────
 pub_related_project: "Proyecto relacionado"

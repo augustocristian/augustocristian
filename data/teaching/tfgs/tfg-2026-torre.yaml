@@ -1,0 +1,17 @@
+title: "DevorApp: Recommending Restaurants Based on Your Location, Tastes and Moment"
+title_es: "DevorApp: recomendando restaurantes según tu ubicación, gustos y momento"
+title_it: "DevorApp: raccomandazione di ristoranti in base a posizione, gusti e momento"
+student: "Alejandro Torre Llorente"
+year: 2026
+degree: "Computer Engineering (IT)"
+degree_es: "Ingeniería Informática en Tecnologías de la Información"
+degree_it: "Ingegneria Informatica nelle Tecnologie dell'Informazione"
+degree_logo: "img/org/org-epigijon.svg"
+institution_logo: "img/org/org-uniovi.svg"
+keywords: []
+abstract: ""
+abstract_es: ""
+documentation: ""
+repo: "https://github.com/TorreAlejandro/EPI-DevorApp"
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: "https://www.linkedin.com/in/alejandro-torre-llorente-876795364/"

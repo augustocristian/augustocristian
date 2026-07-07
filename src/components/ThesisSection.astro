@@ -52,10 +52,11 @@ const filterGroups = [
               {item.has_institution_logo && <img class="thesis-institution-logo" src={`/${item.institution_logo}`} alt="" />}
               <div class="thesis-meta">
                 <span class="badge">{item.year}</span>
-                <span class="text-muted">{item.student}</span>
+                <AuthorChip author={item.student_author} />
               </div>
             </div>
             <h4>{item.title}</h4>
+            {item.has_degree && <p class="thesis-degree"><span class="degree-chip">{item.has_degree_logo && <img src={`/${item.degree_logo}`} alt="" class="degree-chip-logo" />}{item.degree}</span></p>}
             {item.has_cosupervisor && <p class="thesis-cosupervisor"><span class="thesis-cosupervisor-label">{t.teaching_cosupervisor}</span> <AuthorChip author={item.cosupervisor} /></p>}
             {item.has_keywords && (
               <div class="thesis-keywords">{item.keywords.map((k) => <span class="tag">{k.keyword}</span>)}</div>
@@ -77,6 +78,6 @@ const filterGroups = [
       </div>
       </Fragment>
     )}
-    {!hasItems && emptyMessage && <p class="text-muted">{emptyMessage}</p>}
+    {!hasItems && emptyMessage && <p class="empty-state text-muted">{emptyMessage}</p>}
   </div>
 </section>

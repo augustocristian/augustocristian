@@ -1,11 +1,13 @@
 ---
-// Subject page: Theory/Labs/Seminars tabs. Each session is a collapsible unit
-// rendering its Markdown body, an optional embedded PDF from the external
-// teaching-materials repo, and an optional external repo link. Below the tabs,
-// GithubPdfList shows the subject folder of the materials repo live.
+// Subject page: docs-style layout. A collapsible left sidebar lists every
+// lesson grouped Theory/Labs/Seminars; the content area shows ONE lesson at
+// a time, driven by the URL hash (#<group>/<slug>, e.g. #labs/01-html-basics).
+// All lessons are server-rendered (SEO); no-JS and print show them stacked.
+// Each lesson renders its MDX body plus optional embedded video and PDF.
 import { render } from 'astro:content';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Exercise from '../../../../components/Exercise.astro';
+import Video from '../../../../components/Video.astro';
 import PdfViewer from '../../../../components/PdfViewer.astro';
 import GithubPdfList from '../../../../components/GithubPdfList.astro';
 import { LANGS, loadI18n, localize, prefixFor } from '../../../../lib/i18n.js';
@@ -29,103 +31,170 @@ const subjectTitle = localize(subject, 'title', lang) || subject.title;
 const pagePath = `teaching/${subject.id}/`;
 
 const sessions = await loadSubjectSessions(subject.id);
-const tabs = [
+const groups = [
   { key: 'theory', label: t.teaching_tab_theory, items: sessions.theory },
   { key: 'labs', label: t.teaching_tab_labs, items: sessions.lab },
   { key: 'seminars', label: t.teaching_tab_seminars, items: sessions.seminar },
-].filter((tab) => tab.items.length > 0);
+].filter((g) => g.items.length > 0);
 
-// Pre-render every session's MDX body (Content components can't be awaited
-// inside the template).
-const rendered = {};
-for (const tab of tabs) {
-  rendered[tab.key] = await Promise.all(tab.items.map(async (entry) => ({
-    entry,
-    Content: (await render(entry)).Content,
-  })));
+// Flat ordered lesson list (theory -> labs -> seminars) with pre-rendered MDX
+// (Content components can't be awaited inside the template), hash key, group
+// label, and prev/next pointers for the pager.
+const lessons = [];
+for (const g of groups) {
+  for (const entry of g.items) {
+    lessons.push({
+      key: `${g.key}/${entry.id.split('/').pop()}`,
+      groupKey: g.key,
+      groupLabel: g.label,
+      entry,
+      Content: (await render(entry)).Content,
+    });
+  }
 }
+lessons.forEach((l, i) => {
+  l.prev = lessons[i - 1] ?? null;
+  l.next = lessons[i + 1] ?? null;
+});
 ---
 <BaseLayout lang={lang} t={t} pagePath={pagePath} title={`${subjectTitle} — ${t.nav_teaching}`} description={t.meta_desc_teaching}>
 <main id="main">
   <header class="page-header container">
     <a href={`${prefix}teaching/`} class="subject-back-link">{t.teaching_back}</a>
     <h1>{subjectTitle}</h1>
+    {subject.image && <img class="subject-banner" src={`/${subject.image}`} alt="" />}
   </header>
 
   <div class="container subject-page">
 
-    <nav class="subject-tabs" aria-label={t.subject_tabs_aria}>
-      {tabs.map((tab, i) => (
-        <button class={`subject-tab-btn${i === 0 ? ' is-active' : ''}`} data-tab={tab.key}>{tab.label}</button>
-      ))}
-    </nav>
+    <div class="subject-toolbar">
+      <button class="subject-nav-toggle btn btn-sm btn-outline" type="button"
+              aria-expanded="true" aria-controls="subject-nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+        </svg>
+        {t.teaching_lessons}
+      </button>
+    </div>
 
-    {tabs.map((tab, tabIdx) => (
-      <div class="subject-tab-panel" id={`tab-${tab.key}`} hidden={tabIdx !== 0}>
-        {rendered[tab.key].map(({ entry, Content }, idx) => (
-          <details class="subject-unit" open={idx === 0}>
-            <summary class="subject-unit-summary">
-              <span class="subject-unit-title">{entry.data.title}</span>
-              {entry.data.repo_url && (
-                <a class="btn btn-sm btn-outline" href={entry.data.repo_url} target="_blank" rel="noopener" onclick="event.stopPropagation()">{t.teaching_lab_external}</a>
-              )}
-            </summary>
-            <div class="subject-unit-body">
-              <div class="session-body lab-guide">
-                <Content components={{ Exercise }} />
-              </div>
-              {entry.data.pdf_url && <PdfViewer url={entry.data.pdf_url} title={entry.data.title} t={t} />}
-            </div>
-          </details>
+    <div class="subject-layout">
+      <aside class="subject-nav" id="subject-nav" aria-label={t.subject_nav_aria}>
+        {groups.map((g) => (
+          <div class="subject-nav-group">
+            <h2 class="subject-nav-heading">{g.label}</h2>
+            <ul class="subject-nav-list">
+              {lessons.filter((l) => l.groupKey === g.key).map((l) => (
+                <li>
+                  <a href={`#${l.key}`} class="subject-nav-link" data-nav-for={l.key}>
+                    <span class="subject-nav-num">{String(l.entry.data.order).padStart(2, '0')}</span>
+                    <span>{l.entry.data.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </div>
-    ))}
+      </aside>
 
-    <GithubPdfList subjectId={subject.id} t={t} />
+      <div class="subject-content">
+        {lessons.map(({ key, groupLabel, entry, Content, prev, next }, i) => (
+          <article class="lesson" data-lesson={key} hidden={i !== 0}>
+            <header class="lesson-head">
+              <div class="lesson-head-main">
+                <span class="lesson-badge">{groupLabel}</span>
+                <h2 class="lesson-title">{entry.data.title}</h2>
+              </div>
+              {entry.data.repo_url && (
+                <a class="btn btn-sm btn-outline" href={entry.data.repo_url}
+                   target="_blank" rel="noopener">{t.teaching_lab_external}</a>
+              )}
+            </header>
+            <div class="session-body lab-guide">
+              <Content components={{ Exercise, Video }} />
+            </div>
+            {entry.data.video_url && <Video url={entry.data.video_url} label={t.teaching_watch_video} />}
+            {entry.data.pdf_url && <PdfViewer url={entry.data.pdf_url} title={entry.data.title} t={t} />}
+            <nav class="lesson-pager" aria-label={t.subject_nav_aria}>
+              {prev ? (
+                <a class="lesson-pager-link lesson-pager-prev" href={`#${prev.key}`}>
+                  <span class="lesson-pager-dir">{t.teaching_prev_lesson}</span>
+                  <span class="lesson-pager-title">{prev.entry.data.title}</span>
+                </a>
+              ) : <span />}
+              {next && (
+                <a class="lesson-pager-link lesson-pager-next" href={`#${next.key}`}>
+                  <span class="lesson-pager-dir">{t.teaching_next_lesson}</span>
+                  <span class="lesson-pager-title">{next.entry.data.title}</span>
+                </a>
+              )}
+            </nav>
+          </article>
+        ))}
+
+        <GithubPdfList subjectId={subject.id} t={t} />
+      </div>
+    </div>
 
   </div>
 </main>
+<noscript><style>.lesson[hidden] { display: block; }</style></noscript>
 
 <script>
-  // Tab switching with URL-hash persistence (#theory / #labs / #seminars).
-  const tabBtns = document.querySelectorAll('.subject-tab-btn');
-  const panels = document.querySelectorAll('.subject-tab-panel');
+  // Lesson router: one lesson visible at a time, driven by the URL hash
+  // (#<group>/<slug>). Sidebar and pager links are plain anchors, so
+  // back/forward walks lesson history natively via hashchange. Lessons are
+  // display-toggled — they must never receive scroll-reveal classes.
+  const layout = document.querySelector('.subject-layout');
+  if (layout) {
+    const lessons = new Map(
+      [...document.querySelectorAll('[data-lesson]')].map((el) => [el.dataset.lesson, el]),
+    );
+    const navLinks = new Map(
+      [...document.querySelectorAll('[data-nav-for]')].map((a) => [a.dataset.navFor, a]),
+    );
+    const firstKey = lessons.keys().next().value;
 
-  function activateTab(name, updateHash) {
-    let found = false;
-    panels.forEach((panel) => {
-      const match = panel.id === `tab-${name}`;
-      panel.hidden = !match;
-      if (match) found = true;
-    });
-    if (!found) return;
-    tabBtns.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.tab === name));
-    if (updateHash) history.replaceState(null, '', `#${name}`);
-  }
+    // Legacy tab hashes (#theory/#labs/#seminars) -> first lesson of that group.
+    const legacy = {};
+    for (const key of lessons.keys()) {
+      const group = key.split('/')[0];
+      if (!(group in legacy)) legacy[group] = key;
+    }
 
-  tabBtns.forEach((btn) => {
-    btn.addEventListener('click', () => activateTab(btn.dataset.tab, true));
-  });
-
-  const hash = location.hash.slice(1);
-  if (hash) activateTab(hash, false);
-
-  // Lazy PDF embed: create the iframe only on first "View PDF" click.
-  document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const viewer = btn.closest('.pdf-viewer');
-      const wrap = viewer.querySelector('.pdf-frame-wrap');
-      if (!wrap.querySelector('iframe')) {
-        const iframe = document.createElement('iframe');
-        iframe.className = 'pdf-iframe';
-        iframe.src = viewer.dataset.pdfUrl;
-        iframe.title = viewer.dataset.pdfTitle || 'PDF';
-        wrap.appendChild(iframe);
+    function resolve(hash) {
+      const h = decodeURIComponent(hash.replace(/^#/, ''));
+      if (lessons.has(h)) return h;
+      if (legacy[h]) {
+        history.replaceState(null, '', `#${legacy[h]}`);
+        return legacy[h];
       }
-      const show = wrap.hidden;
-      wrap.hidden = !show;
-      btn.setAttribute('aria-expanded', String(show));
-    });
-  });
+      return firstKey;
+    }
+
+    // Collapsible nav — one boolean at every width; persisted on desktop only.
+    const toggle = document.querySelector('.subject-nav-toggle');
+    const isMobile = () => matchMedia('(max-width: 900px)').matches;
+    function setNav(visible) {
+      layout.classList.toggle('nav-hidden', !visible);
+      toggle.setAttribute('aria-expanded', String(visible));
+      if (!isMobile()) localStorage.setItem('teaching-nav', visible ? '1' : '0');
+    }
+    toggle.addEventListener('click', () => setNav(layout.classList.contains('nav-hidden')));
+    setNav(isMobile() ? false : localStorage.getItem('teaching-nav') !== '0');
+
+    function activate(key, scroll) {
+      lessons.forEach((el, k) => { el.hidden = k !== key; });
+      navLinks.forEach((a, k) => {
+        if (k === key) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+      if (scroll && layout.getBoundingClientRect().top < 0) layout.scrollIntoView();
+      if (scroll && isMobile()) setNav(false); // auto-close panel after choosing
+    }
+
+    activate(resolve(location.hash), false);
+    window.addEventListener('hashchange', () => activate(resolve(location.hash), true));
+  }
 </script>
 </BaseLayout>

@@ -49,8 +49,9 @@ data/
   i18n/{en,es,it}.yaml      # UI strings — same keys, same order, in all three files
   talks/<ID>.yaml           # one file per talk/event
   projects/<ID>.yaml        # one file per funded project
+  github.yaml               # GitHub page: username + curated repo cards
   teaching/
-    subjects/<ID>.yaml      # subject METADATA only (title/title_es/title_it, order, hidden)
+    subjects/<ID>.yaml      # subject METADATA only (title/_es/_it, order, hidden, image)
     tfgs/<ID>.yaml          # one file per Final Degree Project
     tfms/<ID>.yaml          # one file per Master Degree Project
 src/
@@ -69,7 +70,9 @@ src/
       talks.js              # talk cards
       experience.js         # education, work history, awards
       projects.js           # funded-project timeline
-      theses.js             # TFG/TFM lists + filter facets
+      theses.js             # TFG/TFM lists + filter facets (async — Gravatar lookups)
+      github.js             # GitHub page (profile + curated repo cards)
+    gravatar.js             # build-time Gravatar check (SHA-256, cached, offline-safe)
     richtext.js             # mini-markdown for YAML fields ([link](url), _em_, "- " bullets)
     bibtex.js               # minimal BibTeX parser (venue, doi, LaTeX accents)
     icons.js                # loadIcon(name) — inline SVG from public/img/icons
@@ -98,7 +101,8 @@ src/
     TimelineItem.astro      # education/work timeline entry (org slot + body slot)
     ProjectTimelineItem.astro # funded-project timeline entry (marker + <details> card)
     Exercise.astro          # exercise callout used inside teaching MDX
-    PdfViewer.astro         # lazy PDF <iframe> + download link (teaching sessions)
+    PdfViewer.astro         # lazy PDF <iframe> + download link (self-contained script)
+    Video.astro             # lazy YouTube embed (nocookie iframe on click; MDX-injectable)
     GithubPdfList.astro     # live PDF listing from the external teaching repo
   pages/
     [...lang]/index.astro                       # homepage (undefined → /, 'es', 'it')
@@ -106,14 +110,15 @@ src/
     [...lang]/talks/index.astro
     [...lang]/projects/index.astro
     [...lang]/experience/index.astro
+    [...lang]/github/index.astro                # GitHub profile + curated repos (live stats)
     [...lang]/teaching/index.astro
-    [...lang]/teaching/[subject]/index.astro    # subject page (tabs, MDX, PDFs)
+    [...lang]/teaching/[subject]/index.astro    # subject page (lesson sidebar, MDX, PDFs, videos)
     sitemap.xml.js                              # sitemap endpoint (same URL set as before)
   styles/                   # CSS partials imported by styles/main.css (bundled by Vite)
-    main.css  core/  layout/  home/  research/  experience/  projects/  talks/  teaching/
+    main.css  core/  layout/  home/  research/  experience/  projects/  talks/  teaching/  github/
   scripts/                  # client JS, bundled by Astro from BaseLayout's <script>
-    main.js                 # entry; inits controllers; dynamic-imports globe.js on homepage
-    controller.js  model.js  view.js  globe.js
+    main.js                 # entry; inits controllers
+    controller.js  model.js  view.js
 public/                     # copied verbatim to dist/ — root-absolute URLs (/img/…, /files/…)
   img/  files/  robots.txt
 scripts/
@@ -126,7 +131,7 @@ dist/                       # GENERATED — gitignored, do not edit manually
 ## Build & performance notes
 
 - **CSS**: `src/styles/main.css` is imported once in `BaseLayout.astro`; Vite resolves the whole `@import` chain into a single hashed stylesheet — no `@import` waterfall.
-- **Zero JS by default**: only `src/scripts/main.js` (theme/nav/filters/detail overlay, a few KB) ships on every page. `globe.js` is code-split into its own chunk and dynamically imported **only on the homepage**; inside it, the heavy Globe.gl CDN (~700 KB) is further deferred via `IntersectionObserver`.
+- **Zero JS by default**: only `src/scripts/main.js` (theme/nav/filters/detail overlay/scroll reveal, a few KB) ships on every page.
 - **Code highlighting**: fenced code blocks in teaching MDX are highlighted at **build time** by Astro's built-in Shiki with **dual themes** (`github-light`/`github-dark`, `defaultColor: false` in `astro.config.mjs`); `subject.css` switches the emitted `--shiki-*` variables with the active site theme — no Highlight.js, no client JS.
 - **Fonts**: non-blocking `media="print"` swap trick in `BaseLayout.astro`.
 - **FOUC prevention**: an inline `<script is:inline>` first in `<head>` applies the stored theme before CSS parses. **Never remove `is:inline`** — Astro would bundle/defer it and the flash returns.
@@ -158,7 +163,7 @@ CSS partials live under `src/styles/` (grouped by area) and are all imported by 
      ink-based in light; resting card = shadow-1, hover = shadow-2, dialog = shadow-3) */
   /* Motion: --ease-out, --dur-1 150ms · --dur-2 250ms · --dur-3 400ms */
   /* Z-index: --z-header 50 · --z-skip 100 */
-  /* Globe: --globe-ocean/country/stroke/pin — read by globe.js at runtime */
+  /* Globe: --globe-* — orphaned (the homepage globe was removed); kept in case it returns */
   --font-display / --font-body: 'Titillium Web', system-ui, sans-serif;
   /* Titillium Web has no 500/800 weights — use 400/600/700 (900 for display) */
   --container-width: 1140px;  --header-height: 4.5rem;
@@ -174,11 +179,12 @@ Rules of thumb: borders are `var(--border-w) solid var(--color-border)` (never h
 Defined in `src/styles/core/animations.css` + `transitions.css`; scroll-reveal JS in `src/scripts/controller.js`.
 
 - **Hover/reveal contract**: interactive hover lifts animate the `translate` property (`translate: 0 -1px/-2px` + one elevation step up); entrance/reveal animations animate `transform`. The two compose on the compositor — never set `translate` in a reveal rule or it kills the hover lift.
-- **Scroll reveal** (homepage only): IntersectionObserver-driven, **fires once** per element (`.reveal`/`.reveal--card` + `.is-visible`); cards in the same grid stagger by 0.08 s via `--reveal-delay`. Elements already in the viewport on load appear instantly.
-- **Hero entrance**: CSS-only staggered `rise-in` keyframes on `.hero-content` children + photo (`animation … backwards`), no JS — safe above the fold.
+- **Scroll reveal** (site-wide): IntersectionObserver-driven, **fires once** per element (`.reveal`/`.reveal--card` + `.is-visible`); cards in the same parent stagger by 0.08 s via `--reveal-delay`. Elements already in the viewport on load appear instantly. Targets come from `revealTargets()` in `src/scripts/model.js`: section heads, standalone tag rows, `.card-link`/`.talk-card`/`.timeline-item`/`.proj-item`/`.award-card`, plus the **containers** of filtered lists (never the `[data-filter-item]` items themselves — `initFilters` toggles their `display`, which would strand reveal-hidden items).
+- **Hero & page-header entrance**: CSS-only staggered `rise-in` keyframes on `.hero-content` children + photo and on `.page-header` children (`animation … backwards`), no JS — safe above the fold.
+- **Publication detail dialog**: opens/closes with a fade + rise via `@starting-style` + `transition-behavior: allow-discrete` (`publications.css`) — pure CSS progressive enhancement; unsupported browsers get the instant open/close.
 - **Header scroll state**: `initHeaderScroll()` (rAF-guarded) toggles `.site-header.is-scrolled` → hairline + `--shadow-1` + stronger blur.
 - **Cross-document view transitions**: pure CSS `@view-transition { navigation: auto }` (200/250 ms crossfade) in `transitions.css`; the header has `view-transition-name: site-header` so the chrome stays stable. Progressive enhancement, zero JS — do **not** add Astro's `<ClientRouter/>`.
-- Everything is gated behind `prefers-reduced-motion: no-preference` (reveals, hero, view transitions, globe rotation/entrance).
+- Everything is gated behind `prefers-reduced-motion: no-preference` (reveals, hero/page-header entrance, dialog animation, smooth scrolling, view transitions).
 
 ---
 
@@ -298,7 +304,7 @@ links:
   poster:  "https://..."
 projects:
   - equavel               # reference to data/projects/<id>.yaml
-lat: 37.5665              # optional — shows pin on homepage globe
+lat: 37.5665              # optional — unused since the homepage globe was removed
 lng: 126.9780
 ```
 
@@ -342,16 +348,30 @@ researchers: "PhD. Jane Doe"
 role: "Work Team Member"          # optional
 ```
 
+### GitHub page — `data/github.yaml`
+
+Drives the `/github/` page (nav item `nav_github`): a profile header + curated repository cards.
+
+```yaml
+username: augustocristian    # profile link, avatar and live-stat lookups
+name: "Cristian Augusto"     # optional display name (falls back to username)
+repos:
+  - name: repo-name          # repository under `username` (also the card link)
+    description: "Owner-maintained English description."
+    description_es: "Descripción en español."
+    description_it: "Descrizione in italiano."
+    topics: [testing, e2e]   # optional — rendered as tag pills
+```
+
+- Descriptions live here (not fetched) so they follow the i18n rules; curate/reorder the list freely.
+- The avatar uses GitHub's stable redirect `https://github.com/<username>.png` — no API call.
+- **Live stats** (profile followers/public-repo counts; per-repo stars/forks/language) are fetched client-side from the GitHub REST API by the page's inline script. Stat elements ship `hidden` and are revealed only on success — on any error or rate limit (60 req/h per visitor IP, 1 + N(repos) requests) the page silently stays complete without them (same pattern as `GithubPdfList.astro`).
+
 ---
 
-## Homepage globe
+## Homepage globe (removed)
 
-The homepage shows a 3D globe (Globe.gl + topojson, CDN-loaded) between the about section and the featured publications. The globe driver element is `350vh` tall with `position: sticky`; scroll position directly controls camera longitude (one full 360° rotation).
-
-- **Pins** appear when the globe rotates toward a conference location; margin labels with SVG connectors avoid overlap; clicking navigates to `/publications/#<id>`.
-- **Theme**: colours are read from the CSS design tokens (`--globe-*` in `tokens.css`) at init and re-read when `data-theme` changes (`MutationObserver`) or the system scheme flips — the globe can never drift from the site palette.
-- Data comes from publications with `lat:`/`lng:` fields (`buildMapLocations` in `src/lib/viewmodels.js`), serialized as `window.GLOBE_LOCATIONS` on the homepage.
-- `src/scripts/globe.js` loads only on the homepage (dynamic import in `main.js`, guarded by `#globe-viz`).
+The scroll-driven 3D globe was removed (commit "Removed globe"). The `--globe-*` tokens in `tokens.css` and the `lat:`/`lng:` publication fields are orphaned but kept in case it returns.
 
 ---
 
@@ -415,7 +435,7 @@ Never access a content field directly when a translated variant might exist. Use
 
 The teaching section has two levels:
 - **Teaching index** (`/teaching/`) — subject card grid + TFG/TFM filtered lists.
-- **Subject page** (`/teaching/<id>/`) — Theory/Labs/Seminars tabs; each session renders Markdown, an optional embedded PDF, and an optional external repo link.
+- **Subject page** (`/teaching/<id>/`) — docs-style layout: a collapsible left sidebar lists every lesson grouped Theory/Labs/Seminars; the content area shows **one lesson at a time**, driven by the URL hash (`#<group>/<slug>`, e.g. `#labs/01-html-basics` — shareable deep links; legacy `#theory`/`#labs`/`#seminars` map to that group's first lesson). Each lesson renders Markdown, an optional embedded PDF viewer, an optional embedded YouTube video, an optional external repo link, and a prev/next pager. Back/forward walks lesson history (plain hash anchors). All lessons are server-rendered: no-JS and print show them stacked. Sidebar visibility persists on desktop (`localStorage['teaching-nav']`) and defaults to hidden ≤900px (stacked panel, auto-closes on selection). Lessons are display-toggled — never give them scroll-reveal classes.
 
 ### Subject metadata — `data/teaching/subjects/<ID>.yaml`
 
@@ -426,12 +446,13 @@ title: "Web Technologies"
 title_es: "Tecnologías Web"
 title_it: "Tecnologie Web"
 order: 1
+image: "img/teaching/web-technologies.jpg"   # optional — banner on the index card AND the subject page (path under public/)
 # hidden: true    # uncomment to exclude subject without deleting it
 ```
 
 ### Session content — `src/content/teaching/<subject-id>/<type-dir>/NN-slug.mdx`
 
-One MDX file per unit/lab/seminar. Directory grouping (`theory/`, `labs/`, `seminars/`) is conventional; the `type` frontmatter field is what determines the tab.
+One MDX file per unit/lab/seminar. Directory grouping (`theory/`, `labs/`, `seminars/`) is conventional; the `type` frontmatter field is what determines the sidebar group. The file name (`NN-slug`) is the lesson's hash slug — renaming a file changes its deep link.
 
 ```mdx
 ---
@@ -439,6 +460,7 @@ title: "Lab 1: HTML Basics"
 type: lab               # theory | lab | seminar
 order: 1
 pdf_url: ""             # URL of the session PDF in the external teaching repo
+video_url: ""           # optional YouTube URL — rendered as a lazy embed below the body
 repo_url: ""            # optional external lab-repo link (button in the header)
 # hidden: true
 ---
@@ -452,9 +474,11 @@ Normal **Markdown** with fenced code blocks (Shiki-highlighted at build time).
 Exercise instructions in Markdown.
 
 </Exercise>
+
+<Video url="https://youtu.be/XXXXXXXXXXX" label="Watch: topic intro" />
 ```
 
-The `<Exercise>` component is provided automatically (no import needed) via the `components` prop in the subject page.
+The `<Exercise>` and `<Video>` components are provided automatically (no import needed) via the `components` prop in the subject page. `<Video>` is a lazy, privacy-friendly YouTube embed (thumbnail facade; the `youtube-nocookie.com` iframe loads only on click; no-JS fallback links to YouTube). In MDX, pass `label` in the language of instruction (teaching content is i18n-exempt); frontmatter `video_url` uses the localized `teaching_watch_video` label.
 
 ### Teaching PDFs — external repository
 
@@ -479,9 +503,20 @@ export const TEACHING_REPO = {
 title: "Title of the Project"
 student: "Student Full Name"
 year: 2024
-documentation: "https://..."
-repo: "https://github.com/..."
+degree: "Computer Engineering (IT)"                 # optional — chip on the card + filter facet
+degree_es: "Ingeniería Informática en Tecnologías de la Información"
+degree_it: "Ingegneria Informatica nelle Tecnologie dell'Informazione"
+degree_logo: "img/org/org-epigijon.svg"             # optional — school logo inside the degree chip
+institution_logo: "img/org/org-uniovi.svg"          # optional — card-header logo + filter facet
+documentation: "https://..."                        # optional — "Documentation" button
+repo: "https://github.com/..."                      # optional — "Repository" button
+email: "student@example.com"                        # optional — Gravatar lookup (see below)
+linkedin: "https://www.linkedin.com/in/example/"    # optional — student name links here
 ```
+
+- The **Documentation/Repository buttons** are fully wired end-to-end (`ThesisSection.astro`, `theses.js`, i18n keys `teaching_documentation`/`teaching_repository`) — filling the URLs above is all it takes for them to appear; empty strings render nothing.
+- **Student avatars**: when `email:` is set, the build SHA-256-hashes the trimmed+lowercased address and checks Gravatar (`?d=404`) via `src/lib/gravatar.js`. Students with a Gravatar get their photo; everyone else gets the initials avatar. Only the hash is ever published — never the address. Lookups are promise-cached per email (one HEAD request each per build) and any network failure falls back to initials, so **offline builds never break**. This is the only build-time network access on the site (`buildThesisViewModels` is async because of it).
+- **LinkedIn**: when `linkedin:` is set, the student's name in the card links to it (rendered through `AuthorChip`).
 
 ---
 
@@ -502,20 +537,18 @@ repo: "https://github.com/..."
 Client scripts live in `src/scripts/` and are bundled by Astro from the `<script>` tag in `BaseLayout.astro`.
 
 ```
-main.js        — entry point; initializes all controllers on DOMContentLoaded;
-                 dynamically imports globe.js only when #globe-viz is present
+main.js        — entry point; initializes all controllers on DOMContentLoaded
 controller.js  — app logic: initTheme, initNav, initHeaderScroll, initFilters,
                  initPubDetail, initScrollReveal
 model.js       — reads DOM state; returns plain data objects
 view.js        — pure DOM mutations; never reads state
-globe.js       — scroll-driven 3D globe (Globe.gl CDN, IntersectionObserver-deferred)
 ```
 
 - **`initFilters()`** is one generic engine for every `FilterBar.astro` on the page: each `[data-filter-root]` filters the `[data-filter-item]` children of its `data-target` list. An item matches a facet when its space-separated `data-<facet>` values intersect the active set (OR within a facet, AND across facets); the optional text input substring-matches `data-<searchField>`. With `data-page-size` set (publications page, `pageSize={10}`), matched items are paginated client-side: page/Next/Last buttons render into `[data-pager-for="<target>"]` and the visible range into the `.filter-range`/`.filter-count-n` spans of `[data-count-for="<target>"]`.
 - **FilterBar variants**: default `panel` (horizontal boxed bar — TFG/TFM lists) and `sidebar` (vertical checkbox groups used by the publications page: left column on desktop via `.pub-layout`, stacked on top below 900px).
-- **`globe.js`**: scroll handler is rAF-throttled; label layout batches all reads (camera matrices, container size, projections) before its style writes; colours are read from the CSS tokens (`--globe-*`, `--color-bg`, `--color-accent`) via `getComputedStyle`, so the globe re-themes with the palette; under `prefers-reduced-motion` it renders a static hemisphere with pins and skips the scroll listener + entrance animation.
+- **`initScrollReveal()`** runs site-wide (skipped under `prefers-reduced-motion: reduce`); reveal targets and the filtered-list container rule live in `revealTargets()` (`model.js`).
 
-Small page-specific scripts (subject-page tab switching + lazy PDF iframes, GitHub PDF listing) live inline in their `.astro` files.
+Small page-specific scripts (subject-page lesson router + sidebar toggle, GitHub PDF listing) live inline in their `.astro` files; the lazy PDF and video embeds live in their components' own `<script>` blocks (`PdfViewer.astro`, `Video.astro`).
 
 ### FOUC prevention
 

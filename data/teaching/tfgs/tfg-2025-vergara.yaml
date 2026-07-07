@@ -4,9 +4,13 @@ student: "José David Vergara Prieto"
 year: 2025
 degree: "Computer Engineering (IT)"
 degree_es: "Ingeniería Informática en Tecnologías de la Información"
+degree_it: "Ingegneria Informatica nelle Tecnologie dell'Informazione"
+degree_logo: "img/org/org-epigijon.svg"
 institution_logo: "img/org/org-uniovi.svg"
 keywords: []
 abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: "https://www.linkedin.com/in/jose-david-vergara-prieto-59151b234/"

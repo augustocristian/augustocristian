@@ -24,12 +24,15 @@ const subjects = await Promise.all(
       id: subject.id,
       title: localize(subject, 'title', lang) || subject.title,
       subject_url: `${prefix}teaching/${subject.id}/`,
+      image: subject.image ? `/${subject.image}` : '',
       ...(await subjectSessionTypes(subject.id)),
     })),
 );
 
-const tfgResult = buildThesisViewModels(loadTFGs(), coauthors, lang);
-const tfmResult = buildThesisViewModels(loadTFMs(), coauthors, lang);
+const [tfgResult, tfmResult] = await Promise.all([
+  buildThesisViewModels(loadTFGs(), coauthors, lang),
+  buildThesisViewModels(loadTFMs(), coauthors, lang),
+]);
 const tfgsIsAlt = subjects.length > 0 && (subjects.length - 1) % 2 === 0;
 const tfmsIsAlt = !tfgsIsAlt;
 ---
@@ -54,6 +57,7 @@ const tfmsIsAlt = !tfgsIsAlt;
           {subjects.map((subject) => (
             <a class="card-link" href={subject.subject_url}>
               <article class="card subject-card">
+                {subject.image && <img class="subject-card-img" src={subject.image} alt="" loading="lazy" />}
                 <h3>{subject.title}</h3>
                 <div class="subject-card-tags">
                   {subject.has_theory && <span class="tag">{t.teaching_tab_theory}</span>}

@@ -12,3 +12,4 @@ export { buildTalkViewModels } from './viewmodels/talks.js';
 export { buildEducationViewModels, buildExperienceViewModels, buildAwardViewModels } from './viewmodels/experience.js';
 export { buildProjectViewModels } from './viewmodels/projects.js';
 export { buildThesisViewModels } from './viewmodels/theses.js';
+export { buildGithubViewModel } from './viewmodels/github.js';

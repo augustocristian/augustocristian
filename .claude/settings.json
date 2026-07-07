@@ -8,7 +8,8 @@
       "WebSearch",
       "Bash(perl -i -pe 's/\\\\xEF\\\\xBB\\\\xBF/\\\\\\\\uFEFF/g' src/lib/data.js src/lib/i18n.js)",
       "Bash(grep -n \"appendForwardSlash\\\\|replace\\(/\\\\\\\\\\\\\\\\/\\\\?\\\\$\" node_modules/astro/dist/core/build/generate.js)",
-      "Bash(rm \"src/pages/cite/[id].bib.js\")"
+      "Bash(rm \"src/pages/cite/[id].bib.js\")",
+      "Bash(taskkill //PID 43164 //F)"
     ]
   }
 }

@@ -126,6 +126,18 @@
 }
 
 /* =========================================================
+   Empty state — dashed placeholder panel (empty TFG/TFM lists)
+   ========================================================= */
+.empty-state {
+  padding: var(--space-5);
+  border: var(--border-w) dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* =========================================================
    Badges
    ========================================================= */
 .badge {
@@ -193,6 +205,41 @@
 }
 
 /* =========================================================
+   Author chips — site-wide avatar + name primitives
+   (AuthorAvatar/AuthorChip: publications, experience, theses)
+   ========================================================= */
+.author-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  vertical-align: middle;
+  white-space: nowrap;
+  flex-wrap: nowrap;    /* prevent avatar/name ever splitting onto separate lines */
+  word-break: keep-all;
+}
+
+.author-avatar {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-w) solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.author-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* =========================================================
    Filter bar — shared faceted-filter panel (publications page
    and TFG/TFM lists), driven by initFilters() via data attributes.
    ========================================================= */
@@ -254,12 +301,21 @@
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: #fff;               /* always white text on blue background */
+  box-shadow: var(--shadow-1);
 }
 
 .filter-btn--author .author-avatar {
   width: 1.2rem;
   height: 1.2rem;
   font-size: 0.5rem;
+}
+
+/* Small logo inside a text filter chip (e.g. school logo on degree facets) */
+.filter-btn-logo {
+  width: 1.2rem;
+  height: 1.2rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .filter-btn--logo {
@@ -408,6 +464,7 @@
 .filter-bar--sidebar .filter-btn.is-active {
   background: none;
   color: var(--color-text);
+  box-shadow: none;
 }
 
 .filter-bar--sidebar .filter-btn.is-active:hover {

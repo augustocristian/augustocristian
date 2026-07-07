@@ -2,6 +2,10 @@ title: "Person Detection and Tracking System"
 title_es: "Sistema de detección y seguimiento de personas"
 student: "Álvaro González Rodríguez"
 year: 2021
+degree: "MSc in Big Data and Data Science"
+degree_es: "Máster Universitario en Big Data y Ciencia de Datos"
+degree_it: "Master in Big Data e Scienza dei Dati"
+degree_logo: "img/org/org-viu.svg"
 institution_logo: "img/org/org-viu.svg"
 cosupervisor: moranjesus
 keywords: []
@@ -9,3 +13,5 @@ abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: ""         # optional — student name links to this profile

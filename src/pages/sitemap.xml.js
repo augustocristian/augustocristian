@@ -1,5 +1,5 @@
-// Multilingual sitemap — same URL set as the old build: 6 standard pages plus
-// one page per visible teaching subject, across the 3 language prefixes.
+// Multilingual sitemap — 7 standard pages plus one page per visible teaching
+// subject, across the 3 language prefixes.
 import { LANGS } from '../lib/i18n.js';
 import { loadProfile, loadSubjects } from '../lib/data.js';
 
@@ -8,13 +8,14 @@ export function GET() {
   const subjectPaths = loadSubjects()
     .filter((s) => !s.hidden)
     .map((s) => `teaching/${s.id}/`);
-  const pages = ['', 'publications/', 'talks/', 'projects/', 'teaching/', 'experience/', ...subjectPaths];
+  const pages = ['', 'publications/', 'talks/', 'projects/', 'teaching/', 'experience/', 'github/', ...subjectPaths];
 
   const entries = [];
   for (const { code } of LANGS) {
     const base = code === 'en' ? '/' : `/${code}/`;
     for (const p of pages) {
-      entries.push(`  <url><loc>${new URL(`${base}${p}`, profile.site_url).toString()}</loc></url>`);
+      const loc = new URL(base + p, profile.site_url).toString();
+      entries.push(`  <url><loc>${loc}</loc></url>`);
     }
   }
 

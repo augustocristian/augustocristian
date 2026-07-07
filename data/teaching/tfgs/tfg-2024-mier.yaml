@@ -4,6 +4,8 @@ student: "Juan Francisco Mier Montoto"
 year: 2024
 degree: "Computer Engineering (IT)"
 degree_es: "Ingeniería Informática en Tecnologías de la Información"
+degree_it: "Ingegneria Informatica nelle Tecnologie dell'Informazione"
+degree_logo: "img/org/org-epigijon.svg"
 institution_logo: "img/org/org-uniovi.svg"
 cosupervisor: moranjesus
 keywords: []
@@ -11,3 +13,5 @@ abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: ""         # optional — student name links to this profile

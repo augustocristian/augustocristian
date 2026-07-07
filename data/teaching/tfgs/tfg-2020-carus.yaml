@@ -4,6 +4,8 @@ student: "Daniel Carús Cordera"
 year: 2020
 degree: "Computer Engineering (IT)"
 degree_es: "Ingeniería Informática en Tecnologías de la Información"
+degree_it: "Ingegneria Informatica nelle Tecnologie dell'Informazione"
+degree_logo: "img/org/org-epigijon.svg"
 institution_logo: "img/org/org-uniovi.svg"
 cosupervisor: moranjesus
 keywords: []
@@ -11,3 +13,5 @@ abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: "https://www.linkedin.com/in/daniel-car%C3%BAs-591430146/"

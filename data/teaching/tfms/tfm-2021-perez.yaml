@@ -2,6 +2,10 @@ title: "Software Testing Tool for Apache Spark Applications"
 title_es: "Herramienta de pruebas del software para aplicaciones Apache Spark"
 student: "Álvaro Rafael Pérez Entrenas"
 year: 2021
+degree: "MSc in Big Data and Data Science"
+degree_es: "Máster Universitario en Big Data y Ciencia de Datos"
+degree_it: "Master in Big Data e Scienza dei Dati"
+degree_logo: "img/org/org-viu.svg"
 institution_logo: "img/org/org-viu.svg"
 cosupervisor: moranjesus
 keywords: []
@@ -9,3 +13,5 @@ abstract: ""
 abstract_es: ""
 documentation: ""
 repo: ""
+email: ""            # optional — Gravatar lookup at build time; only a hash is published
+linkedin: "https://www.linkedin.com/in/%C3%A1lvaro-rafael-p%C3%A9rez-entrenas-5b8b10194/"

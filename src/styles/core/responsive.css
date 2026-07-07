@@ -71,3 +71,22 @@
     position: static;
   }
 }
+
+/* Subject lesson nav stacks above the content on small screens; the
+   nav-hidden class (toggle-driven, default hidden on mobile) still
+   governs visibility */
+@media (max-width: 900px) {
+  .subject-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .subject-nav {
+    position: static;
+    max-height: none;
+    border: var(--border-w) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+}

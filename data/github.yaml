@@ -1,0 +1,39 @@
+# GitHub page — profile + curated repository cards (/github/).
+# `username` drives the profile link, the avatar (github.com/<user>.png) and
+# the client-side live stats (stars/forks/language via the GitHub REST API).
+# Each repo needs only its `name` (a repository under `username`); the
+# description is owner-maintained here so it can be translated (_es/_it).
+# `topics` (optional) render as tag pills. Reorder/trim this list freely.
+username: augustocristian
+name: "Cristian Augusto"
+repos:
+  - name: retorch-thesis-rp
+    description: "Replication package for the PhD thesis “Resource Characterization and Optimization for End-to-End Testing”."
+    description_es: "Paquete de replicación de la tesis doctoral «Resource Characterization and Optimization for End-to-End Testing»."
+    description_it: "Pacchetto di replicazione della tesi di dottorato “Resource Characterization and Optimization for End-to-End Testing”."
+    topics: [testing, research]
+  - name: llm-testing-roadmap-rp
+    description: "Replication package of the article “A Research Roadmap on the Usage of Large Language Models in Software Testing”."
+    description_es: "Paquete de replicación del artículo «A Research Roadmap on the Usage of Large Language Models in Software Testing»."
+    description_it: "Pacchetto di replicazione dell’articolo “A Research Roadmap on the Usage of Large Language Models in Software Testing”."
+    topics: [llm, software-testing]
+  - name: teaching-resources
+    description: "Teaching resources for the Computer Engineering and Software Engineering subjects I teach."
+    description_es: "Recursos docentes de las asignaturas de Ingeniería Informática e Ingeniería del Software que imparto."
+    description_it: "Risorse didattiche per gli insegnamenti di Ingegneria Informatica e Ingegneria del Software."
+    topics: [teaching]
+  - name: retorch-st-devorapp
+    description: "RETORCH end-to-end test orchestration case study on the DevorApp system under test."
+    description_es: "Caso de estudio de orquestación de pruebas end-to-end con RETORCH sobre el sistema DevorApp."
+    description_it: "Caso di studio di orchestrazione di test end-to-end con RETORCH sul sistema DevorApp."
+    topics: [testing, e2e]
+  - name: retorch-st-climanuvem
+    description: "RETORCH end-to-end test orchestration case study on the ClimaNuvem system under test."
+    description_es: "Caso de estudio de orquestación de pruebas end-to-end con RETORCH sobre el sistema ClimaNuvem."
+    description_it: "Caso di studio di orchestrazione di test end-to-end con RETORCH sul sistema ClimaNuvem."
+    topics: [testing, e2e]
+  - name: IPS2025-PAs
+    description: "Practice exercises for the Introduction to Software Engineering (IPS) subject, 2025 edition."
+    description_es: "Ejercicios prácticos de la asignatura Introducción a la Ingeniería del Software (IPS), edición 2025."
+    description_it: "Esercizi pratici per il corso di Introduzione all’Ingegneria del Software (IPS), edizione 2025."
+    topics: [teaching, java]

@@ -1,0 +1,102 @@
+---
+// GitHub page: profile header + curated repository cards from data/github.yaml.
+// Static markup ships complete; live numbers (followers, stars, forks,
+// language) are filled in client-side from the GitHub REST API and stay
+// hidden if the API is unreachable or rate-limited (GithubPdfList pattern).
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import { langStaticPaths, loadI18n } from '../../../lib/i18n.js';
+import { loadGithub } from '../../../lib/data.js';
+import { buildGithubViewModel } from '../../../lib/viewmodels.js';
+import { loadIcon } from '../../../lib/icons.js';
+
+export function getStaticPaths() { return langStaticPaths(); }
+
+const { lang } = Astro.props;
+const t = loadI18n(lang);
+const gh = buildGithubViewModel(loadGithub(), lang);
+const iconGithub = loadIcon('github');
+const iconStar = loadIcon('star');
+const iconFork = loadIcon('fork');
+---
+<BaseLayout lang={lang} t={t} pagePath="github/" title={t.page_github_heading} description={t.meta_desc_github}>
+<main id="main">
+  <PageHeader eyebrow={t.page_github_eyebrow} heading={t.page_github_heading} description={t.page_github_desc} />
+
+  <section class="section">
+    <div class="container github-profile" data-github-user={gh.username}>
+      <img class="github-avatar" src={gh.avatar_url} alt={gh.display_name} width="96" height="96" loading="lazy" />
+      <div class="github-profile-main">
+        <h2>{gh.display_name}</h2>
+        <p class="github-profile-stats">
+          <span data-gh-stat="followers" hidden><strong data-gh-value></strong> {t.github_followers}</span>
+          <span data-gh-stat="public_repos" hidden><strong data-gh-value></strong> {t.github_repos_label}</span>
+        </p>
+        <a class="btn btn-sm" href={gh.profile_url} target="_blank" rel="noopener"><Fragment set:html={iconGithub} /> {t.github_profile_button}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <SectionHead eyebrow={t.github_repos_eyebrow} heading={t.github_repos_heading} />
+      <div class="grid grid-2">
+        {gh.repos.map((repo) => (
+          <a class="card-link" href={repo.url} target="_blank" rel="noopener" data-gh-repo={repo.name}>
+            <article class="card repo-card">
+              <h3>{repo.name}</h3>
+              {repo.description && <p class="text-muted repo-desc">{repo.description}</p>}
+              {repo.has_topics && <div class="repo-topics">{repo.topics.map((topic) => <span class="tag">{topic}</span>)}</div>}
+              <div class="repo-stats">
+                <span class="repo-stat" data-gh-stat="language" hidden title={t.github_stat_language}><span data-gh-value></span></span>
+                <span class="repo-stat" data-gh-stat="stars" hidden title={t.github_stat_stars} aria-label={t.github_stat_stars}><Fragment set:html={iconStar} /> <span data-gh-value></span></span>
+                <span class="repo-stat" data-gh-stat="forks" hidden title={t.github_stat_forks} aria-label={t.github_stat_forks}><Fragment set:html={iconFork} /> <span data-gh-value></span></span>
+              </div>
+            </article>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Live enrichment from the GitHub REST API. Every stat element ships
+  // hidden; fill + unhide on success, stay hidden on any error or rate
+  // limit so the page always looks complete without them.
+  const root = document.querySelector('[data-github-user]');
+  if (root instanceof HTMLElement) {
+    const user = root.dataset.githubUser;
+    const fmt = new Intl.NumberFormat(document.documentElement.lang);
+
+    const show = (scope, stat, value) => {
+      const el = scope.querySelector(`[data-gh-stat="${stat}"]`);
+      if (!el || value === null || value === undefined || value === '') return;
+      const slot = el.querySelector('[data-gh-value]');
+      if (slot) slot.textContent = typeof value === 'number' ? fmt.format(value) : String(value);
+      el.hidden = false;
+    };
+
+    const getJson = (url) =>
+      fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))));
+
+    getJson(`https://api.github.com/users/${user}`)
+      .then((u) => {
+        show(root, 'followers', u.followers);
+        show(root, 'public_repos', u.public_repos);
+      })
+      .catch(() => {});
+
+    document.querySelectorAll('[data-gh-repo]').forEach((card) => {
+      getJson(`https://api.github.com/repos/${user}/${card.dataset.ghRepo}`)
+        .then((repo) => {
+          show(card, 'stars', repo.stargazers_count);
+          show(card, 'forks', repo.forks_count);
+          show(card, 'language', repo.language || '');
+        })
+        .catch(() => {});
+    });
+  }
+</script>
+</BaseLayout>

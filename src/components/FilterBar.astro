@@ -5,6 +5,8 @@
 //   groups        [{ label, filter, kind?: 'text'|'author'|'logo',
 //                    options: [{ value, label?, avatar_path?, initials?, logo_path?, title? }] }]
 //                 `filter` must equal the data-* attribute name on the items.
+//                 Text options may also carry a `logo_path` — rendered as a
+//                 small logo before the label (degree facets on TFG/TFM lists).
 //   target        CSS selector of the list whose [data-filter-item] children get filtered.
 //   variant       'panel' (default, horizontal boxed bar) | 'sidebar' (vertical
 //                 checkbox groups — desktop left column, stacks on top on mobile).
@@ -47,7 +49,7 @@ const {
               {o.label}
             </button>
           ) : (
-            <button class="filter-btn" data-filter={group.filter} data-value={o.value}>{o.label}</button>
+            <button class="filter-btn" data-filter={group.filter} data-value={o.value}>{o.logo_path && <img src={o.logo_path} alt="" class="filter-btn-logo" />}{o.label}</button>
           )
         ))}
       </div>

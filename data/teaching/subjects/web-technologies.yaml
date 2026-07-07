@@ -3,3 +3,4 @@ title_es: "Tecnologías Web"
 title_it: "Tecnologie Web"
 order: 1
 # Session content lives in src/content/teaching/web-technologies/ (MDX files).
+image: ""            # optional — card banner + subject-page banner, path under public/ (e.g. img/teaching/web-technologies.jpg)

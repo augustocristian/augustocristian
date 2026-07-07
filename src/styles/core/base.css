@@ -98,6 +98,11 @@ h4 { font-size: var(--step-1); }
   margin-bottom: 0.5rem;
 }
 
+/* Section eyebrows pick up the accent — quiet brand touch */
+.section-head .eyebrow {
+  color: var(--color-accent);
+}
+
 .highlight {
   background: var(--color-accent);
   color: #fff;               /* blue bg always needs white text in any theme */

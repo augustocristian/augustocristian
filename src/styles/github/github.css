@@ -1,0 +1,74 @@
+/* =========================================================
+   GitHub page — profile header + repository cards
+   ========================================================= */
+.github-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.github-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: var(--border-w) solid var(--color-border);
+}
+
+.github-profile-main h2 {
+  margin-bottom: var(--space-1);
+}
+
+.github-profile-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+/* Repo cards — column layout so the stat row pins to the bottom
+   (.card-link .card is height:100%, cards in a row stay aligned) */
+.repo-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.repo-card h3 {
+  font-size: var(--step-1);
+  margin-bottom: 0;
+  overflow-wrap: anywhere;   /* long repo names must not overflow the card */
+}
+
+.repo-desc {
+  margin-bottom: 0;
+}
+
+.repo-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.repo-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.repo-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.repo-stat svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}

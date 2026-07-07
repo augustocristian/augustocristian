@@ -29,6 +29,7 @@ export const loadEducation = cached(() => readYaml(path.join(DATA_DIR, 'educatio
 export const loadExperience = cached(() => readYaml(path.join(DATA_DIR, 'experience.yaml')));
 export const loadAwards = cached(() => readYaml(path.join(DATA_DIR, 'awards.yaml')));
 export const loadLanguages = cached(() => readYaml(path.join(DATA_DIR, 'languages.yaml')));
+export const loadGithub = cached(() => readYaml(path.join(DATA_DIR, 'github.yaml')));
 
 export const loadCoauthors = cached(() => {
   const coauthors = {};

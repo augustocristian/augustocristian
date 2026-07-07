@@ -12,3 +12,22 @@ const { url, title = 'PDF', t } = Astro.props;
   </div>
   <div class="pdf-frame-wrap" hidden></div>
 </div>
+<script>
+  // Lazy PDF embed: create the iframe only on first "View PDF" click.
+  document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const viewer = btn.closest('.pdf-viewer');
+      const wrap = viewer.querySelector('.pdf-frame-wrap');
+      if (!wrap.querySelector('iframe')) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'pdf-iframe';
+        iframe.src = viewer.dataset.pdfUrl;
+        iframe.title = viewer.dataset.pdfTitle || 'PDF';
+        wrap.appendChild(iframe);
+      }
+      const show = wrap.hidden;
+      wrap.hidden = !show;
+      btn.setAttribute('aria-expanded', String(show));
+    });
+  });
+</script>

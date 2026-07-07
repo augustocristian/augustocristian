@@ -12,6 +12,7 @@ nav_talks: "Conferenze"
 nav_experience: "Esperienza"
 nav_projects: "Progetti"
 nav_teaching: "Didattica"
+nav_github: "GitHub"
 # Etichette aria navigazione
 nav_aria_home: "Home"
 skip_to_content: "Salta al contenuto"
@@ -26,6 +27,7 @@ meta_desc_talks: "Conferenze ed eventi a cui ha partecipato Cristian Augusto."
 meta_desc_experience: "Formazione, esperienza lavorativa, certificazioni e lingue."
 meta_desc_projects: "Progetti di ricerca finanziati e collaborazioni industriali."
 meta_desc_teaching: "Materiali didattici e tesi magistrali supervisionate."
+meta_desc_github: "Software open source e repository di Cristian Augusto su GitHub."
 
 # ── Pagina principale ──────────────────────────────────────────────────────
 # Hero
@@ -133,17 +135,35 @@ teaching_construction_notice: "🚧 Questa sezione è in costruzione. I material
 # ── Pagina didattica — pagine materia ──────────────────────────────────────
 # Navigazione
 teaching_back: "← Torna alla Didattica"
-# Schede sezione
+# Gruppi di lezioni (intestazioni della barra laterale)
 teaching_tab_theory: "Teoria"
 teaching_tab_labs: "Laboratorio"
 teaching_tab_seminars: "Seminari"
-subject_tabs_aria: "Sezioni della materia"
-# Azioni sessione (PDF incorporato + link repository esterno)
+# Barra laterale delle lezioni + paginazione
+subject_nav_aria: "Navigazione delle lezioni"
+teaching_lessons: "Lezioni"
+teaching_prev_lesson: "Precedente"
+teaching_next_lesson: "Successiva"
+# Azioni sessione (PDF incorporato + video + link repository esterno)
 teaching_unit_pdf: "Scarica PDF"
 teaching_view_pdf: "Vedi PDF"
+teaching_watch_video: "Guarda il video"
 teaching_lab_external: "Vedi su GitHub"
 # Elenco in tempo reale dal repository esterno dei materiali didattici
 teaching_repo_materials: "Repository dei materiali"
+
+# ── Pagina GitHub ──────────────────────────────────────────────────────────
+page_github_eyebrow: "Open source"
+page_github_heading: "GitHub"
+page_github_desc: "Il mio lavoro open source: strumenti, prototipi di ricerca e materiale didattico."
+github_profile_button: "Vedi il profilo su GitHub"
+github_followers: "follower"
+github_repos_label: "repository pubblici"
+github_repos_eyebrow: "Repository"
+github_repos_heading: "Repository in evidenza"
+github_stat_stars: "Stelle"
+github_stat_forks: "Fork"
+github_stat_language: "Linguaggio principale"
 
 # ── Ausiliari condivisi ────────────────────────────────────────────────────
 pub_related_project: "Progetto correlato"

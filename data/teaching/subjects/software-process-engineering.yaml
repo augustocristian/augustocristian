@@ -3,3 +3,4 @@ title_es: "Ingeniería del Proceso Software"
 title_it: "Ingegneria del Processo Software"
 order: 2
 # Session content lives in src/content/teaching/software-process-engineering/ (MDX files).
+image: ""            # optional — card banner + subject-page banner, path under public/ (e.g. img/teaching/software-process-engineering.jpg)

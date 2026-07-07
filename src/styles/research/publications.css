@@ -26,6 +26,11 @@
 .pub-item {
   border-bottom: var(--border-w) solid var(--color-border);
   padding-block: var(--space-5);
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+
+.pub-item:hover {
+  border-bottom-color: var(--color-border-strong);
 }
 
 .pub-item:first-child {
@@ -56,7 +61,7 @@
   margin-bottom: 0;
 }
 
-/* ── Author chips ─────────────────────────────────────── */
+/* ── Author line (chip primitives live in core/components.css) ── */
 .pub-authors {
   font-weight: 600;
   margin-bottom: 0.25rem;
@@ -65,37 +70,6 @@
 .pub-authors a {
   text-decoration: underline;
   text-decoration-color: var(--color-accent-2);
-}
-
-.author-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  vertical-align: middle;
-  white-space: nowrap;
-  flex-wrap: nowrap;    /* prevent avatar/name ever splitting onto separate lines */
-  word-break: keep-all;
-}
-
-.author-avatar {
-  display: inline-block;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  border: var(--border-w) solid var(--color-border);
-  flex-shrink: 0;
-}
-
-.author-initials {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
 }
 
 /* ── Venue & abstract ─────────────────────────────────── */
@@ -180,6 +154,49 @@
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+}
+
+/* Open/close animation — pure CSS progressive enhancement via
+   @starting-style + allow-discrete; browsers without support keep
+   the instant open/close. Uses `transform`, not `translate`: the
+   dialog has no hover lift, so the motion contract is untouched. */
+@media (prefers-reduced-motion: no-preference) {
+  .pub-overlay {
+    transition: opacity var(--dur-2) var(--ease-out),
+                transform var(--dur-2) var(--ease-out),
+                overlay var(--dur-2) allow-discrete,
+                display var(--dur-2) allow-discrete;
+  }
+
+  .pub-overlay:not([open]) {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+
+  .pub-overlay[open] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @starting-style {
+    .pub-overlay[open] {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.98);
+    }
+  }
+
+  .pub-overlay::backdrop {
+    transition: opacity var(--dur-2) var(--ease-out),
+                overlay var(--dur-2) allow-discrete,
+                display var(--dur-2) allow-discrete;
+  }
+
+  .pub-overlay:not([open])::backdrop { opacity: 0; }
+  .pub-overlay[open]::backdrop       { opacity: 1; }
+
+  @starting-style {
+    .pub-overlay[open]::backdrop { opacity: 0; }
+  }
 }
 
 .pub-overlay-close {
@@ -274,13 +291,17 @@
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--color-text);
-  transition: border-color var(--dur-1), background var(--dur-1);
+  transition: border-color var(--dur-1), background var(--dur-1),
+              translate var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-1) var(--ease-out);
   max-width: 300px;
 }
 
 .pub-detail-project-card:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-soft);
+  translate: 0 -1px;
+  box-shadow: var(--shadow-1);
 }
 
 .pub-detail-project-img {

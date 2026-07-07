@@ -1,5 +1,5 @@
 /* =========================================================
-   Subject page — back link & tabs
+   Subject page — back link, toolbar & docs layout
    ========================================================= */
 .subject-back-link {
   display: inline-flex;
@@ -21,84 +21,166 @@
   padding-bottom: 4rem;
 }
 
-.subject-tabs {
-  display: flex;
-  gap: 0.25rem;
-  border-bottom: var(--border-w) solid var(--color-border);
-  margin-bottom: 2rem;
-}
-
-.subject-tab-btn {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.9rem;
-  padding: 0.65rem 1.25rem;
-  border: none;
-  background: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: color var(--dur-1), border-color var(--dur-1);
-}
-
-.subject-tab-btn:hover { color: var(--color-text); }
-
-.subject-tab-btn.is-active {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
-
-/* =========================================================
-   Subject unit (collapsible <details> per session)
-   ========================================================= */
-.subject-unit {
-  border: var(--border-w) solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  margin-bottom: 1rem;
-  overflow: hidden;
-}
-
-.subject-unit-summary {
+.subject-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  transition: background var(--dur-1);
+  margin-bottom: var(--space-4);
 }
 
-.subject-unit-summary::-webkit-details-marker { display: none; }
-.subject-unit-summary::marker { content: ''; }
+.subject-nav-toggle svg {
+  width: 1em;
+  height: 1em;
+}
 
-.subject-unit-summary:hover { background: var(--color-bg-alt); }
+/* Docs layout: sticky lesson rail + content column (mirrors .pub-layout) */
+.subject-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
 
-.subject-unit-title {
-  font-family: var(--font-display);
+.subject-layout.nav-hidden { grid-template-columns: 1fr; }
+.subject-layout.nav-hidden .subject-nav { display: none; }
+
+.subject-nav {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-4));
+  max-height: calc(100vh - var(--header-height) - var(--space-6));
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+
+.subject-nav-heading {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
   font-weight: 700;
-  font-size: 1.1rem;
-  flex: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: var(--space-4) 0 var(--space-2);
 }
 
-.subject-unit-summary::before {
-  content: '▶';
-  font-size: 0.7rem;
+.subject-nav-group:first-child .subject-nav-heading { margin-top: 0; }
+
+.subject-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subject-nav-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background var(--dur-1) var(--ease-out),
+              color var(--dur-1) var(--ease-out);
+}
+
+.subject-nav-link:hover {
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+}
+
+.subject-nav-link[aria-current="true"] {
+  background: var(--color-accent-soft);
   color: var(--color-accent);
-  transition: transform var(--dur-2) var(--ease-out);
+  font-weight: 600;
+}
+
+.subject-nav-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 
-.subject-unit[open] > .subject-unit-summary::before {
-  transform: rotate(90deg);
+/* =========================================================
+   Lesson — one article per session, hash-toggled by the page
+   script (never give lessons reveal classes: display-toggled)
+   ========================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  /* display:none -> block restarts the animation on every switch */
+  .lesson {
+    animation: rise-in var(--dur-2) var(--ease-out) both;
+  }
 }
 
-.subject-unit-body {
-  border-top: 1px solid var(--color-border);
-  padding: 1.25rem;
+.lesson-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: var(--border-w) solid var(--color-border);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.lesson-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.lesson-title {
+  font-size: var(--step-2);
+  margin: var(--space-1) 0 0;
+}
+
+/* Prev/next pager at the bottom of every lesson */
+.lesson-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  border-top: var(--border-w) solid var(--color-border);
+  padding-top: var(--space-4);
+}
+
+.lesson-pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: translate var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out);
+}
+
+.lesson-pager-link:hover {
+  translate: 0 -1px;
+  box-shadow: var(--shadow-2);
+  border-color: var(--color-accent);
+}
+
+.lesson-pager-next { text-align: right; }
+
+.lesson-pager-dir {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.lesson-pager-title {
+  font-weight: 600;
+  font-size: 0.92rem;
 }
 
 /* =========================================================
@@ -211,6 +293,75 @@
 }
 
 /* =========================================================
+   Embedded YouTube video (Video.astro — lazy facade)
+   ========================================================= */
+.video-embed {
+  margin-top: var(--space-5);
+  border-top: var(--border-w) solid var(--color-border);
+  padding-top: var(--space-4);
+}
+
+.video-facade {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #000;
+  border: var(--border-w) solid var(--color-border);
+}
+
+.video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+
+.video-facade:hover .video-thumb { opacity: 1; }
+
+.video-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 64px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-2);
+}
+
+.video-play::after {
+  content: '';
+  border-style: solid;
+  border-width: 9px 0 9px 15px;
+  border-color: transparent transparent transparent #fff;
+}
+
+.video-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-2) var(--space-3);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.65));
+}
+
+.video-iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+/* =========================================================
    Live PDF listing from the external materials repository
    ========================================================= */
 .repo-pdf-section {
@@ -256,15 +407,39 @@
   margin-top: 0.75rem;
 }
 
+/* Optional banner image on top of the card (subjects with image:) */
+.subject-card-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 6;   /* consistent crop across cards; reserves space (no CLS) */
+  object-fit: cover;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+/* Wide banner under the subject-page h1 (same image: field) */
+.subject-banner {
+  display: block;
+  width: 100%;
+  aspect-ratio: 21 / 6;
+  object-fit: cover;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+}
+
 /* =========================================================
-   Print — session content as document
+   Print — all lessons as one document, no chrome
    ========================================================= */
 @media print {
-  .site-header, .site-footer, .subject-tabs,
-  .subject-back-link, .pdf-viewer, .repo-pdf-section { display: none !important; }
+  .site-header, .site-footer, .subject-back-link, .subject-toolbar,
+  .subject-nav, .lesson-pager, .pdf-viewer, .video-embed,
+  .repo-pdf-section { display: none !important; }
 
-  .subject-unit { border: none !important; }
-  .subject-tab-panel[hidden] { display: block !important; }
+  .subject-layout { display: block; }
+  .lesson[hidden] { display: block !important; }
+  .lesson { break-inside: avoid-page; }
 }
 
 /* =========================================================

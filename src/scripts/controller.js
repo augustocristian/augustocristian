@@ -231,11 +231,13 @@ export function initPubDetail() {
   }
 }
 
-// ── Scroll reveal (homepage only) ────────────────────────────────────────────
+// ── Scroll reveal (site-wide) ─────────────────────────────────────────────────
 export function initScrollReveal() {
-  if (!('IntersectionObserver' in globalThis) || !document.querySelector('.hero')) return;
+  if (!('IntersectionObserver' in globalThis)) return;
+  if (globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const targets = revealTargets();
+  if (!targets.length) return;
 
   // Stagger cards within the same parent container (delay only on appear)
   const byParent = new Map();

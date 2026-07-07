@@ -10,6 +10,7 @@ const teaching = defineCollection({
     type: z.enum(['theory', 'lab', 'seminar']),
     order: z.number().default(99),
     pdf_url: z.string().default(''),
+    video_url: z.string().default(''),
     repo_url: z.string().default(''),
     hidden: z.boolean().default(false),
   }),

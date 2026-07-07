@@ -53,12 +53,16 @@
   border: var(--border-w) solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  transition: border-color var(--dur-1), background var(--dur-1);
+  transition: border-color var(--dur-1), background var(--dur-1),
+              translate var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-1) var(--ease-out);
 }
 
 .material-link:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-soft);
+  translate: 0 -1px;
+  box-shadow: var(--shadow-1);
 }
 
 .material-link--no-url {
@@ -69,6 +73,8 @@
 .material-link--no-url:hover {
   border-color: var(--color-border);
   background: var(--color-surface);
+  translate: none;
+  box-shadow: none;
 }
 
 .material-link svg {
@@ -111,6 +117,16 @@
   height: 2rem;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+/* Degree chip (reuses the experience-page .degree-chip primitives) */
+.thesis-degree {
+  margin: 0;
+}
+
+/* Long official degree names must wrap inside the pill on narrow cards */
+.thesis-degree .degree-chip {
+  white-space: normal;
 }
 
 .thesis-cosupervisor {

@@ -26,5 +26,8 @@
 @import './teaching/teaching.css';
 @import './teaching/subject.css';
 
+/* ── GitHub ──────────────────────────────────────────────── */
+@import './github/github.css';
+
 /* ── Responsive — breakpoint overrides (must be last) ────── */
 @import './core/responsive.css';

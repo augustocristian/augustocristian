@@ -12,6 +12,7 @@ nav_talks: "Talks"
 nav_experience: "Experience"
 nav_projects: "Projects"
 nav_teaching: "Teaching"
+nav_github: "GitHub"
 # Navigation aria-labels
 nav_aria_home: "Home"
 skip_to_content: "Skip to content"
@@ -26,6 +27,7 @@ meta_desc_talks: "Conferences and talks Cristian Augusto has participated in."
 meta_desc_experience: "Education, work experience, certifications and languages."
 meta_desc_projects: "Funded research projects and industry collaborations."
 meta_desc_teaching: "Course materials and supervised final degree projects."
+meta_desc_github: "Open-source software and repositories by Cristian Augusto on GitHub."
 
 # ── Homepage ───────────────────────────────────────────────────────────────
 # Hero
@@ -134,17 +136,35 @@ teaching_construction_notice: "🚧 This section is currently under construction
 # ── Teaching page — subject pages ─────────────────────────────────────────
 # Navigation
 teaching_back: "← Back to Teaching"
-# Section tabs
+# Lesson groups (sidebar headings)
 teaching_tab_theory: "Theory"
 teaching_tab_labs: "Labs"
 teaching_tab_seminars: "Seminars"
-subject_tabs_aria: "Subject sections"
-# Session actions (PDF embed + external repo link)
+# Lesson sidebar + pager
+subject_nav_aria: "Lesson navigation"
+teaching_lessons: "Lessons"
+teaching_prev_lesson: "Previous"
+teaching_next_lesson: "Next"
+# Session actions (PDF embed + video + external repo link)
 teaching_unit_pdf: "Download PDF"
 teaching_view_pdf: "View PDF"
+teaching_watch_video: "Watch video"
 teaching_lab_external: "View on GitHub"
 # Live listing from the external teaching-materials repository
 teaching_repo_materials: "Materials repository"
+
+# ── GitHub page ────────────────────────────────────────────────────────────
+page_github_eyebrow: "Open Source"
+page_github_heading: "GitHub"
+page_github_desc: "My open-source work: tools, research prototypes and teaching material."
+github_profile_button: "View profile on GitHub"
+github_followers: "followers"
+github_repos_label: "public repositories"
+github_repos_eyebrow: "Repositories"
+github_repos_heading: "Featured Repositories"
+github_stat_stars: "Stars"
+github_stat_forks: "Forks"
+github_stat_language: "Main language"
 
 # ── Shared / cross-page helpers ────────────────────────────────────────────
 pub_related_project: "Related project"

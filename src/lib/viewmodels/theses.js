@@ -2,12 +2,15 @@
 import path from 'node:path';
 import { localize } from '../i18n.js';
 import { isEmpty, slugify } from '../richtext.js';
-import { buildAuthor } from './shared.js';
+import { buildAuthor, nameInitials } from './shared.js';
+import { gravatarUrl } from '../gravatar.js';
 
-export function buildThesisViewModels(items, coauthors, lang) {
+// Async: performs a cached Gravatar existence check per student email (the
+// only build-time network access on the site; failures fall back to initials).
+export async function buildThesisViewModels(items, coauthors, lang) {
   const sorted = [...items].sort((a, b) => (b.year || 0) - (a.year || 0));
 
-  const viewModels = sorted.map((item) => {
+  const viewModels = await Promise.all(sorted.map(async (item) => {
     const coKey = item.cosupervisor || '';
     const title = localize(item, 'title', lang) || item.title || '';
     const abstract = (localize(item, 'abstract', lang) || '').trim().replace(/\s+/g, ' ');
@@ -22,10 +25,21 @@ export function buildThesisViewModels(items, coauthors, lang) {
       title,
       student: item.student || '',
       student_lower: (item.student || '').toLowerCase(),
+      // Structured person for AuthorChip: Gravatar photo when the (optional)
+      // email has one, initials otherwise; name links to LinkedIn when set.
+      student_author: {
+        name: item.student || '',
+        url: item.linkedin || '',
+        avatar_path: await gravatarUrl(item.email),
+        initials: nameInitials(item.student || ''),
+        bold: false,
+      },
       year: item.year,
       degree,
       degree_slug: degreeSlug,
       has_degree: !isEmpty(degree),
+      degree_logo: item.degree_logo || '',
+      has_degree_logo: !isEmpty(item.degree_logo),
       institution_slug: institutionSlug,
       abstract,
       has_abstract: !isEmpty(abstract),
@@ -42,15 +56,22 @@ export function buildThesisViewModels(items, coauthors, lang) {
       has_cosupervisor: !isEmpty(coKey),
       cosupervisor: coKey ? buildAuthor(coauthors, coKey) : null,
     };
-  });
+  }));
 
   const filterYears = [...new Set(sorted.map((t) => t.year).filter(Boolean))]
     .sort((a, b) => b - a)
     .map((y) => ({ label: String(y), value: String(y) }));
 
   const degreeMap = new Map();
-  viewModels.forEach((vm) => { if (vm.degree_slug) degreeMap.set(vm.degree_slug, vm.degree); });
-  const filterDegrees = [...degreeMap.entries()].map(([value, label]) => ({ value, label }));
+  viewModels.forEach((vm) => {
+    if (vm.degree_slug && !degreeMap.has(vm.degree_slug)) {
+      degreeMap.set(vm.degree_slug, {
+        label: vm.degree,
+        logo_path: vm.has_degree_logo ? `/${vm.degree_logo}` : '',
+      });
+    }
+  });
+  const filterDegrees = [...degreeMap.entries()].map(([value, o]) => ({ value, ...o }));
 
   const kwMap = new Map();
   sorted.forEach((t) => (t.keywords || []).forEach((k) => kwMap.set(slugify(k), k)));
