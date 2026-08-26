@@ -1,0 +1,345 @@
+# Planificación docente — Tecnologías Web (GIITIN01-4-012), curso 2026/2027.
+#
+# Fuente única para DOS salidas:
+#   1. La tabla de planificación de /teaching/web-technologies/ (lección «Planificación»).
+#   2. Los ficheros .ics descargables (uno por subgrupo de laboratorio), generados
+#      por src/integrations/teaching-ics.mjs en /calendar/<subject>-<grupo>.ics.
+#
+# Las fechas van ENTRECOMILLADAS a propósito (js-yaml convertiría 2026-09-14 en un
+# Date UTC y perderíamos el control del formato). Formato "YYYY-MM-DD"; las horas
+# "HH:MM" son hora local de la zona indicada en `timezone`.
+
+course: "2026/2027"
+code: "GIITIN01-4-012"
+timezone: "Europe/Madrid"
+location: "Escuela Politécnica de Ingeniería de Gijón"
+
+# Subgrupos de laboratorio: día de la semana (0 = lunes … 4 = viernes) y franja.
+# Las fechas concretas se derivan del lunes (`start`) de cada semana.
+groups:
+  - id: "PL-01"
+    weekday: 2
+    start: "16:00"
+    end: "18:00"
+  - id: "PL-02"
+    weekday: 1
+    start: "18:00"
+    end: "20:00"
+  - id: "PL-03"
+    weekday: 1
+    start: "14:00"
+    end: "16:00"
+  - id: "PL-04"
+    weekday: 0
+    start: "18:00"
+    end: "20:00"
+
+# Semanas de docencia (la semana 1 es orientación/matrícula, sin clase de esta
+# asignatura). `start` es SIEMPRE el lunes de la semana.
+weeks:
+  - n: 2
+    start: "2026-09-14"
+    labs:
+      cancelled: true
+      note: "Sesiones anuladas (aún no hay laboratorio)"
+    theory:
+      - date: "2026-09-15"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T00 Presentación · T01 Arquitecturas web modernas"
+        detail: "Presentación de la asignatura y del supuesto aquaapp; historia de la web e inicio del bloque de arquitecturas."
+        lessons: ["theory/00_presentacion", "theory/01_arquitecturas-web-modernas"]
+      - date: "2026-09-16"
+        start: "14:00"
+        end: "16:00"
+        kind: theory
+        title: "T01 Arquitecturas web modernas (cont.) · T02 Introducción a Spring Boot"
+        detail: "Franja excepcional de 14:00 a 16:00. Continuación de arquitecturas y comunicaciones; arranque de Spring Boot."
+        lessons: ["theory/01_arquitecturas-web-modernas", "theory/02_introduccion-spring-boot"]
+
+  - n: 3
+    start: "2026-09-21"
+    labs:
+      session: "S01"
+      lesson: "labs/01_entorno-y-primer-servicio"
+      title: "Entorno y primer servicio"
+      extra: "Git avanzado (práctica de aula)"
+    theory:
+      - date: "2026-09-22"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T02 Introducción a Spring Boot · T03 Capa web REST"
+        lessons: ["theory/02_introduccion-spring-boot", "theory/03_capa-web-rest"]
+      - date: "2026-09-23"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T03 Capa web REST"
+        lessons: ["theory/03_capa-web-rest"]
+
+  - n: 4
+    start: "2026-09-28"
+    labs:
+      session: "S02"
+      lesson: "labs/02_api-rest-y-capa-de-servicios"
+      title: "API REST y capa de servicios"
+    theory:
+      - date: "2026-09-29"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T02d Diseño: principios SOLID y patrones"
+        lessons: ["theory/02d_solid-y-patrones"]
+      - date: "2026-09-30"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T04 Persistencia con Spring Data JPA"
+        lessons: ["theory/04_persistencia-spring-data-jpa"]
+
+  - n: 5
+    start: "2026-10-05"
+    labs:
+      session: "S03"
+      lesson: "labs/03_modelo-de-dominio-y-persistencia"
+      title: "Modelo de dominio y persistencia"
+    theory:
+      - date: "2026-10-06"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T03a OpenAPI y Postman"
+        lessons: ["theory/03a_openapi-y-postman"]
+      - date: "2026-10-07"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T05 Lógica de negocio y validación"
+        lessons: ["theory/05_logica-de-negocio-y-validacion"]
+
+  - n: 6
+    start: "2026-10-12"
+    note: "El lunes 12 de octubre (Fiesta Nacional) anula la sesión de PL-04, que se recupera el jueves 15."
+    labs:
+      session: "S04"
+      lesson: "labs/04_validacion-y-reglas-de-negocio"
+      title: "Validación y reglas de negocio"
+      groups:
+        PL-04:
+          moved_to: "2026-10-15"
+          reason: "Festivo (Fiesta Nacional) — recuperación en jueves"
+    theory:
+      - date: "2026-10-13"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T06 Seguridad y JWT"
+        lessons: ["theory/06_seguridad-y-jwt"]
+      - date: "2026-10-14"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T07 Microservicio Rust y Docker"
+        lessons: ["theory/07_microservicio-rust-y-docker"]
+
+  - n: 7
+    start: "2026-10-19"
+    note: "PL-04 no tiene sesión el lunes; se imparte el jueves 22, siguiendo el mismo patrón de recuperación de la semana anterior. Pendiente de confirmar con el centro."
+    labs:
+      session: "S05"
+      lesson: "labs/05_microservicio-de-autenticacion-en-rust"
+      title: "Microservicio de autenticación en Rust"
+      groups:
+        PL-04:
+          moved_to: "2026-10-22"
+          reason: "Recuperación en jueves"
+    theory:
+      - date: "2026-10-20"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T08 Pruebas automatizadas"
+        lessons: ["theory/08_pruebas-automatizadas"]
+      - date: "2026-10-21"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T10 HTML5 y CSS (bloque 1: introducción a la parte cliente)"
+        lessons: ["theory/10_html5-y-css"]
+
+  - n: 8
+    start: "2026-10-26"
+    labs:
+      session: "S07"
+      lesson: "labs/07_pruebas-automatizadas"
+      title: "Pruebas automatizadas"
+      extra: "Revisión de la entrega 1 (sesiones 01–06)"
+    theory:
+      - date: "2026-10-27"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T10 HTML5 y CSS (bloque 2)"
+        lessons: ["theory/10_html5-y-css"]
+      - date: "2026-10-28"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T11 JavaScript, TypeScript y AJAX"
+        lessons: ["theory/11_javascript-typescript-ajax"]
+
+  - n: 9
+    start: "2026-11-02"
+    note: "Semana de defensas: los cuatro subgrupos tienen el laboratorio cancelado; la única actividad de laboratorio es la propia defensa."
+    labs:
+      cancelled: true
+      note: "Semana de defensas — laboratorios cancelados"
+    theory:
+      - date: "2026-11-03"
+        start: "16:00"
+        end: "17:00"
+        kind: pa
+        title: "T12 Estilo con Bootstrap"
+        lessons: ["theory/12_estilo-con-bootstrap"]
+    events:
+      - date: "2026-11-04"
+        start: "14:00"
+        end: "16:00"
+        kind: exam
+        title: "Defensa de la entrega 1"
+
+  - n: 10
+    start: "2026-11-09"
+    labs:
+      session: "S08"
+      lesson: "labs/08_documentacion-y-despliegue"
+      title: "Documentación y despliegue"
+    theory:
+      - date: "2026-11-10"
+        start: "16:00"
+        end: "17:00"
+        kind: pa
+        title: "T13 Validación y plantillas"
+        lessons: ["theory/13_validacion-y-plantillas"]
+      - date: "2026-11-11"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T14 Internacionalización (i18n)"
+        lessons: ["theory/14_internacionalizacion-i18n"]
+
+  - n: 11
+    start: "2026-11-16"
+    labs:
+      session: "S10"
+      lesson: "labs/10_cliente-ligero-mvc-y-crud"
+      title: "Cliente ligero (MVC y CRUD)"
+      extra: "Internacionalización"
+    theory:
+      - date: "2026-11-17"
+        start: "16:00"
+        end: "17:00"
+        kind: pa
+        title: "T09b Programación con agentes"
+        lessons: ["theory/09b_programacion-con-agentes"]
+      - date: "2026-11-18"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T16 Pruebas web"
+        lessons: ["theory/16_pruebas-web"]
+
+  - n: 12
+    start: "2026-11-23"
+    labs:
+      session: "S11"
+      lesson: "labs/11_autenticacion-en-el-cliente"
+      title: "Autenticación en el cliente (login y JWT)"
+    theory:
+      - date: "2026-11-24"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T17 Usabilidad y accesibilidad"
+        lessons: ["theory/17_usabilidad-y-accesibilidad"]
+      - date: "2026-11-25"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T18 Legislación y ética"
+        lessons: ["theory/18_legislacion-y-etica"]
+
+  - n: 13
+    start: "2026-11-30"
+    labs:
+      session: "S12"
+      lesson: "labs/12_web-testing"
+      title: "Web Testing"
+    theory:
+      - date: "2026-12-01"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T19 Modelos de negocio en la web"
+        lessons: ["theory/19_modelos-de-negocio-en-la-web"]
+      - date: "2026-12-02"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T15 Frameworks de cliente modernos"
+        lessons: ["theory/15_frameworks-de-cliente-modernos"]
+
+  - n: 14
+    start: "2026-12-07"
+    note: "El martes 8 de diciembre es festivo (Inmaculada Concepción). Solo se imparte el laboratorio de PL-01; la franja de teoría del miércoles está aún sin decidir."
+    labs:
+      session: "S13"
+      lesson: "labs/13_cicd-con-github-actions"
+      title: "CI/CD con GitHub Actions"
+      groups:
+        PL-02:
+          cancelled: true
+          reason: "Festivo (Inmaculada Concepción)"
+        PL-03:
+          cancelled: true
+          reason: "Festivo (Inmaculada Concepción)"
+        PL-04:
+          cancelled: true
+          reason: "Sin sesión esta semana"
+    theory:
+      - date: "2026-12-09"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "Sesión de teoría por confirmar"
+        tentative: true
+
+  - n: 15
+    start: "2026-12-14"
+    note: "Última semana de docencia. PL-01 dedica su sesión a la opcional S09 (Backend for Frontends) junto con la revisión final."
+    labs:
+      session: "S13"
+      lesson: "labs/13_cicd-con-github-actions"
+      title: "CI/CD con GitHub Actions"
+      extra: "Revisión final"
+      groups:
+        PL-01:
+          session: "S09"
+          lesson: "labs/09_backend-for-frontends"
+          title: "(Opcional) Backend for Frontends"
+          extra: "Revisión final"
+    theory:
+      - date: "2026-12-15"
+        start: "16:00"
+        end: "17:00"
+        kind: theory
+        title: "T20 Rendimiento y profiling web"
+        lessons: ["theory/20_rendimiento-y-profiling-web"]
+      - date: "2026-12-16"
+        start: "15:00"
+        end: "16:00"
+        kind: theory
+        title: "T21 Investigación y carrera académica"
+        tentative: true

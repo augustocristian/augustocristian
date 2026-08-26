@@ -1,33 +1,126 @@
 ---
-// Embedded PDF for a teaching session. The iframe src is only set when the
-// user clicks "View PDF" so a page with many sessions never loads N PDFs at
-// once. The "Download PDF" link is the fallback for browsers that refuse to
-// render PDFs inline (most mobile browsers).
-const { url, title = 'PDF', t } = Astro.props;
+// Embedded PDF viewer for a teaching session, with one or more documents
+// (a lab has a guion + ejercicios + solución; a theory unit has just the notes).
+//
+// The iframe src is only set when the reader clicks "View PDF", so a page with
+// many sessions never loads N PDFs at once. Availability is probed with a HEAD
+// request the first time a viewer becomes visible: materials are published week
+// by week, so a document that isn't up yet shows as pending instead of opening
+// a 404 — and the page starts working for it the moment it is pushed, with no
+// site rebuild. This relies on the PDFs being served from GitHub Pages
+// (application/pdf + CORS), not raw.githubusercontent — see src/config.js.
+const { docs = [], t } = Astro.props;
+const items = docs.filter((d) => d.url);
 ---
-<div class="pdf-viewer" data-pdf-url={url} data-pdf-title={title}>
-  <div class="btn-row pdf-viewer-actions">
-    <button class="btn btn-sm pdf-view-btn" type="button" aria-expanded="false">{t.teaching_view_pdf}</button>
-    <a class="btn btn-sm btn-outline" href={url} target="_blank" rel="noopener">{t.teaching_unit_pdf}</a>
+{items.length > 0 && (
+  <div class="pdf-viewer" data-pdf-viewer data-single-label={items[0].label}>
+    <div class="pdf-viewer-bar">
+      {items.length > 1 && (
+        <div class="pdf-tabs" role="tablist" aria-label={t.teaching_materials}>
+          {items.map((doc, i) => (
+            <button class="pdf-tab" type="button" role="tab"
+                    data-pdf-doc={i} data-url={doc.url} data-label={doc.label}
+                    aria-selected={i === 0 ? 'true' : 'false'}>{doc.label}</button>
+          ))}
+        </div>
+      )}
+      <div class="btn-row pdf-viewer-actions">
+        <button class="btn btn-sm pdf-view-btn" type="button" aria-expanded="false"
+                data-hide-label={t.teaching_hide_pdf}>{t.teaching_view_pdf}</button>
+        <a class="btn btn-sm btn-outline pdf-download-btn" href={items[0].url}
+           target="_blank" rel="noopener">{t.teaching_unit_pdf}</a>
+      </div>
+    </div>
+
+    <p class="pdf-pending" hidden>{t.teaching_pdf_pending}</p>
+    <div class="pdf-frame-wrap" hidden></div>
+
+    {/* Without JS the tabs and the lazy embed do nothing — fall back to plain links. */}
+    <noscript>
+      <ul class="pdf-noscript-list">
+        {items.map((doc) => (
+          <li><a href={doc.url} target="_blank" rel="noopener">{doc.label}</a></li>
+        ))}
+      </ul>
+    </noscript>
   </div>
-  <div class="pdf-frame-wrap" hidden></div>
-</div>
+)}
+
 <script>
-  // Lazy PDF embed: create the iframe only on first "View PDF" click.
-  document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const viewer = btn.closest('.pdf-viewer');
-      const wrap = viewer.querySelector('.pdf-frame-wrap');
-      if (!wrap.querySelector('iframe')) {
-        const iframe = document.createElement('iframe');
-        iframe.className = 'pdf-iframe';
-        iframe.src = viewer.dataset.pdfUrl;
-        iframe.title = viewer.dataset.pdfTitle || 'PDF';
-        wrap.appendChild(iframe);
-      }
-      const show = wrap.hidden;
-      wrap.hidden = !show;
-      btn.setAttribute('aria-expanded', String(show));
+  // Availability probe, shared across every viewer on the page: one HEAD request
+  // per distinct URL, cached as a promise so repeated selections are free.
+  const probes = new Map();
+  function isAvailable(url) {
+    if (!probes.has(url)) {
+      probes.set(
+        url,
+        fetch(url, { method: 'HEAD' }).then((res) => res.ok).catch(() => false),
+      );
+    }
+    return probes.get(url);
+  }
+
+  document.querySelectorAll('[data-pdf-viewer]').forEach((viewer) => {
+    const tabs = [...viewer.querySelectorAll('.pdf-tab')];
+    const viewBtn = viewer.querySelector('.pdf-view-btn');
+    const downloadBtn = viewer.querySelector('.pdf-download-btn');
+    const pending = viewer.querySelector('.pdf-pending');
+    const wrap = viewer.querySelector('.pdf-frame-wrap');
+    const viewLabel = viewBtn.textContent;
+    const hideLabel = viewBtn.dataset.hideLabel;
+
+    // Documents: the tab strip when there are several, else the download link.
+    const docs = tabs.length
+      ? tabs.map((tab) => ({ url: tab.dataset.url, label: tab.dataset.label }))
+      : [{ url: downloadBtn.href, label: viewer.dataset.singleLabel }];
+    let current = 0;
+
+    function closeFrame() {
+      wrap.hidden = true;
+      wrap.replaceChildren();
+      viewBtn.setAttribute('aria-expanded', 'false');
+      viewBtn.textContent = viewLabel;
+    }
+
+    async function select(index) {
+      current = index;
+      const doc = docs[index];
+      tabs.forEach((tab, i) => tab.setAttribute('aria-selected', String(i === index)));
+      downloadBtn.href = doc.url;
+      closeFrame();
+
+      // Optimistic: keep the controls live until the probe says otherwise, so a
+      // slow network never blocks a document that is actually there.
+      const ok = await isAvailable(doc.url);
+      if (current !== index) return; // the reader moved on while we waited
+      pending.hidden = ok;
+      viewBtn.disabled = !ok;
+      downloadBtn.classList.toggle('is-disabled', !ok);
+    }
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i)));
+
+    viewBtn.addEventListener('click', () => {
+      if (!wrap.hidden) return closeFrame();
+      const iframe = document.createElement('iframe');
+      iframe.className = 'pdf-iframe';
+      iframe.src = docs[current].url;
+      iframe.title = docs[current].label || 'PDF';
+      wrap.replaceChildren(iframe);
+      wrap.hidden = false;
+      viewBtn.setAttribute('aria-expanded', 'true');
+      if (hideLabel) viewBtn.textContent = hideLabel;
     });
+
+    // Probe only once the viewer is actually on screen: lessons are display-
+    // toggled, so hidden ones never fire and cost nothing.
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.disconnect();
+        select(0);
+      }
+    });
+    observer.observe(viewer);
   });
 </script>

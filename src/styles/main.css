@@ -25,6 +25,8 @@
 /* ── Teaching ────────────────────────────────────────────── */
 @import './teaching/teaching.css';
 @import './teaching/subject.css';
+@import './teaching/planning.css';
+@import './teaching/embed.css';
 
 /* ── GitHub ──────────────────────────────────────────────── */
 @import './github/github.css';

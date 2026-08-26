@@ -1,0 +1,218 @@
+---
+// The body of a subject page: lesson sidebar + one lesson at a time.
+//
+// Shared by the normal subject page and its embeddable twin
+// (/teaching/<id>/embed/), so both stay in lockstep — the only difference is
+// the shell around this component.
+//
+// The first "lesson" is the course planning, so opening a subject lands on the
+// calendar and the link to the official course guide rather than on unit 1.
+import { render } from 'astro:content';
+import Exercise from './Exercise.astro';
+import Video from './Video.astro';
+import PdfViewer from './PdfViewer.astro';
+import GithubPdfList from './GithubPdfList.astro';
+import SubjectPlanning from './SubjectPlanning.astro';
+import { localize } from '../lib/i18n.js';
+import { loadSubjectSessions } from '../lib/teaching.js';
+import { loadSchedule } from '../lib/schedule.js';
+
+const { subject, lang, t, embed = false } = Astro.props;
+
+const sessions = await loadSubjectSessions(subject.id);
+const schedule = loadSchedule(subject.id);
+const guideUrl = localize(subject, 'guide_url', lang) || subject.guide_url || '';
+
+const PLANNING_KEY = 'info/planificacion';
+
+const groups = [
+  { key: 'theory', label: t.teaching_tab_theory, items: sessions.theory },
+  { key: 'labs', label: t.teaching_tab_labs, items: sessions.lab },
+  { key: 'seminars', label: t.teaching_tab_seminars, items: sessions.seminar },
+].filter((g) => g.items.length > 0);
+
+// Flat ordered lesson list with the MDX pre-rendered (a Content component can't
+// be awaited inside the template), plus prev/next pointers for the pager. The
+// planning is lesson 0 when the subject has a schedule.
+const lessons = [];
+if (schedule) {
+  lessons.push({
+    key: PLANNING_KEY,
+    groupKey: 'info',
+    groupLabel: t.teaching_info,
+    title: t.teaching_planning,
+    code: '',
+    planning: true,
+  });
+}
+for (const group of groups) {
+  for (const session of group.items) {
+    lessons.push({
+      key: session.key,
+      groupKey: group.key,
+      groupLabel: group.label,
+      title: session.entry.data.title,
+      code: session.code,
+      session,
+      Content: (await render(session.entry)).Content,
+    });
+  }
+}
+lessons.forEach((lesson, i) => {
+  lesson.prev = lessons[i - 1] ?? null;
+  lesson.next = lessons[i + 1] ?? null;
+});
+
+const navGroups = [
+  ...(schedule ? [{ key: 'info', label: t.teaching_info }] : []),
+  ...groups.map((g) => ({ key: g.key, label: g.label })),
+];
+---
+<div class:list={['subject-page', { 'is-embed': embed }]}>
+  <div class="subject-toolbar">
+    <button class="subject-nav-toggle btn btn-sm btn-outline" type="button"
+            aria-expanded="true" aria-controls="subject-nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+      </svg>
+      {t.teaching_lessons}
+    </button>
+  </div>
+
+  <div class="subject-layout">
+    <aside class="subject-nav" id="subject-nav" aria-label={t.subject_nav_aria}>
+      {navGroups.map((group) => (
+        <div class="subject-nav-group">
+          <h2 class="subject-nav-heading">{group.label}</h2>
+          <ul class="subject-nav-list">
+            {lessons.filter((l) => l.groupKey === group.key).map((l) => (
+              <li>
+                <a href={`#${l.key}`} class="subject-nav-link" data-nav-for={l.key}>
+                  <span class="subject-nav-num">{l.code || '·'}</span>
+                  <span>{l.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </aside>
+
+    <div class="subject-content">
+      {lessons.map((lesson, i) => {
+        const Content = lesson.Content;
+        return (
+        <article class="lesson" data-lesson={lesson.key} hidden={i !== 0}>
+          <header class="lesson-head">
+            <div class="lesson-head-main">
+              <span class="lesson-badge">{lesson.groupLabel}</span>
+              <h2 class="lesson-title">
+                {lesson.code && <span class="lesson-code">{lesson.code}</span>}
+                {lesson.title}
+              </h2>
+              {lesson.session?.data.summary && (
+                <p class="lesson-summary">{lesson.session.data.summary}</p>
+              )}
+            </div>
+            {lesson.session?.data.repo_url && (
+              <a class="btn btn-sm btn-outline" href={lesson.session.data.repo_url}
+                 target="_blank" rel="noopener">{t.teaching_lab_external}</a>
+            )}
+          </header>
+
+          {lesson.planning ? (
+            <SubjectPlanning subject={subject} schedule={schedule} t={t} guideUrl={guideUrl} />
+          ) : (
+            <Fragment>
+              <div class="session-body lab-guide">
+                <Content components={{ Exercise, Video }} />
+              </div>
+              {lesson.session.data.video_url && (
+                <Video url={lesson.session.data.video_url} label={t.teaching_watch_video} />
+              )}
+              <PdfViewer docs={lesson.session.docs} t={t} />
+            </Fragment>
+          )}
+
+          <nav class="lesson-pager" aria-label={t.subject_nav_aria}>
+            {lesson.prev ? (
+              <a class="lesson-pager-link lesson-pager-prev" href={`#${lesson.prev.key}`}>
+                <span class="lesson-pager-dir">{t.teaching_prev_lesson}</span>
+                <span class="lesson-pager-title">{lesson.prev.title}</span>
+              </a>
+            ) : <span />}
+            {lesson.next && (
+              <a class="lesson-pager-link lesson-pager-next" href={`#${lesson.next.key}`}>
+                <span class="lesson-pager-dir">{t.teaching_next_lesson}</span>
+                <span class="lesson-pager-title">{lesson.next.title}</span>
+              </a>
+            )}
+          </nav>
+        </article>
+        );
+      })}
+
+      <GithubPdfList subjectId={subject.id} t={t} />
+    </div>
+  </div>
+</div>
+<noscript><style>.lesson[hidden] { display: block; }</style></noscript>
+
+<script>
+  // Lesson router: one lesson visible at a time, driven by the URL hash
+  // (#<group>/<slug>). Sidebar and pager links are plain anchors, so
+  // back/forward walks lesson history natively via hashchange. Lessons are
+  // display-toggled — they must never receive scroll-reveal classes.
+  const layout = document.querySelector('.subject-layout');
+  if (layout) {
+    const lessons = new Map(
+      [...document.querySelectorAll('[data-lesson]')].map((el) => [el.dataset.lesson, el]),
+    );
+    const navLinks = new Map(
+      [...document.querySelectorAll('[data-nav-for]')].map((a) => [a.dataset.navFor, a]),
+    );
+    const firstKey = lessons.keys().next().value;
+
+    // Legacy group hashes (#theory/#labs/#seminars) -> that group's first lesson.
+    const legacy = {};
+    for (const key of lessons.keys()) {
+      const group = key.split('/')[0];
+      if (!(group in legacy)) legacy[group] = key;
+    }
+
+    function resolve(hash) {
+      const h = decodeURIComponent(hash.replace(/^#/, ''));
+      if (lessons.has(h)) return h;
+      if (legacy[h]) {
+        history.replaceState(null, '', `#${legacy[h]}`);
+        return legacy[h];
+      }
+      return firstKey;
+    }
+
+    // Collapsible nav — one boolean at every width; persisted on desktop only.
+    const toggle = document.querySelector('.subject-nav-toggle');
+    const isMobile = () => matchMedia('(max-width: 900px)').matches;
+    function setNav(visible) {
+      layout.classList.toggle('nav-hidden', !visible);
+      toggle.setAttribute('aria-expanded', String(visible));
+      if (!isMobile()) localStorage.setItem('teaching-nav', visible ? '1' : '0');
+    }
+    toggle.addEventListener('click', () => setNav(layout.classList.contains('nav-hidden')));
+    setNav(isMobile() ? false : localStorage.getItem('teaching-nav') !== '0');
+
+    function activate(key, scroll) {
+      lessons.forEach((el, k) => { el.hidden = k !== key; });
+      navLinks.forEach((a, k) => {
+        if (k === key) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+      if (scroll && layout.getBoundingClientRect().top < 0) layout.scrollIntoView();
+      if (scroll && isMobile()) setNav(false); // auto-close panel after choosing
+    }
+
+    activate(resolve(location.hash), false);
+    window.addEventListener('hashchange', () => activate(resolve(location.hash), true));
+  }
+</script>

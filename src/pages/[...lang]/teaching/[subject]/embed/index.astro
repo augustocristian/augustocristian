@@ -1,0 +1,38 @@
+---
+// Embeddable subject page — the same lesson browser as /teaching/<id>/ but in a
+// bare shell, meant to be dropped into a Campus Virtual / Moodle page:
+//
+//   <iframe src="https://www.augustocristian.es/es/teaching/web-technologies/embed/"
+//           style="width:100%;height:80vh;border:0" loading="lazy"
+//           title="Tecnologías Web"></iframe>
+//
+// Deep links work inside the frame too: append the lesson hash to the src,
+// e.g. .../embed/#labs/01_entorno-y-primer-servicio.
+//
+// Nothing on this site sends X-Frame-Options or a frame-ancestors CSP, so the
+// page frames anywhere. Keep it that way if a headers file is ever added.
+import EmbedLayout from '../../../../../layouts/EmbedLayout.astro';
+import SubjectContent from '../../../../../components/SubjectContent.astro';
+import { LANGS, loadI18n, localize, prefixFor } from '../../../../../lib/i18n.js';
+import { loadSubjects, loadProfile } from '../../../../../lib/data.js';
+
+export function getStaticPaths() {
+  const subjects = loadSubjects().filter((s) => !s.hidden);
+  return LANGS.flatMap(({ code }) =>
+    subjects.map((subject) => ({
+      params: { lang: code === 'en' ? undefined : code, subject: subject.id },
+      props: { lang: code, subject },
+    })),
+  );
+}
+
+const { lang, subject } = Astro.props;
+const t = loadI18n(lang);
+const prefix = prefixFor(lang);
+const profile = loadProfile();
+const subjectTitle = localize(subject, 'title', lang) || subject.title;
+const fullUrl = new URL(`${prefix}teaching/${subject.id}/`, profile.site_url).toString();
+---
+<EmbedLayout lang={lang} t={t} title={subjectTitle} canonical={fullUrl} fullUrl={fullUrl}>
+  <SubjectContent subject={subject} lang={lang} t={t} embed={true} />
+</EmbedLayout>

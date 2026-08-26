@@ -2,6 +2,7 @@
 lang: en
 html_lang: en
 months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+weekdays_short: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 present: "Present"
 profile_role: "Assistant Professor"
 
@@ -148,10 +149,35 @@ teaching_next_lesson: "Next"
 # Session actions (PDF embed + video + external repo link)
 teaching_unit_pdf: "Download PDF"
 teaching_view_pdf: "View PDF"
+teaching_hide_pdf: "Hide PDF"
+teaching_materials: "Materials"
+teaching_pdf_pending: "Not published yet — it will appear here once it is uploaded."
 teaching_watch_video: "Watch video"
 teaching_lab_external: "View on GitHub"
 # Live listing from the external teaching-materials repository
 teaching_repo_materials: "Materials repository"
+
+# Course planning (first lesson of every subject that has a schedule)
+teaching_info: "Overview"
+teaching_planning: "Course planning"
+teaching_planning_lede: "Week-by-week plan for the course. Pick your lab subgroup to highlight your own sessions and download them as a calendar file."
+teaching_course: "Academic year"
+teaching_code: "Course code"
+teaching_centre: "School"
+teaching_course_guide: "Official course guide"
+teaching_your_group: "Your lab subgroup"
+teaching_all_groups: "All subgroups"
+teaching_add_calendar: "Download calendar (.ics)"
+teaching_ics_hint: "Works with Google Calendar, Outlook and Apple Calendar."
+teaching_week: "Week"
+teaching_no_session: "No session"
+teaching_makeup: "Make-up"
+teaching_pa: "Classroom practical"
+teaching_tentative: "To be confirmed"
+teaching_assessment: "Assessment"
+
+# Embeddable subject view (/teaching/<id>/embed/)
+teaching_open_full: "Open full page"
 
 # ── GitHub page ────────────────────────────────────────────────────────────
 page_github_eyebrow: "Open Source"

@@ -3,7 +3,12 @@
 // per subject id), fetched client-side via the GitHub Contents API so new PDFs
 // appear without a site rebuild. Renders nothing while TEACHING_REPO.enabled
 // is false; hides itself on any fetch error (repo missing, rate limit…).
-import { TEACHING_REPO } from '../config.js';
+//
+// The listing shows whatever is in the folder, so it filters out the
+// course-private documents (exercise solutions) — otherwise copying the whole
+// pdf-practicas/ folder into the repository would publish them here even though
+// no session links to them. See TEACHING_PRIVATE_PATTERN in src/config.js.
+import { TEACHING_REPO, TEACHING_PRIVATE_PATTERN, repoSubjectPath } from '../config.js';
 const { subjectId, t } = Astro.props;
 ---
 {TEACHING_REPO.enabled && (
@@ -12,7 +17,8 @@ const { subjectId, t } = Astro.props;
            data-owner={TEACHING_REPO.owner}
            data-repo={TEACHING_REPO.repo}
            data-branch={TEACHING_REPO.branch}
-           data-path={subjectId}>
+           data-path={[repoSubjectPath(subjectId), TEACHING_REPO.list_path].filter(Boolean).join('/')}
+           data-exclude={TEACHING_PRIVATE_PATTERN}>
     <h2 class="repo-pdf-heading">{t.teaching_repo_materials}</h2>
     <ul class="repo-pdf-list"></ul>
   </section>
@@ -20,11 +26,17 @@ const { subjectId, t } = Astro.props;
   <script>
     const section = document.querySelector('.repo-pdf-section');
     if (section instanceof HTMLElement) {
-      const { owner, repo, branch, path } = section.dataset;
+      const { owner, repo, branch, path, exclude } = section.dataset;
+      const isPrivate = new RegExp(exclude, 'i');
       fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`)
         .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
         .then((files) => {
-          const pdfs = files.filter((f) => f.type === 'file' && f.name.toLowerCase().endsWith('.pdf'));
+          const pdfs = files.filter(
+            (f) =>
+              f.type === 'file' &&
+              f.name.toLowerCase().endsWith('.pdf') &&
+              !isPrivate.test(f.name),
+          );
           if (!pdfs.length) return;
           const list = section.querySelector('.repo-pdf-list');
           for (const f of pdfs) {

@@ -51,15 +51,17 @@ data/
   projects/<ID>.yaml        # one file per funded project
   github.yaml               # GitHub page: username + curated repo cards
   teaching/
-    subjects/<ID>.yaml      # subject METADATA only (title/_es/_it, order, hidden, image)
+    subjects/<ID>.yaml      # subject METADATA only (title/_es/_it, order, guide_url, hidden, image)
+    schedule/<ID>.yaml      # week-by-week planning -> planning table + .ics export
     tfgs/<ID>.yaml          # one file per Final Degree Project
     tfms/<ID>.yaml          # one file per Master Degree Project
 src/
-  config.js                 # TEACHING_UNDER_CONSTRUCTION flag + TEACHING_REPO settings
+  config.js                 # TEACHING_UNDER_CONSTRUCTION + TEACHING_REPO (incl. pages_url) + teachingPdfUrl()
   content.config.ts         # `teaching` content collection (MDX) schema
-  content/teaching/         # session content: <subject-id>/<theory|labs|seminars>/NN-slug.mdx
+  content/teaching/         # session content: <subject-id>/<theory|labs|seminars>/NN_slug/index.mdx
   integrations/
     cite-bib.mjs            # emits /cite/<ID>.bib into dist/ + serves them on the dev server
+    teaching-ics.mjs        # emits /calendar/<subject>-<group>.ics (+ -completo.ics)
   lib/
     i18n.js                 # LANGS, loadI18n, localize(), langStaticPaths, langLinks, date fmt
     data.js                 # cached YAML loaders (BOM-tolerant) for everything under data/
@@ -72,14 +74,17 @@ src/
       projects.js           # funded-project timeline
       theses.js             # TFG/TFM lists + filter facets (async — Gravatar lookups)
       github.js             # GitHub page (profile + curated repo cards)
+    schedule.js             # planning loader: week expansion + dated event list (tz-safe)
+    ics.js                  # minimal RFC 5545 writer (CRLF, 75-octet folding, UTC stamps)
     gravatar.js             # build-time Gravatar check (SHA-256, cached, offline-safe)
     richtext.js             # mini-markdown for YAML fields ([link](url), _em_, "- " bullets)
     bibtex.js               # minimal BibTeX parser (venue, doi, LaTeX accents)
     icons.js                # loadIcon(name) — inline SVG from public/img/icons
-    teaching.js             # teaching-collection helpers (sessions grouped by type)
+    teaching.js             # teaching-collection helpers: derives type/order/code from the path
   layouts/
     BaseLayout.astro        # <head> (SEO/hreflang/fonts/theme FOUC guard), Header, Footer,
                             # global CSS import, client script entry
+    EmbedLayout.astro       # bare shell for /teaching/<id>/embed/ (no header/footer, noindex)
   components/
     Header.astro            # sticky nav, lang switcher, theme toggle
     Footer.astro            # social icons, copyright
@@ -101,7 +106,10 @@ src/
     TimelineItem.astro      # education/work timeline entry (org slot + body slot)
     ProjectTimelineItem.astro # funded-project timeline entry (marker + <details> card)
     Exercise.astro          # exercise callout used inside teaching MDX
-    PdfViewer.astro         # lazy PDF <iframe> + download link (self-contained script)
+    SubjectContent.astro    # subject body (lesson sidebar + one lesson at a time), shared
+                            # by the normal subject page and its /embed/ twin
+    SubjectPlanning.astro   # planning table + course-guide link + .ics export
+    PdfViewer.astro         # multi-document lazy PDF <iframe> + availability probe
     Video.astro             # lazy YouTube embed (nocookie iframe on click; MDX-injectable)
     GithubPdfList.astro     # live PDF listing from the external teaching repo
   pages/
@@ -112,10 +120,12 @@ src/
     [...lang]/experience/index.astro
     [...lang]/github/index.astro                # GitHub profile + curated repos (live stats)
     [...lang]/teaching/index.astro
-    [...lang]/teaching/[subject]/index.astro    # subject page (lesson sidebar, MDX, PDFs, videos)
+    [...lang]/teaching/[subject]/index.astro        # subject page (planning + lessons)
+    [...lang]/teaching/[subject]/embed/index.astro  # same, bare shell, for iframe embedding
     sitemap.xml.js                              # sitemap endpoint (same URL set as before)
   styles/                   # CSS partials imported by styles/main.css (bundled by Vite)
-    main.css  core/  layout/  home/  research/  experience/  projects/  talks/  teaching/  github/
+    main.css  core/  layout/  home/  research/  experience/  projects/  talks/  github/
+    teaching/  (teaching.css  subject.css  planning.css  embed.css)
   scripts/                  # client JS, bundled by Astro from BaseLayout's <script>
     main.js                 # entry; inits controllers
     controller.js  model.js  view.js
@@ -435,67 +445,176 @@ Never access a content field directly when a translated variant might exist. Use
 
 The teaching section has two levels:
 - **Teaching index** (`/teaching/`) — subject card grid + TFG/TFM filtered lists.
-- **Subject page** (`/teaching/<id>/`) — docs-style layout: a collapsible left sidebar lists every lesson grouped Theory/Labs/Seminars; the content area shows **one lesson at a time**, driven by the URL hash (`#<group>/<slug>`, e.g. `#labs/01-html-basics` — shareable deep links; legacy `#theory`/`#labs`/`#seminars` map to that group's first lesson). Each lesson renders Markdown, an optional embedded PDF viewer, an optional embedded YouTube video, an optional external repo link, and a prev/next pager. Back/forward walks lesson history (plain hash anchors). All lessons are server-rendered: no-JS and print show them stacked. Sidebar visibility persists on desktop (`localStorage['teaching-nav']`) and defaults to hidden ≤900px (stacked panel, auto-closes on selection). Lessons are display-toggled — never give them scroll-reveal classes.
+- **Subject page** (`/teaching/<id>/`) — docs-style layout: a collapsible left sidebar lists the course **planning** plus every lesson grouped Theory/Labs/Seminars; the content area shows **one lesson at a time**, driven by the URL hash (`#<group>/<slug>`, e.g. `#labs/01_entorno-y-primer-servicio` — shareable deep links; legacy `#theory`/`#labs`/`#seminars` map to that group's first lesson). Every lesson renders Markdown, its PDFs in an on-page viewer, an optional YouTube video, an optional external repo link, and a prev/next pager. All lessons are server-rendered: no-JS and print show them stacked. Sidebar visibility persists on desktop (`localStorage['teaching-nav']`) and defaults to hidden ≤900px (stacked panel, auto-closes on selection). Lessons are display-toggled — never give them scroll-reveal classes.
+
+The subject body lives in **`SubjectContent.astro`**, shared verbatim by the normal page and the embeddable one, so the two can never drift.
+
+### Adding a session (the common case)
+
+Create a numbered folder with an `index.mdx` in it. Nothing else — no index to update, no numbers to shuffle:
+
+```
+src/content/teaching/<subject-id>/<group>/<NN_slug>/index.mdx
+                                   ▲        ▲
+                                   │        └── sort order + sidebar code + deep-link slug
+                                   └── theory | labs | seminars  →  the session type
+```
+
+The path carries the metadata that used to be typed by hand (parsed in `src/lib/teaching.js`):
+
+| From the path | Becomes |
+|---|---|
+| `theory/` · `labs/` · `seminars/` | the session `type` (and the sidebar group) |
+| the `NN` in `NN_slug` | the sort `order` |
+| the letter suffix in `NNx_slug` (`02d`) | `order + 0.0x`, so `02d` sorts between `02` and `03` **without renumbering anything** |
+| `NN[x]` + the group letter (`T`/`S`/`PA`) | the sidebar code — `T02d`, `S09b` |
+| the whole `NN_slug` folder name | the deep-link slug (`#theory/02d_solid-y-patrones`) |
+
+So the frontmatter is only what the session actually *has*:
+
+```mdx
+---
+title: "Capa web REST"
+summary: "Qué hace que una API sea REST y cómo se escribe esa capa en Spring."
+pdfs:
+  - label: "Apuntes"
+    file: "apuntes/03 Capa web REST.pdf"
+# video_url: "" · repo_url: "" · hidden: true   — all optional
+# type / order / code override the path-derived values; normally omit them
+---
+
+## Contenidos
+
+Normal **Markdown** with fenced code blocks (Shiki-highlighted at build time).
+
+<Exercise title="Ejercicio 1.1">Instrucciones en Markdown.</Exercise>
+<Video url="https://youtu.be/XXXXXXXXXXX" label="Introducción al tema" />
+```
+
+`<Exercise>` and `<Video>` are injected automatically (no import needed). A flat `NN_slug.mdx` with no folder still works (`software-process-engineering` uses it); prefer a folder so a session can keep its own images beside it.
+
+**Teaching content is i18n-exempt** — it is written once in the language of instruction. Subject *titles* in `data/teaching/subjects/` are still translated.
 
 ### Subject metadata — `data/teaching/subjects/<ID>.yaml`
-
-Metadata only (content lives in MDX):
 
 ```yaml
 title: "Web Technologies"
 title_es: "Tecnologías Web"
 title_it: "Tecnologie Web"
 order: 1
-image: "img/teaching/web-technologies.jpg"   # optional — banner on the index card AND the subject page (path under public/)
-# hidden: true    # uncomment to exclude subject without deleting it
+guide_url: ""    # official course guide; renders a button on the planning lesson
+image: ""        # optional — index-card + subject-page banner, path under public/
+# hidden: true   # uncomment to exclude the subject without deleting it
 ```
 
-### Session content — `src/content/teaching/<subject-id>/<type-dir>/NN-slug.mdx`
+### Planning & calendar export — `data/teaching/schedule/<ID>.yaml`
 
-One MDX file per unit/lab/seminar. Directory grouping (`theory/`, `labs/`, `seminars/`) is conventional; the `type` frontmatter field is what determines the sidebar group. The file name (`NN-slug`) is the lesson's hash slug — renaming a file changes its deep link.
+Optional. When present, the subject page gains a **Planning** lesson as its landing view (course facts, the link to the official guide, a subgroup picker and the week-by-week calendar), and the build emits downloadable `.ics` files. Without it a subject simply starts on its first lesson.
 
-```mdx
----
-title: "Lab 1: HTML Basics"
-type: lab               # theory | lab | seminar
-order: 1
-pdf_url: ""             # URL of the session PDF in the external teaching repo
-video_url: ""           # optional YouTube URL — rendered as a lazy embed below the body
-repo_url: ""            # optional external lab-repo link (button in the header)
-# hidden: true
----
+**One file, two outputs** — the table and the calendars are generated from the same weeks, so they can never disagree:
 
-## Any Markdown heading
+```yaml
+course: "2026/2027"
+code: "GIITIN01-4-012"
+timezone: "Europe/Madrid"          # IANA zone; DST is resolved via Intl, never hardcoded
+location: "Escuela Politécnica de Ingeniería de Gijón"
 
-Normal **Markdown** with fenced code blocks (Shiki-highlighted at build time).
+groups:                             # lab subgroups: weekday (0 = Mon … 4 = Fri) + slot
+  - { id: "PL-01", weekday: 2, start: "16:00", end: "18:00" }
 
-<Exercise title="Exercise 1.1">
-
-Exercise instructions in Markdown.
-
-</Exercise>
-
-<Video url="https://youtu.be/XXXXXXXXXXX" label="Watch: topic intro" />
+weeks:
+  - n: 3
+    start: "2026-09-21"             # ALWAYS the Monday; lab dates derive from it
+    note: "Footnote shown under the week"
+    labs:
+      session: "S01"
+      lesson: "labs/01_entorno-y-primer-servicio"   # makes the row link to the lesson
+      title: "Entorno y primer servicio"
+      extra: "Git avanzado (práctica de aula)"      # optional second activity
+      groups:                       # optional per-subgroup overrides
+        PL-04:
+          moved_to: "2026-10-15"    # make-up session on another date
+          reason: "Festivo — recuperación en jueves"
+        PL-02:
+          cancelled: true
+          reason: "Festivo (Inmaculada Concepción)"
+      # cancelled: true             # at this level: cancels the week for every subgroup
+    theory:                         # explicit date + times (exceptional slots are just rows)
+      - date: "2026-09-22"
+        start: "16:00"
+        end: "17:00"
+        kind: theory                # theory | pa  (pa renders a "Práctica de aula" tag)
+        title: "T02 Introducción a Spring Boot"
+        detail: "Optional second line"
+        lessons: ["theory/02_introduccion-spring-boot"]
+        # tentative: true           # renders a "por confirmar" tag
+    events:                         # one-off items (defences, exams)
+      - { date: "2026-11-04", start: "14:00", end: "16:00", kind: exam, title: "Defensa" }
 ```
 
-The `<Exercise>` and `<Video>` components are provided automatically (no import needed) via the `components` prop in the subject page. `<Video>` is a lazy, privacy-friendly YouTube embed (thumbnail facade; the `youtube-nocookie.com` iframe loads only on click; no-JS fallback links to YouTube). In MDX, pass `label` in the language of instruction (teaching content is i18n-exempt); frontmatter `video_url` uses the localized `teaching_watch_video` label.
+- **Dates are quoted strings.** Unquoted, js-yaml turns `2026-09-14` into a UTC `Date` and the formatting control is lost.
+- **Lab dates are derived** from the week's Monday + the subgroup's `weekday`; only exceptions need an override.
+- `buildPlanningWeeks()` also exposes `primary` (the session most subgroups run that week) and `allCancelled`, so the component never re-scans the list.
 
-### Teaching PDFs — external repository
+**Calendar files** (`src/integrations/teaching-ics.mjs`, written into `dist/` at `astro:build:done` and served by dev-server middleware):
 
-PDFs live in a **separate GitHub repo**, configured in `src/config.js`:
+| URL | Contents |
+|---|---|
+| `/calendar/<subject>-<group>.ics` | that subgroup's labs + all theory/PA + all events — a student's personal calendar |
+| `/calendar/<subject>-completo.ics` | every subgroup's labs + all theory/PA + all events — the teacher's calendar |
+
+The subgroup `<select>` on the planning drives **both** the highlighted rows and which `.ics` the download button points at (remembered in `localStorage['teaching-group']`).
+
+`src/lib/ics.js` is a small RFC 5545 writer, strict about the parts Outlook rejects: CRLF endings, every line folded at **75 octets** (never mid-codepoint), TEXT values escaped, and `DTSTART`/`DTEND` emitted as **absolute UTC** (`…Z`) rather than `TZID` — so no `VTIMEZONE` block is needed and Google Calendar, Outlook (desktop + web) and Apple Calendar all resolve the same instant. Local wall time is converted in `zonedToUtc()` (`src/lib/schedule.js`) with a two-pass `Intl` offset lookup, which stays correct across a DST transition. `DTSTAMP` is fixed so rebuilds are byte-identical.
+
+### Teaching PDFs — external repository (must be GitHub **Pages**)
+
+PDFs live in a separate repo, configured in `src/config.js`:
 
 ```js
 export const TEACHING_REPO = {
   owner: 'augustocristian',
-  repo:  'teaching-materials',   // one folder per subject id
+  repo: 'teaching-materials',      // one folder per subject id
   branch: 'main',
-  enabled: false,                // flip to true once the repo exists
+  pages_url: 'https://augustocristian.github.io/teaching-materials',
+  enabled: false,                  // true once the repo AND its Pages site exist
+  list_path: 'practicas',          // subfolder the live listing enumerates (not recursive)
 };
 ```
 
-- Set a session's `pdf_url` to the raw URL of its PDF (e.g. `https://raw.githubusercontent.com/<owner>/<repo>/main/<subject-id>/<file>.pdf`). The subject page shows a "View PDF" toggle that lazily embeds an `<iframe>`, plus a "Download PDF" link.
-- When `enabled: true`, `GithubPdfList.astro` also fetches the subject's folder listing client-side via the GitHub Contents API and lists every PDF — new uploads appear with **no site rebuild**. Errors (repo missing, rate limit) silently hide the section.
-- The teaching index shows an under-construction banner while `TEACHING_UNDER_CONSTRUCTION` is `true` in `src/config.js`.
+> **Never link PDFs through `raw.githubusercontent.com`.** It serves them as `application/octet-stream` with `X-Content-Type-Options: nosniff`, so browsers refuse to render them inline and an `<iframe>` just downloads the file. GitHub **Pages** serves the same file as `application/pdf` (plus `Access-Control-Allow-Origin: *`), which is what makes the on-page viewer — and the availability probe — work. `pages_url` must therefore point at the repo's Pages site.
+
+Sessions reference documents by **repo-relative path**, and `teachingPdfUrl(subjectId, file)` builds the absolute URL (percent-encoding each segment, so the LaTeX-generated names with spaces and accents survive):
+
+```yaml
+pdfs:
+  - { label: "Guion",      file: "practicas/Sesion1. Entorno y primer servicio.pdf" }
+  - { label: "Ejercicios", file: "practicas/Ejercicios Sesion1. Entorno y primer servicio.pdf" }
+```
+
+> **Exercise solutions are never published.** `Solucion Ejercicios SesionN.pdf` is course-private, permanently — not a "publish it after the session" case. Sessions link only the *guion* and the *exercise sheet*. This is enforced, not just conventional (`TEACHING_PRIVATE_PATTERN` in `src/config.js`):
+> 1. **The build fails** if a session's `pdfs:` lists a file or label matching `soluci[oó]n|solution` (thrown in `src/lib/teaching.js`).
+> 2. **The live repo listing filters them out** (`GithubPdfList.astro`), so copying the whole `pdf-practicas/` folder into the materials repository cannot surface them there either.
+>
+> Do not add an "unlock later" flag for these. If a solution ever needs sharing, it goes through a channel that is not this site.
+
+`PdfViewer.astro` renders a document switcher (only when a session has more than one), a lazy **View PDF** toggle that creates the `<iframe>` on first click, and a download link. Because materials are published week by week, it **HEAD-probes each URL** the first time a viewer scrolls into view: a document that is not up yet shows *"todavía no publicado"* with the controls disabled, and starts working the moment the file is pushed — **no site rebuild**. Probes are cached per URL and any network failure degrades to the pending state. With `enabled: true`, `GithubPdfList.astro` additionally lists the subject's folder live via the GitHub Contents API.
+
+The teaching index shows an under-construction banner while `TEACHING_UNDER_CONSTRUCTION` is `true` in `src/config.js`.
+
+### Embeddable subject page — `/teaching/<id>/embed/`
+
+Every subject also builds a bare variant for dropping into a Campus Virtual / Moodle page:
+
+```html
+<iframe src="https://www.augustocristian.es/es/teaching/web-technologies/embed/"
+        style="width:100%;height:80vh;border:0" loading="lazy"
+        title="Tecnologías Web"></iframe>
+```
+
+Same lesson browser, same content component; `EmbedLayout.astro` replaces the site chrome with a slim bar (title, theme toggle, "open full page" in `_blank`). It is `noindex, follow` with `<link rel="canonical">` on the real page, so the embeds never compete in search. Deep links work inside the frame — append the lesson hash to the `src`.
+
+**No `X-Frame-Options` or `frame-ancestors` CSP is sent anywhere on this site**, which is what allows framing. If a `_headers` / `netlify.toml` headers block is ever added, it must not reintroduce them.
 
 ### TFG / TFM files — `data/teaching/tfgs/<ID>.yaml`
 
@@ -527,7 +646,7 @@ linkedin: "https://www.linkedin.com/in/example/"    # optional — student name 
 1. Pages under `src/pages/[...lang]/` render every route × 3 languages (`langStaticPaths()`).
 2. YAML is loaded through the cached loaders in `src/lib/data.js`; view models are built per language in `src/lib/viewmodels.js` (localization, date formatting, BibTeX venue/doi, related-pubs, chips).
 3. Teaching MDX renders through the `teaching` content collection (`src/content.config.ts`).
-4. The `cite-bib` integration (`src/integrations/cite-bib.mjs`) writes `/cite/<ID>.bib` verbatim into `dist/` at `astro:build:done` (and serves the same URLs on the dev server); `src/pages/sitemap.xml.js` emits the multilingual sitemap; `public/robots.txt` is copied as-is.
+4. The `cite-bib` integration (`src/integrations/cite-bib.mjs`) writes `/cite/<ID>.bib` verbatim into `dist/` at `astro:build:done`, and `teaching-ics` (`src/integrations/teaching-ics.mjs`) writes `/calendar/<subject>-<group>.ics` the same way (both also serve their URLs via dev-server middleware). `src/pages/sitemap.xml.js` emits the multilingual sitemap; `public/robots.txt` is copied as-is.
 5. `public/` (img, files, robots.txt) is copied verbatim; CSS and client JS are bundled/hashed into `dist/_astro/`.
 
 ---
@@ -548,7 +667,7 @@ view.js        — pure DOM mutations; never reads state
 - **FilterBar variants**: default `panel` (horizontal boxed bar — TFG/TFM lists) and `sidebar` (vertical checkbox groups used by the publications page: left column on desktop via `.pub-layout`, stacked on top below 900px).
 - **`initScrollReveal()`** runs site-wide (skipped under `prefers-reduced-motion: reduce`); reveal targets and the filtered-list container rule live in `revealTargets()` (`model.js`).
 
-Small page-specific scripts (subject-page lesson router + sidebar toggle, GitHub PDF listing) live inline in their `.astro` files; the lazy PDF and video embeds live in their components' own `<script>` blocks (`PdfViewer.astro`, `Video.astro`).
+Small page-specific scripts live inline in their own `.astro` files, outside the main bundle: the lesson router + sidebar toggle (`SubjectContent.astro`), the planning subgroup picker (`SubjectPlanning.astro`), the GitHub PDF listing (`GithubPdfList.astro`), and the lazy PDF and video embeds (`PdfViewer.astro`, `Video.astro`). `EmbedLayout.astro` deliberately ships **only** a theme toggle — the embed has no nav, filters or scroll reveal, so it never loads `main.js`.
 
 ### FOUC prevention
 

@@ -2,6 +2,7 @@
 lang: it
 html_lang: it
 months: ["gen.", "feb.", "mar.", "apr.", "mag.", "giu.", "lug.", "ago.", "set.", "ott.", "nov.", "dic."]
+weekdays_short: ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
 present: "Presente"
 profile_role: "Professore Assistente"
 
@@ -147,10 +148,35 @@ teaching_next_lesson: "Successiva"
 # Azioni sessione (PDF incorporato + video + link repository esterno)
 teaching_unit_pdf: "Scarica PDF"
 teaching_view_pdf: "Vedi PDF"
+teaching_hide_pdf: "Nascondi PDF"
+teaching_materials: "Materiali"
+teaching_pdf_pending: "Non ancora pubblicato — apparirà qui appena caricato."
 teaching_watch_video: "Guarda il video"
 teaching_lab_external: "Vedi su GitHub"
 # Elenco in tempo reale dal repository esterno dei materiali didattici
 teaching_repo_materials: "Repository dei materiali"
+
+# Pianificazione del corso (prima lezione di ogni materia con calendario)
+teaching_info: "Informazioni"
+teaching_planning: "Pianificazione"
+teaching_planning_lede: "Pianificazione settimana per settimana del corso. Scegli il tuo sottogruppo di laboratorio per evidenziare le tue sessioni e scaricarle come file di calendario."
+teaching_course: "Anno accademico"
+teaching_code: "Codice"
+teaching_centre: "Scuola"
+teaching_course_guide: "Guida ufficiale del corso"
+teaching_your_group: "Il tuo sottogruppo di laboratorio"
+teaching_all_groups: "Tutti i sottogruppi"
+teaching_add_calendar: "Scarica calendario (.ics)"
+teaching_ics_hint: "Compatibile con Google Calendar, Outlook e Apple Calendar."
+teaching_week: "Settimana"
+teaching_no_session: "Nessuna sessione"
+teaching_makeup: "Recupero"
+teaching_pa: "Esercitazione in aula"
+teaching_tentative: "Da confermare"
+teaching_assessment: "Valutazione"
+
+# Vista incorporabile della materia (/teaching/<id>/embed/)
+teaching_open_full: "Apri pagina completa"
 
 # ── Pagina GitHub ──────────────────────────────────────────────────────────
 page_github_eyebrow: "Open source"

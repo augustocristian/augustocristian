@@ -1,0 +1,195 @@
+---
+// Subject planning: the week-by-week calendar of the course, the link to the
+// official course guide, and the .ics export.
+//
+// One subgroup selector drives both the table (which lab slot is highlighted)
+// and the download button (which .ics it points at), so the reader picks their
+// lab group once and gets a personal calendar. Everything is rendered at build
+// time; the only client JS is the selector itself.
+import { buildPlanningWeeks, weekdayOf } from '../lib/schedule.js';
+
+const { subject, schedule, t, guideUrl = '' } = Astro.props;
+
+const weeks = buildPlanningWeeks(schedule);
+const months = t.months;
+const weekdays = t.weekdays_short;
+
+// "lun 21 sep" — built here so no date formatting ships to the browser.
+function fmtDay(dateStr) {
+  const [, m, d] = dateStr.split('-').map(Number);
+  return `${weekdays[weekdayOf(dateStr)]} ${d} ${months[m - 1]}`;
+}
+
+function fmtRange(startStr, endStr) {
+  const [, sm, sd] = startStr.split('-').map(Number);
+  const [y, em, ed] = endStr.split('-').map(Number);
+  const left = sm === em ? `${sd}` : `${sd} ${months[sm - 1]}`;
+  return `${left} – ${ed} ${months[em - 1]} ${y}`;
+}
+
+---
+<div class="planning">
+  <div class="planning-intro">
+    <p class="planning-lede">{t.teaching_planning_lede}</p>
+    <dl class="planning-facts">
+      <div><dt>{t.teaching_course}</dt><dd>{schedule.course}</dd></div>
+      <div><dt>{t.teaching_code}</dt><dd>{schedule.code}</dd></div>
+      {schedule.location && (
+        <div><dt>{t.teaching_centre}</dt><dd>{schedule.location}</dd></div>
+      )}
+    </dl>
+    {guideUrl && (
+      <a class="btn btn-sm" href={guideUrl} target="_blank" rel="noopener">
+        {t.teaching_course_guide}
+      </a>
+    )}
+  </div>
+
+  <div class="planning-toolbar" data-planning-toolbar>
+    <div class="planning-group-picker">
+      <label for="planning-group">{t.teaching_your_group}</label>
+      <select id="planning-group" data-group-select>
+        <option value="all">{t.teaching_all_groups}</option>
+        {schedule.groups.map((g) => <option value={g.id}>{g.id}</option>)}
+      </select>
+    </div>
+    <a class="btn btn-sm planning-ics-btn" data-ics-link
+       data-subject={subject.id} data-all-file={`${subject.id}-completo.ics`}
+       href={`/calendar/${subject.id}-completo.ics`}
+       download={`${subject.id}-completo.ics`}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      {t.teaching_add_calendar}
+    </a>
+    <p class="planning-ics-hint">{t.teaching_ics_hint}</p>
+  </div>
+
+  <ol class="planning-weeks">
+    {weeks.map((week) => (
+      <li class="planning-week">
+        <div class="planning-week-head">
+          <span class="planning-week-n">{t.teaching_week} {week.n}</span>
+          <span class="planning-week-dates">{fmtRange(week.start, week.end)}</span>
+        </div>
+
+        <div class="planning-week-body">
+          <div class="planning-row">
+            <span class="planning-row-label">{t.teaching_tab_labs}</span>
+            <div class="planning-row-content">
+              {week.allCancelled ? (
+                <p class="planning-cancelled">{week.labs[0].reason || t.teaching_no_session}</p>
+              ) : (
+                <Fragment>
+                  <p class="planning-session">
+                    <span class="planning-code">{week.primary.session}</span>
+                    <a href={`#${week.primary.lesson}`}>
+                      {[week.primary.title, week.primary.extra].filter(Boolean).join(' · ')}
+                    </a>
+                  </p>
+                  <ul class="planning-slots">
+                    {week.labs.map((lab) => (
+                      <li class:list={['planning-slot', { 'is-cancelled': lab.cancelled }]}
+                          data-group={lab.group.id}>
+                        <span class="planning-slot-group">{lab.group.id}</span>
+                        {lab.cancelled ? (
+                          <span class="planning-slot-when">{lab.reason || t.teaching_no_session}</span>
+                        ) : (
+                          <span class="planning-slot-when">
+                            {fmtDay(lab.date)} · {lab.start}–{lab.end}
+                            {lab.moved && <span class="planning-tag">{t.teaching_makeup}</span>}
+                          </span>
+                        )}
+                        {/* A subgroup running a different session from the rest of the week. */}
+                        {!lab.cancelled && lab.session !== week.primary.session && (
+                          <span class="planning-slot-alt">{lab.session} {lab.title}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </Fragment>
+              )}
+            </div>
+          </div>
+
+          {week.theory.length > 0 && (
+            <div class="planning-row">
+              <span class="planning-row-label">{t.teaching_tab_theory}</span>
+              <div class="planning-row-content">
+                <ul class="planning-theory">
+                  {week.theory.map((row) => (
+                    <li class:list={['planning-theory-item', { 'is-tentative': row.tentative }]}>
+                      <span class="planning-when">{fmtDay(row.date)} · {row.start}–{row.end}</span>
+                      <span class="planning-theory-title">
+                        {row.kind === 'pa' && <span class="planning-tag">{t.teaching_pa}</span>}
+                        {row.lessons?.length
+                          ? <a href={`#${row.lessons[0]}`}>{row.title}</a>
+                          : row.title}
+                        {row.tentative && <span class="planning-tag planning-tag-soft">{t.teaching_tentative}</span>}
+                      </span>
+                      {row.detail && <span class="planning-detail">{row.detail}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {week.events.length > 0 && (
+            <div class="planning-row">
+              <span class="planning-row-label">{t.teaching_assessment}</span>
+              <div class="planning-row-content">
+                <ul class="planning-theory">
+                  {week.events.map((row) => (
+                    <li class="planning-theory-item is-exam">
+                      <span class="planning-when">{fmtDay(row.date)} · {row.start}–{row.end}</span>
+                      <span class="planning-theory-title">{row.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {week.note && <p class="planning-note">{week.note}</p>}
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<script>
+  // Subgroup selector: dims the other subgroups' lab slots and repoints the
+  // .ics download. Remembered per browser so the choice survives navigation.
+  const toolbar = document.querySelector('[data-planning-toolbar]');
+  if (toolbar) {
+    const select = toolbar.querySelector('[data-group-select]');
+    const link = toolbar.querySelector('[data-ics-link]');
+    const base = link.getAttribute('href').replace(/[^/]+$/, '');
+    const planning = document.querySelector('.planning');
+    const KEY = 'teaching-group';
+
+    function apply(group) {
+      planning.classList.toggle('has-group', group !== 'all');
+      planning.querySelectorAll('[data-group]').forEach((slot) => {
+        slot.classList.toggle('is-mine', slot.dataset.group === group);
+      });
+      const file = group === 'all'
+        ? link.dataset.allFile
+        : `${link.dataset.subject}-${group}.ics`;
+      link.href = base + file;
+      link.setAttribute('download', file);
+    }
+
+    const stored = localStorage.getItem(KEY);
+    if (stored && [...select.options].some((o) => o.value === stored)) select.value = stored;
+    apply(select.value);
+
+    select.addEventListener('change', () => {
+      localStorage.setItem(KEY, select.value);
+      apply(select.value);
+    });
+  }
+</script>

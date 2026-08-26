@@ -2,6 +2,7 @@
 lang: es
 html_lang: es
 months: ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."]
+weekdays_short: ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 present: "Actualidad"
 profile_role: "Profesor Ayudante Doctor"
 
@@ -138,7 +139,7 @@ teaching_back: "← Volver a Docencia"
 # Grupos de lecciones (encabezados de la barra lateral)
 teaching_tab_theory: "Teoría"
 teaching_tab_labs: "Laboratorio"
-teaching_tab_seminars: "Seminarios"
+teaching_tab_seminars: "Prácticas de aula"
 # Barra lateral de lecciones + paginador
 subject_nav_aria: "Navegación de lecciones"
 teaching_lessons: "Lecciones"
@@ -147,10 +148,35 @@ teaching_next_lesson: "Siguiente"
 # Acciones de sesión (PDF incrustado + vídeo + enlace a repositorio externo)
 teaching_unit_pdf: "Descargar PDF"
 teaching_view_pdf: "Ver PDF"
+teaching_hide_pdf: "Ocultar PDF"
+teaching_materials: "Materiales"
+teaching_pdf_pending: "Todavía no publicado — aparecerá aquí en cuanto se suba."
 teaching_watch_video: "Ver vídeo"
 teaching_lab_external: "Ver en GitHub"
 # Listado en vivo del repositorio externo de materiales docentes
 teaching_repo_materials: "Repositorio de materiales"
+
+# Planificación docente (primera lección de cada asignatura con calendario)
+teaching_info: "Información"
+teaching_planning: "Planificación"
+teaching_planning_lede: "Planificación semana a semana de la asignatura. Elige tu subgrupo de laboratorio para resaltar tus sesiones y descargarlas como fichero de calendario."
+teaching_course: "Curso"
+teaching_code: "Código"
+teaching_centre: "Centro"
+teaching_course_guide: "Guía docente oficial"
+teaching_your_group: "Tu subgrupo de laboratorio"
+teaching_all_groups: "Todos los subgrupos"
+teaching_add_calendar: "Descargar calendario (.ics)"
+teaching_ics_hint: "Compatible con Google Calendar, Outlook y Apple Calendar."
+teaching_week: "Semana"
+teaching_no_session: "Sin sesión"
+teaching_makeup: "Recuperación"
+teaching_pa: "Práctica de aula"
+teaching_tentative: "Por confirmar"
+teaching_assessment: "Evaluación"
+
+# Vista incrustable de la asignatura (/teaching/<id>/embed/)
+teaching_open_full: "Abrir página completa"
 
 # ── Página de GitHub ───────────────────────────────────────────────────────
 page_github_eyebrow: "Código abierto"

@@ -95,9 +95,11 @@
 
 .subject-nav-num {
   font-variant-numeric: tabular-nums;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
   color: var(--color-text-muted);
   flex-shrink: 0;
+  min-width: 2.4rem;
 }
 
 /* =========================================================
@@ -136,6 +138,24 @@
 .lesson-title {
   font-size: var(--step-2);
   margin: var(--space-1) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.lesson-code {
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--color-accent);
+}
+
+.lesson-summary {
+  margin: var(--space-2) 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  max-width: 62ch;
 }
 
 /* Prev/next pager at the bottom of every lesson */
@@ -273,6 +293,74 @@
   margin-top: 1.25rem;
   border-top: 1px solid var(--color-border);
   padding-top: 1rem;
+}
+
+.pdf-viewer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Document switcher — only rendered when a session has several PDFs
+   (a lab has a guion and an exercise sheet). */
+.pdf-tabs {
+  display: inline-flex;
+  padding: 0.2rem;
+  gap: 0.2rem;
+  background: var(--color-surface-2);
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+.pdf-tab {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out),
+              background-color var(--dur-1) var(--ease-out);
+}
+
+.pdf-tab:hover {
+  color: var(--color-text);
+}
+
+.pdf-tab[aria-selected='true'] {
+  color: var(--color-accent);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-1);
+}
+
+/* Materials are published week by week: a document that is not up yet shows
+   this instead of opening a 404 (see PdfViewer.astro). */
+.pdf-pending {
+  margin: var(--space-3) 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.pdf-view-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pdf-noscript-list {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
 }
 
 .pdf-frame-wrap {
