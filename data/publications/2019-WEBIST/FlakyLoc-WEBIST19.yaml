@@ -1,4 +1,4 @@
-﻿type: conference
+type: conference
 authors: [moranjesus, augusto, bertolino, claudio, tuya]
 date: 2019-09-18
 venue_short: "WEBIST19 (C3)"
@@ -19,7 +19,7 @@ abstract: >-
   analyses the execution of the same flaky test under different environmental factors that
   can trigger the flakiness. The technique is illustrated on an educational web platform
   named FullTeaching.
-tags: [Software Testing and Debugging, Spectrum-based Localization, Web Applications, Test Flakiness]
+tags: [Software testing and debugging, Spectrum-based localization, Web applications, Test flakiness]
 featured: false
 links:
   pdf: "http://hdl.handle.net/10651/54569"

@@ -9,7 +9,8 @@
   --color-surface-2:     #1B3450;   /* raised surfaces (hover fills, chips) */
   --color-text:          #E4EDF8;   /* near-white — body text */
   --color-text-muted:    #7AAAC4;   /* GIIS muted blue */
-  --color-accent:        #1E8CE0;   /* bright GIIS-derived blue — primary accent */
+  --color-accent:        #36A2F5;   /* GIIS-derived blue — WCAG AA as text on every dark surface */
+  --color-on-accent:     #0C1829;   /* label on an accent fill (.btn-primary) */
   --color-accent-soft:   #0D3460;   /* dark blue fill — tag / badge backgrounds */
   --color-accent-2:      #80A6CC;   /* GIIS secondary light blue */
   --color-accent-2-soft: #1A3D58;   /* dark blue-grey fill */
@@ -77,7 +78,7 @@
   --globe-pin:     #1E8CE0;
 
   /* Fonts (loaded from Google Fonts) */
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Noto Sans Display', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
@@ -97,7 +98,8 @@
     --color-surface-2:     #FFFFFF;
     --color-text:          #0D1B2A;
     --color-text-muted:    #38648A;
-    --color-accent:        #0F6DB5;
+    --color-accent:        #0E62A3;
+    --color-on-accent:     #FFFFFF;
     --color-accent-soft:   #C5DDF7;
     --color-accent-2:      #3A7AB5;
     --color-accent-2-soft: #D4E8F7;
@@ -136,7 +138,8 @@
   --color-surface-2:     #FFFFFF;
   --color-text:          #0D1B2A;
   --color-text-muted:    #38648A;
-  --color-accent:        #0F6DB5;
+  --color-accent:        #0E62A3;
+  --color-on-accent:     #FFFFFF;
   --color-accent-soft:   #C5DDF7;
   --color-accent-2:      #3A7AB5;
   --color-accent-2-soft: #D4E8F7;

@@ -2,7 +2,6 @@
 lang: es
 html_lang: es
 months: ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."]
-weekdays_short: ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 present: "Actualidad"
 profile_role: "Profesor Ayudante Doctor"
 
@@ -112,7 +111,6 @@ project_role: "Rol"
 page_teaching_eyebrow: "Academia"
 page_teaching_heading: "Docencia"
 page_teaching_desc: "Materiales docentes y Trabajos Fin de Máster supervisados."
-teaching_subject_eyebrow: "Asignatura"
 # Encabezados TFG / TFM
 teaching_students_eyebrow: "Estudiantes"
 teaching_tfg_heading: "Trabajos Fin de Grado"
@@ -131,52 +129,51 @@ teaching_filter_keywords: "Palabras clave"
 teaching_filter_student: "Buscar por alumno…"
 teaching_filter_projects: "proyectos"
 teaching_filter_reset: "Restablecer"
-teaching_construction_notice: "🚧 Esta sección está en construcción. Los materiales se irán añadiendo progresivamente."
 
-# ── Página de docencia — páginas de asignatura ────────────────────────────
-# Navegación
-teaching_back: "← Volver a Docencia"
-# Grupos de lecciones (encabezados de la barra lateral)
-teaching_tab_theory: "Teoría"
-teaching_tab_labs: "Laboratorio"
-teaching_tab_seminars: "Prácticas de aula"
-# Barra lateral de lecciones + paginador
-subject_nav_aria: "Navegación de lecciones"
-teaching_lessons: "Lecciones"
-teaching_prev_lesson: "Anterior"
-teaching_next_lesson: "Siguiente"
-# Acciones de sesión (PDF incrustado + vídeo + enlace a repositorio externo)
-teaching_unit_pdf: "Descargar PDF"
-teaching_view_pdf: "Ver PDF"
-teaching_hide_pdf: "Ocultar PDF"
-teaching_materials: "Materiales"
-teaching_pdf_pending: "Todavía no publicado — aparecerá aquí en cuanto se suba."
-teaching_watch_video: "Ver vídeo"
-teaching_lab_external: "Ver en GitHub"
-# Listado en vivo del repositorio externo de materiales docentes
-teaching_repo_materials: "Repositorio de materiales"
-
-# Planificación docente (primera lección de cada asignatura con calendario)
-teaching_info: "Información"
-teaching_planning: "Planificación"
-teaching_planning_lede: "Planificación semana a semana de la asignatura. Elige tu subgrupo de laboratorio para resaltar tus sesiones y descargarlas como fichero de calendario."
-teaching_course: "Curso"
-teaching_code: "Código"
-teaching_centre: "Centro"
-teaching_course_guide: "Guía docente oficial"
-teaching_your_group: "Tu subgrupo de laboratorio"
-teaching_all_groups: "Todos los subgrupos"
-teaching_add_calendar: "Descargar calendario (.ics)"
-teaching_ics_hint: "Compatible con Google Calendar, Outlook y Apple Calendar."
-teaching_week: "Semana"
-teaching_no_session: "Sin sesión"
-teaching_makeup: "Recuperación"
-teaching_pa: "Práctica de aula"
-teaching_tentative: "Por confirmar"
-teaching_assessment: "Evaluación"
-
-# Vista incrustable de la asignatura (/teaching/<id>/embed/)
-teaching_open_full: "Abrir página completa"
+# ── Página de docencia — gráfico de docencia impartida ────────────────────
+teaching_record_eyebrow: "Docencia"
+teaching_record_heading: "Todas las asignaturas que he impartido"
+teaching_record_desc: "Horas certificadas por la Universidad de Oviedo. Filtra por curso académico o titulación: los totales y ambos gráficos se recalculan."
+# Tarjetas de resumen
+teaching_stat_hours: "Horas"
+teaching_stat_subjects: "Asignaturas"
+teaching_stat_degrees: "Titulaciones"
+teaching_stat_years: "Cursos académicos"
+# Gráficos
+teaching_theory: "Teoría"
+teaching_practice: "Prácticas"
+# Filtros
+teaching_filter_course_year: "Curso académico"
+teaching_filter_titulacion: "Titulación"
+teaching_filter_none: "Ninguna docencia coincide con estos filtros."
+# Vista de tabla y notas
+teaching_table_toggle: "Ver los datos como tabla"
+teaching_th_year: "Curso"
+teaching_th_subject: "Asignatura"
+teaching_th_bilingual: "Bilingüe"
+teaching_bilingual_yes: "EN"
+teaching_th_degrees: "Titulaciones"
+teaching_th_theory: "Teoría"
+teaching_th_practice: "Prácticas"
+teaching_th_hours: "Total"
+teaching_programmed_note: "programada, aún no impartida en su totalidad"
+teaching_english_note: "Impartida en inglés"
+# Trayectoria por titulación + flujo asignatura→titulación
+teaching_by_degree: "Presencia en cada titulación"
+teaching_by_degree_lede: "Un punto por curso impartido; el tamaño son las horas. Los huecos dicen tanto como los puntos."
+teaching_by_flow: "Qué asignatura alimenta a qué titulación"
+teaching_by_flow_lede: "Una asignatura compartida por varias titulaciones es una clase con varias audiencias: por eso una sola asignatura puede colocarte en ocho."
+teaching_show_more: "Ver todas"
+teaching_show_less: "Ver menos"
+teaching_attribution_note: "Estas dos vistas imputan las horas de una asignatura compartida a cada titulación que la recibe, así que sus totales son mayores que el total certificado de arriba. Es intencionado: responden a dónde has estado presente, no a cómo se reparten las horas."
+teaching_col_subject: "Asignatura"
+teaching_col_degree: "Titulación"
+teaching_dot_legend: "tamaño del punto = horas de ese curso"
+teaching_no_year: "sin docencia ese curso"
+teaching_years_count: "cursos"
+teaching_subjects_count: "asignaturas"
+teaching_reaches: "titulaciones"
+teaching_source_note: "Fuente: certificado de docencia emitido por la Universidad de Oviedo el 8 de septiembre de 2026. Una asignatura impartida a varias titulaciones es una sola docencia y se cuenta una vez, igual que en los totales anuales del propio certificado."
 
 # ── Página de GitHub ───────────────────────────────────────────────────────
 page_github_eyebrow: "Código abierto"

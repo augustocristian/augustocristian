@@ -22,7 +22,7 @@ abstract: >-
   successfully applied to anonymize the clinical data of the INEBIR, allowing third parties
   to transfer without transgressing the user privacy and develop useful AI Tools with the
   anonymized data.
-tags: [Anonymization, Software Testing, Artificial intelligence, Health-Care Data, k-Anonymity]
+tags: [Anonymization, Software testing, Artificial intelligence, Health-Care Data, k-Anonymity]
 featured: true
 links:
   pdf: "http://hdl.handle.net/10651/56868"

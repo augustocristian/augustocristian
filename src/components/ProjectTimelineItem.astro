@@ -11,14 +11,14 @@ const { project, t } = Astro.props;
   <details class="timeline-card">
     <summary>
       <div class="timeline-thumb">
-        <img src={`/${project.image}`} alt={project.title} />
+        <img src={`/${project.image}`} alt={project.title} loading="lazy" decoding="async" />
       </div>
       <div class="timeline-info">
         <div class="timeline-meta">
           <span class={`badge badge-status-${project.status}`}>{project.status_label}</span>
           <span class="tag">{project.summary}</span>
         </div>
-        <h3>{project.title}</h3>
+        <h2>{project.title}</h2>
         <p class="timeline-subtitle text-muted">{project.full_title}</p>
         <p class="proj-dates">{project.date_range}</p>
       </div>

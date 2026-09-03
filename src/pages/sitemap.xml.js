@@ -1,14 +1,10 @@
-// Multilingual sitemap — 7 standard pages plus one page per visible teaching
-// subject, across the 3 language prefixes.
+// Multilingual sitemap — the 7 standard pages across the 3 language prefixes.
 import { LANGS } from '../lib/i18n.js';
-import { loadProfile, loadSubjects } from '../lib/data.js';
+import { loadProfile } from '../lib/data.js';
 
 export function GET() {
   const profile = loadProfile();
-  const subjectPaths = loadSubjects()
-    .filter((s) => !s.hidden)
-    .map((s) => `teaching/${s.id}/`);
-  const pages = ['', 'publications/', 'talks/', 'projects/', 'teaching/', 'experience/', 'github/', ...subjectPaths];
+  const pages = ['', 'publications/', 'talks/', 'projects/', 'teaching/', 'experience/', 'github/'];
 
   const entries = [];
   for (const { code } of LANGS) {

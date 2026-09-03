@@ -140,7 +140,7 @@
   margin-bottom: 0.4rem;
 }
 
-.timeline-card h3 {
+.timeline-card :is(h2, h3) {
   font-size: 0.95rem;
   margin: 0 0 0.2rem;
 }
@@ -268,7 +268,7 @@
     padding: 0.75rem;
   }
 
-  .timeline-card h3 {
+  .timeline-card :is(h2, h3) {
     overflow: visible;
     text-overflow: clip;
     white-space: normal;

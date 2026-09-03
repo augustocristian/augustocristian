@@ -75,6 +75,7 @@ function loadTeachingYamls(subdir) {
   return loadIdList(dir);
 }
 
-export const loadSubjects = cached(() => loadTeachingYamls('subjects'));
+// Teaching record (courses.yaml) — transcribed from the official certificate.
+export const loadCourses = cached(() => readYaml(path.join(DATA_DIR, 'teaching', 'courses.yaml')));
 export const loadTFGs = cached(() => loadTeachingYamls('tfgs'));
 export const loadTFMs = cached(() => loadTeachingYamls('tfms'));

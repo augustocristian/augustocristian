@@ -20,7 +20,7 @@ abstract: >-
   scheduled in parallel on several machines. RETORCH is exemplified with a real-world
   application, and its performance evaluation shows promising savings in terms of resource
   usage and time.
-tags: [Continuous integration, Continuous testing, End-to-end testing, Software testing, Test orchestration, Testing in the Cloud]
+tags: [Continuous integration, Continuous testing, End-to-End testing, Software testing, Test orchestration, Testing in the cloud]
 featured: true
 links:
   pdf: "http://hdl.handle.net/10651/53593"

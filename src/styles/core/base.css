@@ -55,7 +55,7 @@ ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; }
   z-index: var(--z-skip);
   padding: var(--space-2) var(--space-4);
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
   font-weight: 600;
   text-decoration: none;
   border-radius: var(--radius-sm);
@@ -68,8 +68,14 @@ ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; }
 
 ::selection {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
+
+/* The `hidden` attribute must win over any author `display`.
+   [hidden] lives in the UA stylesheet, and author rules beat UA rules at any
+   specificity — so a flex/grid class silently un-hides the element. Everything
+   the site toggles with `el.hidden` depends on this one line. */
+[hidden] { display: none !important; }
 
 /* =========================================================
    Typography
@@ -105,7 +111,7 @@ h4 { font-size: var(--step-1); }
 
 .highlight {
   background: var(--color-accent);
-  color: #fff;               /* blue bg always needs white text in any theme */
+  color: var(--color-on-accent);
   padding: 0.05em 0.3em;
   border-radius: var(--radius-sm);
   box-decoration-break: clone;

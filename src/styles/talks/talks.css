@@ -10,6 +10,12 @@
   margin-bottom: 1rem;
 }
 
+/* Sized by role, not by level: the talks page uses h2 (its h1 is the only
+   heading above), the homepage strip h3 (it sits under a section head). */
+.talk-card :is(h2, h3) {
+  font-size: var(--step-2);
+}
+
 .talk-meta {
   color: var(--color-text-muted);
   font-weight: 600;

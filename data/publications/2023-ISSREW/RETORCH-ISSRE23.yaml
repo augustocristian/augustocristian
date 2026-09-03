@@ -1,4 +1,4 @@
-﻿type: conference
+type: conference
 authors: [augusto]
 date: 2023-10-09
 venue_short: "ISSREW 2023 (C6)"
@@ -26,7 +26,7 @@ abstract: >-
   overall cost (billed by the Cloud Provider), but also the cost invested in testing and
   unused infrastructure (overprovisioning) to select the infrastructure best aligned with
   the testing objectives.
-tags: [Software Reliability, Software Testing, Cloud Computing, End-to-End Testing, Resource Optimization]
+tags: [Software Reliability, Software testing, Cloud computing, End-to-End testing, Resource Optimization]
 featured: false
 links:
   pdf: "https://hdl.handle.net/10651/72390"

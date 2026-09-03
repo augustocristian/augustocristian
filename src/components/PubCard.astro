@@ -5,7 +5,7 @@ import LinkButtonRow from './LinkButtonRow.astro';
 const { pub, t } = Astro.props;
 ---
 <article class="pub-card" id={pub.id}>
-  <PubCardHead pub={pub} />
+  <PubCardHead pub={pub} headingLevel={2} />
   <details class="pub-abstract-details">
     <summary>{t.pub_abstract}</summary>
     <p class="pub-abstract">{pub.abstract}</p>

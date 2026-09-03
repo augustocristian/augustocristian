@@ -28,11 +28,16 @@
 }
 
 /* Once visible, drop the compositor hint and restore the hover-lift
-   transitions (this rule overrides .card-link's own transition). */
+   transitions (this rule overrides .card-link's own transition).
+   The reveal's OWN properties keep --dur-3 and the stagger delay: this rule
+   lands in the same style change that starts the reveal, so giving opacity and
+   transform --dur-1 here cut every card's entrance to 150ms and dropped the
+   stagger entirely — the whole grid snapped in at once instead of floating in.
+   Only the hover-lift properties belong on the short duration. */
 .reveal--card.is-visible {
   will-change: auto;
-  transition: opacity var(--dur-1) var(--ease-out),
-              transform var(--dur-1) var(--ease-out),
+  transition: opacity var(--dur-3) var(--ease-out) var(--reveal-delay, 0s),
+              transform var(--dur-3) var(--ease-out) var(--reveal-delay, 0s),
               translate var(--dur-1) var(--ease-out),
               box-shadow var(--dur-1) var(--ease-out);
 }

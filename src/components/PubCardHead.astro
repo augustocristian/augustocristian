@@ -3,10 +3,13 @@
 // title + classification badges, author chips, venue — date line.
 import PubBadges from './PubBadges.astro';
 import AuthorList from './AuthorList.astro';
-const { pub } = Astro.props;
+// headingLevel keeps the document outline gap-free: 3 under a section head
+// (homepage), 2 on a listing page where the page h1 is the only heading above.
+const { pub, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}`;
 ---
 <div class="pub-card-head">
-  <h3>{pub.title}</h3>
+  <Heading>{pub.title}</Heading>
   <PubBadges pub={pub} />
 </div>
 <p class="pub-authors"><AuthorList authors={pub.authors} /></p>

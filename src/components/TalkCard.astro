@@ -1,13 +1,15 @@
 ---
 import LinkButtonRow from './LinkButtonRow.astro';
-const { talk, t } = Astro.props;
+// headingLevel: 3 under the homepage section head, 2 on the talks page.
+const { talk, t, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}`;
 ---
 <article class="card talk-card" id={talk.id}>
-  <img src={`/${talk.image}`} alt={talk.title} />
+  <img src={`/${talk.image}`} alt={talk.title} loading="lazy" decoding="async" />
   <p class="talk-meta">{talk.date_range} · {talk.location}</p>
-  <h3>{talk.has_event_url
+  <Heading>{talk.has_event_url
     ? <a href={talk.event_url} target="_blank" rel="noopener">{talk.title}</a>
-    : talk.title}</h3>
+    : talk.title}</Heading>
   <p>{talk.summary}</p>
   {talk.abstract && (
     <details class="pub-abstract-details">

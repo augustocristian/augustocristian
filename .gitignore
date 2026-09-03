@@ -154,3 +154,5 @@ fabric.properties
 #Claude
 .agents
 .claude
+# Image originals kept by the downscaling pass (public/img holds the web-sized copies)
+.image-originals/

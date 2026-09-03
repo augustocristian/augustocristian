@@ -4,5 +4,6 @@
 const { name, avatar_path = '', initials } = Astro.props;
 ---
 {avatar_path
-  ? <img class="author-avatar" src={avatar_path} alt={name} />
+  ? <img class="author-avatar" src={avatar_path} alt={name}
+         width="96" height="96" loading="lazy" decoding="async" />
   : <span class="author-avatar author-initials" aria-hidden="true">{initials}</span>}

@@ -4,7 +4,7 @@ import { filterItems, revealTargets } from './model.js';
 import {
   showCard, hideCard, setCount,
   setActive, clearActive,
-  markRevealed, scheduleReveal, triggerReveal,
+  scheduleReveal, triggerReveal,
 } from './view.js';
 
 // ── Theme ────────────────────────────────────────────────────────────────────
@@ -239,6 +239,8 @@ export function initScrollReveal() {
   const targets = revealTargets();
   if (!targets.length) return;
 
+  const variantOf = new WeakMap(targets.map(({ el, variant }) => [el, variant]));
+
   // Stagger cards within the same parent container (delay only on appear)
   const byParent = new Map();
   targets.forEach(({ el, variant }) => {
@@ -253,25 +255,42 @@ export function initScrollReveal() {
     });
   });
 
-  // One-shot observer, threshold 0: float in as soon as the element's
-  // leading edge enters the viewport (so the whole animation plays on
-  // screen), then leave it alone — revealed elements stay put.
+  // Which elements start on screen is decided by the observer's FIRST callback,
+  // never by measuring here. At DOMContentLoaded the webfonts have not swapped
+  // in yet (FontLinks.astro loads them async), so the page is still laid out in
+  // fallback metrics: getBoundingClientRect() put elements on the wrong side of
+  // the fold, they were marked "already visible", and they then never animated.
+  // The observer computes intersection after layout — and again whenever layout
+  // changes — so the font swap can no longer strand anything.
+  //
+  // One-shot, threshold 0: an element floats in as soon as its leading edge
+  // enters the viewport, so the whole animation plays on screen.
+  const classified = new WeakSet();
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
+      const el = entry.target;
+
+      // First delivery for this element: classify it.
+      if (!classified.has(el)) {
+        classified.add(el);
+        if (entry.isIntersecting) {
+          // On screen at load — leave it exactly as rendered: no reveal classes,
+          // no animation, and .card-link keeps its own hover transition.
+          observer.unobserve(el);
+        } else {
+          // Off screen, so hiding it now is invisible to the reader.
+          scheduleReveal(el, variantOf.get(el));
+        }
+        return;
+      }
+
       if (entry.isIntersecting) {
-        triggerReveal(entry.target);
-        observer.unobserve(entry.target);
+        triggerReveal(el);
+        observer.unobserve(el);
       }
     });
   }, { threshold: 0 });
 
-  targets.forEach(({ el, variant }) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < globalThis.innerHeight) {
-      markRevealed(el, variant);
-    } else {
-      scheduleReveal(el, variant);
-      observer.observe(el);
-    }
-  });
+  targets.forEach(({ el }) => observer.observe(el));
 }

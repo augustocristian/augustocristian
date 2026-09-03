@@ -75,9 +75,9 @@ const languages = loadLanguages();
           <div class="card award-card">
             {award.has_icon && <img class="award-icon" src={`/${award.icon}`} alt="" />}
             <div class="award-body">
-              <h4>{award.has_url
+              <h3>{award.has_url
                 ? <a href={award.url} target="_blank" rel="noopener">{award.title}</a>
-                : award.title}</h4>
+                : award.title}</h3>
               <p class="award-meta">{award.awarder} · {award.date_formatted}</p>
               {award.has_summary && <p class="text-muted">{award.summary}</p>}
             </div>

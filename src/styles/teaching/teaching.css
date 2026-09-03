@@ -100,7 +100,7 @@
   flex-wrap: wrap;
 }
 
-.thesis-card h4 {
+.thesis-card :is(h3, h4) {
   margin-bottom: 0;
   font-size: 1rem;
   line-height: 1.4;

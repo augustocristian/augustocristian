@@ -159,7 +159,10 @@
   border-color: var(--color-border-strong);
 }
 
-.award-body h4 {
+.award-body :is(h3, h4) {
+  /* Awards sit under their own h2, so the heading is an h3; pin the size that
+     the old h4 got from base.css so the level change stays purely semantic. */
+  font-size: var(--step-1);
   margin-bottom: 0.2rem;
 }
 

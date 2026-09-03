@@ -37,7 +37,10 @@
 
 .btn-primary {
   background: var(--color-accent);
-  color: #fff;               /* always white text on blue background */
+  /* Label colour flips per theme: the dark theme's accent is bright enough that
+     white on it fails AA (3.6:1), so it takes the navy ink instead; the light
+     theme's accent is dark, so it keeps white. Both clear 4.5:1. */
+  color: var(--color-on-accent);
   border-color: transparent;
 }
 
@@ -154,7 +157,7 @@
 
 .badge-status-open {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .badge-status-closed {
@@ -300,7 +303,7 @@
 .filter-btn.is-active {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #fff;               /* always white text on blue background */
+  color: var(--color-on-accent);
   box-shadow: var(--shadow-1);
 }
 
@@ -511,7 +514,7 @@
 .pager-btn.is-active {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .pager-btn:disabled {

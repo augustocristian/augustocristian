@@ -38,9 +38,9 @@ links:
   dataset: "https://doi.org/10.5281/zenodo.17442306"
   code:    "https://github.com/giis-uniovi/retorch-simphony-rp"
 tags:
-  - Software Testing
-  - End-to-End Testing
-  - Test Orchestration
+  - "Software testing"
+  - "End-to-End testing"
+  - "Test orchestration"
 featured: false
 lat: -22.9068
 lng: -43.1729

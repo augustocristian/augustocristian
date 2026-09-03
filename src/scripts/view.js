@@ -12,12 +12,6 @@ export function clearActive(btns) {
   btns.forEach((b) => b.classList.remove('is-active'));
 }
 
-// Immediately mark as revealed — no animation (element already in viewport on load)
-export function markRevealed(el, variant) {
-  el.classList.add('reveal', 'is-visible');
-  if (variant === 'card') el.classList.add('reveal--card');
-}
-
 // Set up hidden state for off-screen element, ready to animate in
 export function scheduleReveal(el, variant) {
   el.classList.add('reveal');

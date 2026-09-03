@@ -1,4 +1,4 @@
-﻿type: conference
+type: conference
 authors: [augusto, moranjesus, claudio, tuya]
 date: 2019-04-04
 venue_short: "AITEST19 (C1)"
@@ -18,7 +18,11 @@ abstract: >-
   protections and then used to train classification AIs. The results show how we can
   anonymize the data to achieve an adequate functional suitability in the AI context while
   maintaining the privacy of the anonymized data as high as possible.
-tags: []
+tags:
+  - "Anonymization"
+  - "Software testing"
+  - "Artificial intelligence"
+  - "k-Anonymity"
 featured: false
 links:
   pdf: "http://hdl.handle.net/10651/52773"

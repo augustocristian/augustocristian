@@ -1,4 +1,4 @@
-﻿type: conference
+type: conference
 authors: [augusto]
 date: 2020-07-06
 venue_short: "ICSE20 (C4)"
@@ -18,7 +18,7 @@ abstract: >-
   E2E testing phase. The test cases are grouped and scheduled with the resources (i.e.
   parallelized in the same machine or executed in a fixed arrangement), achieving an
   efficient test suite execution and reducing its total cost/time.
-tags: [Orchestration, End to End Testing, Efficient use of resources, Containerization]
+tags: [Orchestration, End-to-End testing, Efficient use of resources, Containerization]
 featured: false
 links:
   pdf: "http://hdl.handle.net/10651/58377"

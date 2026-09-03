@@ -2,7 +2,6 @@
 lang: it
 html_lang: it
 months: ["gen.", "feb.", "mar.", "apr.", "mag.", "giu.", "lug.", "ago.", "set.", "ott.", "nov.", "dic."]
-weekdays_short: ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
 present: "Presente"
 profile_role: "Professore Assistente"
 
@@ -112,7 +111,6 @@ project_role: "Ruolo"
 page_teaching_eyebrow: "Accademia"
 page_teaching_heading: "Didattica"
 page_teaching_desc: "Materiali didattici e tesi magistrali supervisionate."
-teaching_subject_eyebrow: "Materia"
 # Intestazioni TFG / TFM
 teaching_students_eyebrow: "Studenti"
 teaching_tfg_heading: "Tesi di Laurea Triennale"
@@ -131,52 +129,51 @@ teaching_filter_keywords: "Parole chiave"
 teaching_filter_student: "Cerca per studente…"
 teaching_filter_projects: "progetti"
 teaching_filter_reset: "Reimposta"
-teaching_construction_notice: "🚧 Questa sezione è in costruzione. I materiali verranno aggiunti progressivamente."
 
-# ── Pagina didattica — pagine materia ──────────────────────────────────────
-# Navigazione
-teaching_back: "← Torna alla Didattica"
-# Gruppi di lezioni (intestazioni della barra laterale)
-teaching_tab_theory: "Teoria"
-teaching_tab_labs: "Laboratorio"
-teaching_tab_seminars: "Seminari"
-# Barra laterale delle lezioni + paginazione
-subject_nav_aria: "Navigazione delle lezioni"
-teaching_lessons: "Lezioni"
-teaching_prev_lesson: "Precedente"
-teaching_next_lesson: "Successiva"
-# Azioni sessione (PDF incorporato + video + link repository esterno)
-teaching_unit_pdf: "Scarica PDF"
-teaching_view_pdf: "Vedi PDF"
-teaching_hide_pdf: "Nascondi PDF"
-teaching_materials: "Materiali"
-teaching_pdf_pending: "Non ancora pubblicato — apparirà qui appena caricato."
-teaching_watch_video: "Guarda il video"
-teaching_lab_external: "Vedi su GitHub"
-# Elenco in tempo reale dal repository esterno dei materiali didattici
-teaching_repo_materials: "Repository dei materiali"
-
-# Pianificazione del corso (prima lezione di ogni materia con calendario)
-teaching_info: "Informazioni"
-teaching_planning: "Pianificazione"
-teaching_planning_lede: "Pianificazione settimana per settimana del corso. Scegli il tuo sottogruppo di laboratorio per evidenziare le tue sessioni e scaricarle come file di calendario."
-teaching_course: "Anno accademico"
-teaching_code: "Codice"
-teaching_centre: "Scuola"
-teaching_course_guide: "Guida ufficiale del corso"
-teaching_your_group: "Il tuo sottogruppo di laboratorio"
-teaching_all_groups: "Tutti i sottogruppi"
-teaching_add_calendar: "Scarica calendario (.ics)"
-teaching_ics_hint: "Compatibile con Google Calendar, Outlook e Apple Calendar."
-teaching_week: "Settimana"
-teaching_no_session: "Nessuna sessione"
-teaching_makeup: "Recupero"
-teaching_pa: "Esercitazione in aula"
-teaching_tentative: "Da confermare"
-teaching_assessment: "Valutazione"
-
-# Vista incorporabile della materia (/teaching/<id>/embed/)
-teaching_open_full: "Apri pagina completa"
+# ── Pagina didattica — grafico della didattica svolta ─────────────────────
+teaching_record_eyebrow: "Didattica"
+teaching_record_heading: "Tutti i corsi che ho tenuto"
+teaching_record_desc: "Ore certificate dall'Università di Oviedo. Filtra per anno accademico o corso di laurea: i totali e i due grafici si ricalcolano."
+# Riquadri di sintesi
+teaching_stat_hours: "Ore"
+teaching_stat_subjects: "Materie"
+teaching_stat_degrees: "Corsi di laurea"
+teaching_stat_years: "Anni accademici"
+# Grafici
+teaching_theory: "Lezione"
+teaching_practice: "Laboratorio"
+# Filtri
+teaching_filter_course_year: "Anno accademico"
+teaching_filter_titulacion: "Corso di laurea"
+teaching_filter_none: "Nessuna attività corrisponde a questi filtri."
+# Vista tabella e note
+teaching_table_toggle: "Vedi i dati come tabella"
+teaching_th_year: "Anno"
+teaching_th_subject: "Materia"
+teaching_th_bilingual: "Bilingue"
+teaching_bilingual_yes: "EN"
+teaching_th_degrees: "Corsi di laurea"
+teaching_th_theory: "Lezione"
+teaching_th_practice: "Laboratorio"
+teaching_th_hours: "Totale"
+teaching_programmed_note: "programmata, non ancora svolta per intero"
+teaching_english_note: "Tenuta in inglese"
+# Percorso per corso di laurea + flusso materia→corso
+teaching_by_degree: "Presenza in ogni corso di laurea"
+teaching_by_degree_lede: "Un punto per anno accademico svolto; la dimensione sono le ore. I vuoti dicono quanto i punti."
+teaching_by_flow: "Quale materia alimenta quale corso di laurea"
+teaching_by_flow_lede: "Una materia condivisa da più corsi è una lezione con più pubblici: per questo una sola materia può collocarti in otto."
+teaching_show_more: "Mostra tutte"
+teaching_show_less: "Mostra meno"
+teaching_attribution_note: "Queste due viste attribuiscono le ore di una materia condivisa a ogni corso che la riceve, quindi i loro totali superano il totale certificato qui sopra. È voluto: rispondono a dove sei stato presente, non a come si dividono le ore."
+teaching_col_subject: "Materia"
+teaching_col_degree: "Corso di laurea"
+teaching_dot_legend: "dimensione = ore di quell'anno"
+teaching_no_year: "nessuna didattica quell'anno"
+teaching_years_count: "anni"
+teaching_subjects_count: "materie"
+teaching_reaches: "corsi di laurea"
+teaching_source_note: "Fonte: certificato di didattica rilasciato dall'Università di Oviedo l'8 settembre 2026. Una materia tenuta per più corsi di laurea è un'unica attività, contata una sola volta, come nei totali annuali del certificato stesso."
 
 # ── Pagina GitHub ──────────────────────────────────────────────────────────
 page_github_eyebrow: "Open source"

@@ -1,0 +1,287 @@
+# Registro de docencia — transcrito de certificado_docencia.pdf
+# (Universidad de Oviedo, Vicerrectorado de Políticas de Profesorado y
+# Ordenación Académica; fecha de referencia 08-09-2026).
+#
+# UNIDAD DE DATOS: una *impartición* = una asignatura en un curso académico.
+# Una misma impartición puede llegar a VARIAS titulaciones (el certificado la
+# lista una vez por titulación, con las mismas horas); son la misma clase, no
+# docencia repetida. Por eso las horas viven en la impartición y las
+# titulaciones son una lista dentro de ella.
+#
+# COMPROBACIÓN: la suma de `hours` de cada curso cuadra con la columna
+# «Horas Curso» del certificado, que se guarda en `official_total` para que
+# cualquier cambio futuro se pueda validar contra el documento original.
+#   2019-2020 157.0 · 2020-2021 225.0 · 2022-2023 230.6 · 2023-2024 231.6
+#   2024-2025 221.0 · 2025-2026 186.0 · 2026-2027 166.0 (programada)
+# (2021-2022 no aparece en el certificado: no hubo docencia asignada.)
+
+source: "certificado_docencia.pdf"
+source_date: "2026-09-08"
+institution: "Universidad de Oviedo"
+
+# Nombre corto de cada titulación, para las etiquetas del gráfico.
+degrees:
+  giisw:      { short: "Ing. Informática del Software",      level: grado,  full: "Grado en Ingeniería Informática del Software" }
+  giitin:     { short: "Ing. Informática en TI",             level: grado,  full: "Grado en Ingeniería Informática en Tecnologías de la Información" }
+  pceo:       { short: "PCEO Software + Matemáticas",        level: grado,  full: "PCEO Grado en Ingeniería Informática del Software / Grado en Matemáticas" }
+  master_ii:  { short: "Máster Ing. Informática",            level: master, full: "Máster Universitario en Ingeniería Informática por la Universidad de Oviedo" }
+  mecanica:   { short: "Ing. Mecánica",                      level: grado,  full: "Grado en Ingeniería Mecánica" }
+  electrica:  { short: "Ing. Eléctrica",                     level: grado,  full: "Grado en Ingeniería Eléctrica" }
+  quimica:    { short: "Ing. Química Industrial",            level: grado,  full: "Grado en Ingeniería Química Industrial" }
+  electronica: { short: "Ing. Electrónica Industrial",        level: grado,  full: "Grado en Ingeniería Electrónica Industrial y Automática" }
+  organizacion: { short: "Ing. Organización Industrial",      level: grado,  full: "Grado en Ingeniería de Organización Industrial" }
+  industriales: { short: "Ing. Tecnologías Industriales",     level: grado,  full: "Grado en Ingeniería de Tecnologías Industriales" }
+  telecom:    { short: "Ing. Tecnologías y Servicios de Telecom.", level: grado, full: "Grado en Ingeniería en Tecnologías y Servicios de Telecomunicación" }
+  gap:        { short: "Gestión y Admón. Pública (online)",  level: grado,  full: "Grado en Gestión y Administración Pública (On line)" }
+
+# Degrees that are only ever reached by the SAME shared delivery, and so behave
+# as one audience rather than several. Collapsed into a single row by default:
+# six identical rows say nothing that one row does not, and their 6-way tie at
+# 173 h made any "top N" cut arbitrary. Expanding a chart splits them again.
+#
+# Grouping also fixes a real double count: full attribution charged the same
+# 173 h to each of the six. Mapping a delivery's degrees through the group and
+# de-duplicating counts it once.
+degree_groups:
+  rama_industrial:
+    short: "Ing. Industriales"
+    full: "Grados de la rama industrial: Mecánica, Eléctrica, Química Industrial, Electrónica Industrial y Automática, Organización Industrial y Tecnologías Industriales"
+    level: grado
+    members: [mecanica, electrica, quimica, electronica, organizacion, industriales]
+
+courses:
+  - year: "2026-2027"
+    status: programmed          # planificada, aún no impartida en su totalidad
+    position: "Profesor Ayudante Doctor LOSU"
+    official_total: 166.0
+    teaching:
+      - subject: "Ingeniería del Proceso Software"
+        shared: true
+        english: true
+        theory: 11.0
+        practice: 60.0
+        hours: 71.0
+        degrees: [{ id: giisw, year: 3 }, { id: pceo, year: 4 }]
+      - subject: "Tecnologías Web"
+        shared: true
+        theory: 21.0
+        practice: 74.0
+        hours: 95.0
+        degrees: [{ id: giitin, year: 4 }, { id: master_ii, year: 1 }]
+
+  - year: "2025-2026"
+    status: delivered
+    position: "Profesor Ayudante Doctor LOSU"
+    official_total: 186.0
+    teaching:
+      - subject: "Tecnologías Web"
+        shared: true
+        theory: 0.0
+        practice: 98.0
+        hours: 98.0
+        degrees: [{ id: giitin, year: 4 }, { id: master_ii, year: 1 }]
+      - subject: "Ingeniería del Proceso Software"
+        shared: true
+        english: true
+        theory: 11.0
+        practice: 44.0
+        hours: 55.0
+        degrees: [{ id: giisw, year: 3 }, { id: pceo, year: 4 }]
+      - subject: "Calidad, Validación y Verificación del Software"
+        shared: true
+        theory: 0.0
+        practice: 32.0
+        hours: 32.0
+        degrees: [{ id: pceo, year: 5 }, { id: giisw, year: 4 }]
+      - subject: "Fundamentos de Informática"
+        shared: true
+        theory: 1.0
+        practice: 0.0
+        hours: 1.0
+        degrees:
+          - { id: quimica, year: 1 }
+          - { id: electronica, year: 1 }
+          - { id: organizacion, year: 1 }
+          - { id: industriales, year: 1 }
+          - { id: mecanica, year: 1 }
+          - { id: electrica, year: 1 }
+
+  - year: "2024-2025"
+    status: delivered
+    position: "Profesor Sustituto 80.2-A LOSU"
+    official_total: 221.0
+    teaching:
+      - subject: "Fundamentos de Informática"
+        shared: true
+        theory: 56.0
+        practice: 30.0
+        hours: 86.0
+        degrees:
+          - { id: mecanica, year: 1 }
+          - { id: industriales, year: 1 }
+          - { id: quimica, year: 1 }
+          - { id: electrica, year: 1 }
+          - { id: electronica, year: 1 }
+          - { id: organizacion, year: 1 }
+      - subject: "Tecnologías Web"
+        theory: 21.0
+        practice: 44.0
+        hours: 65.0
+        degrees: [{ id: giitin, year: 4 }]
+      - subject: "Ingeniería del Proceso Software"
+        english: true
+        theory: 10.0
+        practice: 30.0
+        hours: 40.0
+        degrees: [{ id: giisw, year: 3 }]
+      - subject: "Sistemas de Información"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giitin, year: 3 }]
+
+  - year: "2023-2024"
+    status: delivered
+    position: "Profesor Sustituto 80.2-A LOSU"
+    official_total: 231.6
+    teaching:
+      - subject: "Ingeniería del Proceso Software"
+        english: true
+        theory: 10.0
+        practice: 60.0
+        hours: 70.0
+        degrees: [{ id: giisw, year: 3 }]
+      - subject: "Aspectos Sociales, Legales, Éticos y Profesionales de la Informática"
+        theory: 0.0
+        practice: 58.0
+        hours: 58.0
+        degrees: [{ id: giisw, year: 4 }]
+      - subject: "Arquitectura del Software"
+        theory: 0.0
+        practice: 45.6
+        hours: 45.6
+        degrees: [{ id: giisw, year: 3 }]
+      - subject: "Tecnologías Web"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giitin, year: 4 }]
+      - subject: "Fundamentos de Informática"
+        shared: true
+        theory: 28.0
+        practice: 0.0
+        hours: 28.0
+        degrees:
+          - { id: mecanica, year: 1 }
+          - { id: electronica, year: 1 }
+          - { id: quimica, year: 1 }
+          - { id: electrica, year: 1 }
+          - { id: industriales, year: 1 }
+          - { id: organizacion, year: 1 }
+
+  - year: "2022-2023"
+    status: delivered
+    position: "Profesor Laboral de Interinidad"
+    official_total: 230.6
+    teaching:
+      - subject: "Gestión de la Información y Documentación Administrativa"
+        theory: 60.0
+        practice: 0.0
+        hours: 60.0
+        degrees: [{ id: gap, year: 3 }]
+      - subject: "Arquitectura del Software"
+        theory: 0.0
+        practice: 40.6
+        hours: 40.6
+        degrees: [{ id: giisw, year: 3 }]
+      - subject: "Fundamentos de Informática"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giisw, year: 1 }]
+      - subject: "Fundamentos de Informática"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: telecom, year: 1 }]
+      - subject: "Sistemas de Información"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giitin, year: 3 }]
+      - subject: "Fundamentos de Informática"
+        shared: true
+        theory: 28.0
+        practice: 0.0
+        hours: 28.0
+        degrees:
+          - { id: mecanica, year: 1 }
+          - { id: organizacion, year: 1 }
+          - { id: electronica, year: 1 }
+          - { id: electrica, year: 1 }
+          - { id: industriales, year: 1 }
+          - { id: quimica, year: 1 }
+      - subject: "Administración de Sistemas y Redes"
+        theory: 12.0
+        practice: 0.0
+        hours: 12.0
+        degrees: [{ id: giisw, year: 3 }]
+
+  - year: "2020-2021"
+    status: delivered
+    position: "Profesor Laboral de Interinidad"
+    official_total: 225.0
+    teaching:
+      - subject: "Bases de Datos"
+        theory: 0.0
+        practice: 69.0
+        hours: 69.0
+        degrees: [{ id: giitin, year: 2 }]
+      - subject: "Calidad, Validación y Verificación del Software"
+        theory: 0.0
+        practice: 50.0
+        hours: 50.0
+        degrees: [{ id: giisw, year: 4 }]
+      - subject: "Sistemas Operativos"
+        theory: 0.0
+        practice: 46.0
+        hours: 46.0
+        degrees: [{ id: giitin, year: 2 }]
+      - subject: "Sistemas de Información"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giitin, year: 3 }]
+      - subject: "Fundamentos de Informática"
+        shared: true
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees:
+          - { id: electrica, year: 1 }
+          - { id: electronica, year: 1 }
+          - { id: industriales, year: 1 }
+          - { id: quimica, year: 1 }
+          - { id: mecanica, year: 1 }
+          - { id: organizacion, year: 1 }
+
+  - year: "2019-2020"
+    status: delivered
+    position: "Profesor Laboral de Interinidad"
+    official_total: 157.0
+    teaching:
+      - subject: "Administración de Sistemas y Redes"
+        theory: 18.0
+        practice: 75.0
+        hours: 93.0
+        degrees: [{ id: giisw, year: 3 }]
+      - subject: "Aspectos Sociales, Legales, Éticos y Profesionales de la Informática"
+        theory: 0.0
+        practice: 34.0
+        hours: 34.0
+        degrees: [{ id: giisw, year: 4 }]
+      - subject: "Sistemas Operativos"
+        theory: 0.0
+        practice: 30.0
+        hours: 30.0
+        degrees: [{ id: giisw, year: 2 }]

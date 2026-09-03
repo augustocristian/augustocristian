@@ -10,11 +10,9 @@ This file documents the architecture, data schemas, and build process for this s
 Static site built with **Astro** (zero client JS by default). No CMS, no bespoke build script.
 
 - **Data**: YAML files under `data/` define all content (publications, talks, projects, profile, …).
-- **Teaching content**: Markdown/MDX files under `src/content/teaching/` (one file per session).
 - **Pages/components**: `.astro` files under `src/pages/`, `src/components/`, `src/layouts/`.
 - **Build**: `astro build` renders everything to `dist/` (gitignored). CI rebuilds on every push to `main`.
 - **Languages**: English (`/`), Spanish (`/es/`), Italian (`/it/`) — UI strings in `data/i18n/`, content fields use `_es` / `_it` suffixes.
-- **Teaching PDFs**: hosted in a **separate GitHub repository** (see `TEACHING_REPO` in `src/config.js`); each session links/embeds its PDF, plus a live folder listing via the GitHub Contents API.
 
 ---
 
@@ -34,7 +32,7 @@ Or combine build + preview (Windows): `scripts/deploy.ps1 -Serve` — serves at 
 ## Directory layout
 
 ```
-astro.config.mjs            # Astro config: site URL, trailingSlash, MDX, Shiki theme
+astro.config.mjs            # Astro config: site URL, trailingSlash, compressHTML, cite-bib
 tsconfig.json               # editor/tooling support (astro/tsconfigs/base)
 data/
   profile.yaml              # bio, photo, social links, organisations, interests, CV
@@ -51,17 +49,12 @@ data/
   projects/<ID>.yaml        # one file per funded project
   github.yaml               # GitHub page: username + curated repo cards
   teaching/
-    subjects/<ID>.yaml      # subject METADATA only (title/_es/_it, order, guide_url, hidden, image)
-    schedule/<ID>.yaml      # week-by-week planning -> planning table + .ics export
+    courses.yaml            # the teaching record (chart source; see the Teaching section)
     tfgs/<ID>.yaml          # one file per Final Degree Project
     tfms/<ID>.yaml          # one file per Master Degree Project
 src/
-  config.js                 # TEACHING_UNDER_CONSTRUCTION + TEACHING_REPO (incl. pages_url) + teachingPdfUrl()
-  content.config.ts         # `teaching` content collection (MDX) schema
-  content/teaching/         # session content: <subject-id>/<theory|labs|seminars>/NN_slug/index.mdx
   integrations/
     cite-bib.mjs            # emits /cite/<ID>.bib into dist/ + serves them on the dev server
-    teaching-ics.mjs        # emits /calendar/<subject>-<group>.ics (+ -completo.ics)
   lib/
     i18n.js                 # LANGS, loadI18n, localize(), langStaticPaths, langLinks, date fmt
     data.js                 # cached YAML loaders (BOM-tolerant) for everything under data/
@@ -73,18 +66,16 @@ src/
       experience.js         # education, work history, awards
       projects.js           # funded-project timeline
       theses.js             # TFG/TFM lists + filter facets (async — Gravatar lookups)
+      teaching.js           # teaching record -> delivery list + filter facets
       github.js             # GitHub page (profile + curated repo cards)
-    schedule.js             # planning loader: week expansion + dated event list (tz-safe)
-    ics.js                  # minimal RFC 5545 writer (CRLF, 75-octet folding, UTC stamps)
+    teaching-aggregate.js   # pure aggregation over the teaching record (server AND client)
     gravatar.js             # build-time Gravatar check (SHA-256, cached, offline-safe)
     richtext.js             # mini-markdown for YAML fields ([link](url), _em_, "- " bullets)
     bibtex.js               # minimal BibTeX parser (venue, doi, LaTeX accents)
     icons.js                # loadIcon(name) — inline SVG from public/img/icons
-    teaching.js             # teaching-collection helpers: derives type/order/code from the path
   layouts/
     BaseLayout.astro        # <head> (SEO/hreflang/fonts/theme FOUC guard), Header, Footer,
                             # global CSS import, client script entry
-    EmbedLayout.astro       # bare shell for /teaching/<id>/embed/ (no header/footer, noindex)
   components/
     Header.astro            # sticky nav, lang switcher, theme toggle
     Footer.astro            # social icons, copyright
@@ -105,13 +96,7 @@ src/
     ThesisSection.astro     # TFG/TFM filtered list (shared by both sections)
     TimelineItem.astro      # education/work timeline entry (org slot + body slot)
     ProjectTimelineItem.astro # funded-project timeline entry (marker + <details> card)
-    Exercise.astro          # exercise callout used inside teaching MDX
-    SubjectContent.astro    # subject body (lesson sidebar + one lesson at a time), shared
-                            # by the normal subject page and its /embed/ twin
-    SubjectPlanning.astro   # planning table + course-guide link + .ics export
-    PdfViewer.astro         # multi-document lazy PDF <iframe> + availability probe
-    Video.astro             # lazy YouTube embed (nocookie iframe on click; MDX-injectable)
-    GithubPdfList.astro     # live PDF listing from the external teaching repo
+    TeachingRecord.astro    # teaching-record tiles + two bar charts + filters + table
   pages/
     [...lang]/index.astro                       # homepage (undefined → /, 'es', 'it')
     [...lang]/publications/index.astro
@@ -119,13 +104,11 @@ src/
     [...lang]/projects/index.astro
     [...lang]/experience/index.astro
     [...lang]/github/index.astro                # GitHub profile + curated repos (live stats)
-    [...lang]/teaching/index.astro
-    [...lang]/teaching/[subject]/index.astro        # subject page (planning + lessons)
-    [...lang]/teaching/[subject]/embed/index.astro  # same, bare shell, for iframe embedding
+    [...lang]/teaching/index.astro              # teaching record chart + TFG/TFM lists
     sitemap.xml.js                              # sitemap endpoint (same URL set as before)
   styles/                   # CSS partials imported by styles/main.css (bundled by Vite)
     main.css  core/  layout/  home/  research/  experience/  projects/  talks/  github/
-    teaching/  (teaching.css  subject.css  planning.css  embed.css)
+    teaching/  (teaching.css  courses.css)
   scripts/                  # client JS, bundled by Astro from BaseLayout's <script>
     main.js                 # entry; inits controllers
     controller.js  model.js  view.js
@@ -142,8 +125,8 @@ dist/                       # GENERATED — gitignored, do not edit manually
 
 - **CSS**: `src/styles/main.css` is imported once in `BaseLayout.astro`; Vite resolves the whole `@import` chain into a single hashed stylesheet — no `@import` waterfall.
 - **Zero JS by default**: only `src/scripts/main.js` (theme/nav/filters/detail overlay/scroll reveal, a few KB) ships on every page.
-- **Code highlighting**: fenced code blocks in teaching MDX are highlighted at **build time** by Astro's built-in Shiki with **dual themes** (`github-light`/`github-dark`, `defaultColor: false` in `astro.config.mjs`); `subject.css` switches the emitted `--shiki-*` variables with the active site theme — no Highlight.js, no client JS.
-- **Fonts**: non-blocking `media="print"` swap trick in `BaseLayout.astro`.
+- **Fonts**: non-blocking `media="print"` swap trick, declared once in `components/FontLinks.astro` and used by both layouts.
+- **Images**: `public/img/` holds web-sized copies only — sources are downscaled to what the CSS actually renders (avatars 96px, hero 640px, card art 1200px wide) and the untouched originals live in `.image-originals/` (gitignored). Everything below the fold carries `loading="lazy" decoding="async"`; the hero photo is the LCP element, so it stays eager with `fetchpriority="high"`. This took the homepage from 4.05 MB of imagery to 0.71 MB.
 - **FOUC prevention**: an inline `<script is:inline>` first in `<head>` applies the stored theme before CSS parses. **Never remove `is:inline`** — Astro would bundle/defer it and the flash returns.
 - **Trailing slashes**: `trailingSlash: 'always'` + directory output format keep the exact old URL scheme (`/publications/`, `/es/teaching/<id>/`, …).
 - **compressHTML: true** in `astro.config.mjs` keeps classic whitespace collapsing — Astro 7's `'jsx'` default would strip the space between adjacent inline elements (icon + label buttons). Do not remove.
@@ -162,6 +145,7 @@ CSS partials live under `src/styles/` (grouped by area) and are all imported by 
   --color-bg / --color-bg-alt / --color-surface / --color-surface-2
   --color-text / --color-text-muted
   --color-accent / --color-accent-soft / --color-accent-2 / --color-accent-2-soft
+  --color-on-accent   /* label on an accent fill — see the contrast note below */
   --color-border (hairlines) / --color-border-strong (interactive)
   /* + --badge-core-* / --badge-quartile-* / --badge-arxiv-* palettes */
 
@@ -174,11 +158,21 @@ CSS partials live under `src/styles/` (grouped by area) and are all imported by 
   /* Motion: --ease-out, --dur-1 150ms · --dur-2 250ms · --dur-3 400ms */
   /* Z-index: --z-header 50 · --z-skip 100 */
   /* Globe: --globe-* — orphaned (the homepage globe was removed); kept in case it returns */
-  --font-display / --font-body: 'Titillium Web', system-ui, sans-serif;
-  /* Titillium Web has no 500/800 weights — use 400/600/700 (900 for display) */
+  --font-display: 'Noto Sans Display', system-ui, sans-serif;      /* h1–h5, code chips */
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;   /* all body text */
+  /* All three come from Google Fonts via components/FontLinks.astro — the single
+     place the webfont <link>s are declared, so the layouts cannot drift onto
+     different families (they did once: a layout kept requesting a family the
+     site had dropped, and its headings silently fell back to Georgia).
+     Change a family here AND in FontLinks.astro.
+     Noto Sans Display is variable (400..700 requested), so 600/700 are real cuts. */
   --container-width: 1140px;  --header-height: 4.5rem;
 }
 ```
+
+**Contrast (WCAG AA, verified):** the accent has two roles that pull in opposite directions — as TEXT on a dark surface it must be light, as a FILL under white text it must be dark. One value cannot do both, so `--color-accent` is the text/border value (dark `#36A2F5`, light `#0E62A3`; both clear 4.5:1 on bg, surface, surface-2 and accent-soft) and `--color-on-accent` is the label placed on an accent fill (navy in dark, white in light). Never write `color: #fff` on `background: var(--color-accent)` — that combination fails AA in the dark theme; use `var(--color-on-accent)`.
+
+**Heading level ≠ heading size.** Levels are chosen so each page's outline has no gaps (a card title is `h2` on a listing page, `h3` under a section head), so card CSS must never key off the element: rules are written `.pub-card :is(h2, h3)`, `.thesis-card :is(h3, h4)` and always pin an explicit `font-size`. Promoting a heading without that pin makes it inherit the much larger `base.css` element size.
 
 Rules of thumb: borders are `var(--border-w) solid var(--color-border)` (never hardcode widths), shadows come only from `--shadow-1/2/3`, durations/easings only from the motion tokens. To retune colours or fonts, edit tokens and run `npm run dev` / `npm run build`.
 
@@ -188,8 +182,8 @@ Rules of thumb: borders are `var(--border-w) solid var(--color-border)` (never h
 
 Defined in `src/styles/core/animations.css` + `transitions.css`; scroll-reveal JS in `src/scripts/controller.js`.
 
-- **Hover/reveal contract**: interactive hover lifts animate the `translate` property (`translate: 0 -1px/-2px` + one elevation step up); entrance/reveal animations animate `transform`. The two compose on the compositor — never set `translate` in a reveal rule or it kills the hover lift.
-- **Scroll reveal** (site-wide): IntersectionObserver-driven, **fires once** per element (`.reveal`/`.reveal--card` + `.is-visible`); cards in the same parent stagger by 0.08 s via `--reveal-delay`. Elements already in the viewport on load appear instantly. Targets come from `revealTargets()` in `src/scripts/model.js`: section heads, standalone tag rows, `.card-link`/`.talk-card`/`.timeline-item`/`.proj-item`/`.award-card`, plus the **containers** of filtered lists (never the `[data-filter-item]` items themselves — `initFilters` toggles their `display`, which would strand reveal-hidden items).
+- **Hover/reveal contract**: interactive hover lifts animate the `translate` property (`translate: 0 -1px/-2px` + one elevation step up); entrance/reveal animations animate `transform`. The two compose on the compositor — never set `translate` in a reveal rule or it kills the hover lift. The mirror rule matters just as much: `.reveal--card.is-visible` lands in the SAME style change that starts the reveal, so `opacity`/`transform` must keep `--dur-3` **and** `var(--reveal-delay)` there — putting them on `--dur-1` cuts every card's entrance to 150 ms and drops the stagger, and the grid snaps in instead of floating in. Only `translate`/`box-shadow` belong on the short duration.
+- **Scroll reveal** (site-wide): IntersectionObserver-driven, **fires once** per element (`.reveal`/`.reveal--card` + `.is-visible`); cards in the same parent stagger by 0.08 s via `--reveal-delay`. Whether an element starts on screen is decided by the **observer's first callback**, never by measuring in JS: at `DOMContentLoaded` the webfonts have not swapped in yet (`FontLinks.astro` loads them async), so a `getBoundingClientRect()` check reads fallback-metric layout and puts elements on the wrong side of the fold — they get treated as already visible and never animate, worsening down long pages. Elements on screen at load are left untouched (no reveal classes at all, so `.card-link` keeps its own hover transition); the rest are hidden on that first callback and animated when scrolled to. Targets come from `revealTargets()` in `src/scripts/model.js`: section heads, standalone tag rows, `.card-link`/`.talk-card`/`.timeline-item`/`.proj-item`/`.award-card`, plus the **containers** of filtered lists (never the `[data-filter-item]` items themselves — `initFilters` toggles their `display`, which would strand reveal-hidden items).
 - **Hero & page-header entrance**: CSS-only staggered `rise-in` keyframes on `.hero-content` children + photo and on `.page-header` children (`animation … backwards`), no JS — safe above the fold.
 - **Publication detail dialog**: opens/closes with a fade + rise via `@starting-style` + `transition-behavior: allow-discrete` (`publications.css`) — pure CSS progressive enhancement; unsupported browsers get the instant open/close.
 - **Header scroll state**: `initHeaderScroll()` (rAF-guarded) toggles `.site-header.is-scrolled` → hairline + `--shadow-1` + stronger blur.
@@ -407,7 +401,7 @@ bio_it: "Bio in italiano…"
 
 ## Internationalisation rules (mandatory — all content except teaching)
 
-These rules apply to every content change in: profile, experience, education, awards, talks, projects, and publications. **Teaching** content (subject MDX sessions) is exempt because materials are written once in the language of instruction (subject *titles* in `data/teaching/subjects/` are still translated).
+These rules apply to every content change in: profile, experience, education, awards, talks, projects, publications and teaching. In `data/teaching/courses.yaml` the subject and degree names are the institution's own official Spanish wording and are **not** translated — translating an official course title would misrepresent the certificate; everything the chart says *about* them lives in `data/i18n/`.
 
 ### Rule 1 — Every new content entry must be fully translated
 
@@ -443,178 +437,72 @@ Never access a content field directly when a translated variant might exist. Use
 
 ## Teaching
 
-The teaching section has two levels:
-- **Teaching index** (`/teaching/`) — subject card grid + TFG/TFM filtered lists.
-- **Subject page** (`/teaching/<id>/`) — docs-style layout: a collapsible left sidebar lists the course **planning** plus every lesson grouped Theory/Labs/Seminars; the content area shows **one lesson at a time**, driven by the URL hash (`#<group>/<slug>`, e.g. `#labs/01_entorno-y-primer-servicio` — shareable deep links; legacy `#theory`/`#labs`/`#seminars` map to that group's first lesson). Every lesson renders Markdown, its PDFs in an on-page viewer, an optional YouTube video, an optional external repo link, and a prev/next pager. All lessons are server-rendered: no-JS and print show them stacked. Sidebar visibility persists on desktop (`localStorage['teaching-nav']`) and defaults to hidden ≤900px (stacked panel, auto-closes on selection). Lessons are display-toggled — never give them scroll-reveal classes.
+One page, `/teaching/`: the **teaching record** (a filterable chart of every course taught) followed by the supervised **TFG/TFM** lists. There are no per-subject pages — course materials, lesson content, planning tables, `.ics` export and the embeddable subject view were all removed; if they ever come back, they come back as their own thing rather than by reviving the old subject collection.
 
-The subject body lives in **`SubjectContent.astro`**, shared verbatim by the normal page and the embeddable one, so the two can never drift.
+### Teaching record — `data/teaching/courses.yaml`
 
-### Adding a session (the common case)
+Transcribed from the official teaching certificate (Universidad de Oviedo). **The source PDF is gitignored** — it carries a national ID number and must not reach the repository.
 
-Create a numbered folder with an `index.mdx` in it. Nothing else — no index to update, no numbers to shuffle:
-
-```
-src/content/teaching/<subject-id>/<group>/<NN_slug>/index.mdx
-                                   ▲        ▲
-                                   │        └── sort order + sidebar code + deep-link slug
-                                   └── theory | labs | seminars  →  the session type
-```
-
-The path carries the metadata that used to be typed by hand (parsed in `src/lib/teaching.js`):
-
-| From the path | Becomes |
-|---|---|
-| `theory/` · `labs/` · `seminars/` | the session `type` (and the sidebar group) |
-| the `NN` in `NN_slug` | the sort `order` |
-| the letter suffix in `NNx_slug` (`02d`) | `order + 0.0x`, so `02d` sorts between `02` and `03` **without renumbering anything** |
-| `NN[x]` + the group letter (`T`/`S`/`PA`) | the sidebar code — `T02d`, `S09b` |
-| the whole `NN_slug` folder name | the deep-link slug (`#theory/02d_solid-y-patrones`) |
-
-So the frontmatter is only what the session actually *has*:
-
-```mdx
----
-title: "Capa web REST"
-summary: "Qué hace que una API sea REST y cómo se escribe esa capa en Spring."
-pdfs:
-  - label: "Apuntes"
-    file: "apuntes/03 Capa web REST.pdf"
-# video_url: "" · repo_url: "" · hidden: true   — all optional
-# type / order / code override the path-derived values; normally omit them
----
-
-## Contenidos
-
-Normal **Markdown** with fenced code blocks (Shiki-highlighted at build time).
-
-<Exercise title="Ejercicio 1.1">Instrucciones en Markdown.</Exercise>
-<Video url="https://youtu.be/XXXXXXXXXXX" label="Introducción al tema" />
-```
-
-`<Exercise>` and `<Video>` are injected automatically (no import needed). A flat `NN_slug.mdx` with no folder still works (`software-process-engineering` uses it); prefer a folder so a session can keep its own images beside it.
-
-**Teaching content is i18n-exempt** — it is written once in the language of instruction. Subject *titles* in `data/teaching/subjects/` are still translated.
-
-### Subject metadata — `data/teaching/subjects/<ID>.yaml`
+The unit is a **delivery**: one subject in one academic year. A delivery can reach several degrees; that is one class with several audiences, so **its hours are counted once**, not once per degree. This is not a modelling preference — it is what makes the numbers reconcile: summing the certificate's rows for 2025-2026 gives 376 h, while the certificate's own yearly total is 186 h.
 
 ```yaml
-title: "Web Technologies"
-title_es: "Tecnologías Web"
-title_it: "Tecnologie Web"
-order: 1
-guide_url: ""    # official course guide; renders a button on the planning lesson
-image: ""        # optional — index-card + subject-page banner, path under public/
-# hidden: true   # uncomment to exclude the subject without deleting it
+degrees:                          # id -> short label (chart) + full name (tooltip)
+  giitin: { short: "Ing. Informática en TI", level: grado, full: "Grado en Ingeniería…" }
+
+courses:
+  - year: "2025-2026"
+    status: delivered             # delivered | programmed (scheduled, not yet fully taught)
+    position: "Profesor Ayudante Doctor LOSU"
+    official_total: 186.0         # the certificate's «Horas Curso» — the check value
+    teaching:
+      - subject: "Tecnologías Web"
+        shared: true              # «docencia compartida» (the certificate's *)
+        english: true             # optional
+        theory: 0.0
+        practice: 98.0
+        hours: 98.0
+        degrees: [{ id: giitin, year: 4 }, { id: master_ii, year: 1 }]
 ```
 
-### Planning & calendar export — `data/teaching/schedule/<ID>.yaml`
+**`official_total` is a checksum, not decoration.** Every year's `hours` must sum to it; all seven do. After editing this file, verify:
 
-Optional. When present, the subject page gains a **Planning** lesson as its landing view (course facts, the link to the official guide, a subgroup picker and the week-by-week calendar), and the build emits downloadable `.ics` files. Without it a subject simply starts on its first lesson.
-
-**One file, two outputs** — the table and the calendars are generated from the same weeks, so they can never disagree:
-
-```yaml
-course: "2026/2027"
-code: "GIITIN01-4-012"
-timezone: "Europe/Madrid"          # IANA zone; DST is resolved via Intl, never hardcoded
-location: "Escuela Politécnica de Ingeniería de Gijón"
-
-groups:                             # lab subgroups: weekday (0 = Mon … 4 = Fri) + slot
-  - { id: "PL-01", weekday: 2, start: "16:00", end: "18:00" }
-
-weeks:
-  - n: 3
-    start: "2026-09-21"             # ALWAYS the Monday; lab dates derive from it
-    note: "Footnote shown under the week"
-    labs:
-      session: "S01"
-      lesson: "labs/01_entorno-y-primer-servicio"   # makes the row link to the lesson
-      title: "Entorno y primer servicio"
-      extra: "Git avanzado (práctica de aula)"      # optional second activity
-      groups:                       # optional per-subgroup overrides
-        PL-04:
-          moved_to: "2026-10-15"    # make-up session on another date
-          reason: "Festivo — recuperación en jueves"
-        PL-02:
-          cancelled: true
-          reason: "Festivo (Inmaculada Concepción)"
-      # cancelled: true             # at this level: cancels the week for every subgroup
-    theory:                         # explicit date + times (exceptional slots are just rows)
-      - date: "2026-09-22"
-        start: "16:00"
-        end: "17:00"
-        kind: theory                # theory | pa  (pa renders a "Práctica de aula" tag)
-        title: "T02 Introducción a Spring Boot"
-        detail: "Optional second line"
-        lessons: ["theory/02_introduccion-spring-boot"]
-        # tentative: true           # renders a "por confirmar" tag
-    events:                         # one-off items (defences, exams)
-      - { date: "2026-11-04", start: "14:00", end: "16:00", kind: exam, title: "Defensa" }
+```sh
+node -e "const y=require('js-yaml'),f=require('fs');const d=y.load(f.readFileSync('data/teaching/courses.yaml','utf8').replace(/^﻿/,''));for(const c of d.courses){const s=c.teaching.reduce((a,t)=>a+t.hours,0);if(Math.abs(s-c.official_total)>0.001)throw new Error(c.year+': '+s+' != '+c.official_total)}console.log('all years match the certificate')"
 ```
 
-- **Dates are quoted strings.** Unquoted, js-yaml turns `2026-09-14` into a UTC `Date` and the formatting control is lost.
-- **Lab dates are derived** from the week's Monday + the subgroup's `weekday`; only exceptions need an override.
-- `buildPlanningWeeks()` also exposes `primary` (the session most subgroups run that week) and `allCancelled`, so the component never re-scans the list.
+Current record: **1 417,2 h · 30 deliveries · 11 subjects · 12 degrees · 7 academic years** (2019-2020 → 2026-2027; 2021-2022 is absent because no teaching was assigned).
 
-**Calendar files** (`src/integrations/teaching-ics.mjs`, written into `dist/` at `astro:build:done` and served by dev-server middleware):
+### The chart — `components/TeachingRecord.astro`
 
-| URL | Contents |
-|---|---|
-| `/calendar/<subject>-<group>.ics` | that subgroup's labs + all theory/PA + all events — a student's personal calendar |
-| `/calendar/<subject>-completo.ics` | every subgroup's labs + all theory/PA + all events — the teacher's calendar |
+Four summary tiles, two bar charts and a table view, all driven by one filter row (academic year + degree).
 
-The subgroup `<select>` on the planning drives **both** the highlighted rows and which `.ics` the download button points at (remembered in `localStorage['teaching-group']`).
+- **Identity lives in the row label, not in colour**, so the charts need only **two** categorical series — lecture vs lab — rather than one hue per subject. Eleven hues would break the "assign categorical hues in fixed order, never cycled" rule; eleven labelled rows do not.
+- **Bar length is absolute hours** (rows comparable across subjects and years) and each bar's split shows composition; the share label states the proportion outright.
+- Both palettes were run through the data-viz validator against this site's real chart surfaces and pass every check — lightness band, chroma floor, CVD separation, normal-vision floor, contrast:
 
-`src/lib/ics.js` is a small RFC 5545 writer, strict about the parts Outlook rejects: CRLF endings, every line folded at **75 octets** (never mid-codepoint), TEXT values escaped, and `DTSTART`/`DTEND` emitted as **absolute UTC** (`…Z`) rather than `TZID` — so no `VTIMEZONE` block is needed and Google Calendar, Outlook (desktop + web) and Apple Calendar all resolve the same instant. Local wall time is converted in `zonedToUtc()` (`src/lib/schedule.js`) with a two-pass `Intl` offset lookup, which stays correct across a DST transition. `DTSTAMP` is fixed so rebuilds are byte-identical.
+  | | lecture | lab | surface |
+  |---|---|---|---|
+  | light | `#0E62A3` | `#eb6834` | `#FFFFFF` |
+  | dark | `#3987e5` | `#d95926` | `#162B42` |
 
-### Teaching PDFs — external repository (must be GitHub **Pages**)
+  The dark steps are **chosen for the dark surface**, not flipped from the light ones, and the chart blue is a step of its own — it is deliberately not the UI's `--color-accent`, whose job is text contrast. Re-run the validator if you change them.
+- Aggregation lives in **`src/lib/teaching-aggregate.js`**, imported by both the Astro frontmatter (which server-renders the unfiltered charts, so the page works with JS off) and the component's client script (which re-renders on filter). One implementation, so the two can never disagree.
+- A legend is always present (two series) and every bar is directly labelled, so identity never rests on colour alone; the `<details>` table view carries the full per-delivery detail.
 
-PDFs live in a separate repo, configured in `src/config.js`:
+**Four views, one filter row**, in this order: the summary tiles (kept at the top, always showing the filtered totals), the two hour bar charts, then two degree-centric views:
 
-```js
-export const TEACHING_REPO = {
-  owner: 'augustocristian',
-  repo: 'teaching-materials',      // one folder per subject id
-  branch: 'main',
-  pages_url: 'https://augustocristian.github.io/teaching-materials',
-  enabled: false,                  // true once the repo AND its Pages site exist
-  list_path: 'practicas',          // subfolder the live listing enumerates (not recursive)
-};
-```
+| View | Mark | Answers |
+|---|---|---|
+| Hours by subject / by year | stacked bars | what and when |
+| **Presence in each degree** | one stacked mini-column per academic year, on a shared baseline | where, and for how many years running |
+| **Subject → degree flow** | two HTML columns + an SVG link overlay | why a degree adds up to what it does |
 
-> **Never link PDFs through `raw.githubusercontent.com`.** It serves them as `application/octet-stream` with `X-Content-Type-Options: nosniff`, so browsers refuse to render them inline and an `<iframe>` just downloads the file. GitHub **Pages** serves the same file as `application/pdf` (plus `Access-Control-Allow-Origin: *`), which is what makes the on-page viewer — and the availability probe — work. `pages_url` must therefore point at the repo's Pages site.
+Two rules these last two must keep:
 
-Sessions reference documents by **repo-relative path**, and `teachingPdfUrl(subjectId, file)` builds the absolute URL (percent-encoding each segment, so the LaTeX-generated names with spaces and accents survive):
+- **They use FULL attribution** — a shared subject's hours count for every degree it reached — so their totals (2 633 h) deliberately exceed the certified total (1 417 h). They answer *where have I been present*, not *how do the hours divide*. `teaching_attribution_note` says so on the page; never mix the two sums.
+- **All four views keep the same lecture/lab split**, so the two hues always mean the same thing and one legend governs the lot. The timeline uses columns rather than dots for exactly this reason: a dot cannot carry a split, and length compares better than area. An untaught year is an empty lane over the baseline, never a tiny mark — "absent" must not read as "a little".
 
-```yaml
-pdfs:
-  - { label: "Guion",      file: "practicas/Sesion1. Entorno y primer servicio.pdf" }
-  - { label: "Ejercicios", file: "practicas/Ejercicios Sesion1. Entorno y primer servicio.pdf" }
-```
-
-> **Exercise solutions are never published.** `Solucion Ejercicios SesionN.pdf` is course-private, permanently — not a "publish it after the session" case. Sessions link only the *guion* and the *exercise sheet*. This is enforced, not just conventional (`TEACHING_PRIVATE_PATTERN` in `src/config.js`):
-> 1. **The build fails** if a session's `pdfs:` lists a file or label matching `soluci[oó]n|solution` (thrown in `src/lib/teaching.js`).
-> 2. **The live repo listing filters them out** (`GithubPdfList.astro`), so copying the whole `pdf-practicas/` folder into the materials repository cannot surface them there either.
->
-> Do not add an "unlock later" flag for these. If a solution ever needs sharing, it goes through a channel that is not this site.
-
-`PdfViewer.astro` renders a document switcher (only when a session has more than one), a lazy **View PDF** toggle that creates the `<iframe>` on first click, and a download link. Because materials are published week by week, it **HEAD-probes each URL** the first time a viewer scrolls into view: a document that is not up yet shows *"todavía no publicado"* with the controls disabled, and starts working the moment the file is pushed — **no site rebuild**. Probes are cached per URL and any network failure degrades to the pending state. With `enabled: true`, `GithubPdfList.astro` additionally lists the subject's folder live via the GitHub Contents API.
-
-The teaching index shows an under-construction banner while `TEACHING_UNDER_CONSTRUCTION` is `true` in `src/config.js`.
-
-### Embeddable subject page — `/teaching/<id>/embed/`
-
-Every subject also builds a bare variant for dropping into a Campus Virtual / Moodle page:
-
-```html
-<iframe src="https://www.augustocristian.es/es/teaching/web-technologies/embed/"
-        style="width:100%;height:80vh;border:0" loading="lazy"
-        title="Tecnologías Web"></iframe>
-```
-
-Same lesson browser, same content component; `EmbedLayout.astro` replaces the site chrome with a slim bar (title, theme toggle, "open full page" in `_blank`). It is `noindex, follow` with `<link rel="canonical">` on the real page, so the embeds never compete in search. Deep links work inside the frame — append the lesson hash to the `src`.
-
-**No `X-Frame-Options` or `frame-ancestors` CSP is sent anywhere on this site**, which is what allows framing. If a `_headers` / `netlify.toml` headers block is ever added, it must not reintroduce them.
+The flow's curves are drawn from **measured** node geometry (`getBoundingClientRect`), redrawn on filter and via `ResizeObserver`, so they stay correct after any reflow or font swap. The columns themselves are ordinary HTML, so with JS off the relationships still read as two labelled lists — only the curves are missing. Below 900px the curves are hidden and the columns stack.
 
 ### TFG / TFM files — `data/teaching/tfgs/<ID>.yaml`
 
@@ -645,9 +533,8 @@ linkedin: "https://www.linkedin.com/in/example/"    # optional — student name 
 
 1. Pages under `src/pages/[...lang]/` render every route × 3 languages (`langStaticPaths()`).
 2. YAML is loaded through the cached loaders in `src/lib/data.js`; view models are built per language in `src/lib/viewmodels.js` (localization, date formatting, BibTeX venue/doi, related-pubs, chips).
-3. Teaching MDX renders through the `teaching` content collection (`src/content.config.ts`).
-4. The `cite-bib` integration (`src/integrations/cite-bib.mjs`) writes `/cite/<ID>.bib` verbatim into `dist/` at `astro:build:done`, and `teaching-ics` (`src/integrations/teaching-ics.mjs`) writes `/calendar/<subject>-<group>.ics` the same way (both also serve their URLs via dev-server middleware). `src/pages/sitemap.xml.js` emits the multilingual sitemap; `public/robots.txt` is copied as-is.
-5. `public/` (img, files, robots.txt) is copied verbatim; CSS and client JS are bundled/hashed into `dist/_astro/`.
+3. The `cite-bib` integration (`src/integrations/cite-bib.mjs`) writes `/cite/<ID>.bib` verbatim into `dist/` at `astro:build:done` (and serves the same URLs via dev-server middleware). `src/pages/sitemap.xml.js` emits the multilingual sitemap; `public/robots.txt` is copied as-is.
+4. `public/` (img, files, robots.txt) is copied verbatim; CSS and client JS are bundled/hashed into `dist/_astro/`.
 
 ---
 
@@ -667,7 +554,7 @@ view.js        — pure DOM mutations; never reads state
 - **FilterBar variants**: default `panel` (horizontal boxed bar — TFG/TFM lists) and `sidebar` (vertical checkbox groups used by the publications page: left column on desktop via `.pub-layout`, stacked on top below 900px).
 - **`initScrollReveal()`** runs site-wide (skipped under `prefers-reduced-motion: reduce`); reveal targets and the filtered-list container rule live in `revealTargets()` (`model.js`).
 
-Small page-specific scripts live inline in their own `.astro` files, outside the main bundle: the lesson router + sidebar toggle (`SubjectContent.astro`), the planning subgroup picker (`SubjectPlanning.astro`), the GitHub PDF listing (`GithubPdfList.astro`), and the lazy PDF and video embeds (`PdfViewer.astro`, `Video.astro`). `EmbedLayout.astro` deliberately ships **only** a theme toggle — the embed has no nav, filters or scroll reveal, so it never loads `main.js`.
+Small page-specific scripts live inline in their own `.astro` files, outside the main bundle: the teaching-record filters (`TeachingRecord.astro`, ~2.9 KB) and the GitHub live stats (`github/index.astro`).
 
 ### FOUC prevention
 

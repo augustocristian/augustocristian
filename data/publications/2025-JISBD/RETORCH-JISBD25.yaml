@@ -19,7 +19,7 @@ abstract: >-
   using a real-world application's E2E test suite. We analyze how the different decisions
   taken when the suite is migrated to the Cloud impact the cost, highlighting how RETORCH*
   can help the tester during Cloud and test configuration to make a more informed decision.
-tags: [Software engineering, Test optimization, Software testing, Cloud computing, End-to-end testing, E2E testing]
+tags: [Software engineering, Test optimization, Software testing, Cloud computing, End-to-End testing, E2E testing]
 featured: false
 links:
   pdf: "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/80780/11705-JISBD-2025-14.pdf?sequence=4&isAllowed=y"

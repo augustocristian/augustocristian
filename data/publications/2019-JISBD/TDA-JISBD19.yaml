@@ -19,7 +19,11 @@ abstract: >-
   Dicha calidad junto con la no funcional (privacidad), es ponderada según los criterios de
   usuario con el fin de alcanzar el punto de compromiso entre ambas características de
   calidad.
-tags: []
+tags:
+  - "Anonymization"
+  - "Software testing"
+  - "Artificial intelligence"
+  - "k-Anonymity"
 featured: false
 links:
   pdf: "http://hdl.handle.net/10651/56867"

@@ -19,7 +19,7 @@ abstract: >-
   using a real-world application's E2E test suite. We analyze how the different decisions
   taken when the suite is migrated to the Cloud impact the cost, highlighting how RETORCH*
   can help the tester during Cloud and test configuration to make a more informed decision.
-tags: [Continuous integration, Continuous testing, End-to-end testing, Software testing, Test orchestration, Testing in the Cloud]
+tags: [Continuous integration, Continuous testing, End-to-End testing, Software testing, Test orchestration, Testing in the cloud]
 featured: true
 links:
   pdf: "https://hdl.handle.net/10651/75794"

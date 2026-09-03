@@ -1,0 +1,479 @@
+---
+// Teaching record: four summary tiles, two degree-centric views and a table,
+// all driven by one filter row (academic year + degree).
+//
+// FORM: identity lives in the row label, not in colour, so both views need only
+// TWO categorical series — lecture vs lab — instead of one hue per subject.
+// (Eleven hues would break the "assign categorical hues in fixed order, never
+// cycled" rule; eleven labelled rows do not.)
+//
+// The unfiltered views are server-rendered, so the page works with JS off; the
+// script below only recomputes them when a filter changes, using the very same
+// aggregations the frontmatter used.
+import {
+  aggregate, aggregateDegrees, degreeYearMatrix, subjectDegreeLinks, groupDegrees, fmtHours,
+} from '../lib/teaching-aggregate.js';
+
+const { record, t } = Astro.props;
+const { deliveries, yearOptions, degreeOptions, groups, groupOf } = record;
+
+const initial = aggregate(deliveries);
+// Labels cover the collapsed groups as well as the individual degrees.
+const degreeName = {
+  ...Object.fromEntries(degreeOptions.map((d) => [d.id, d.label])),
+  ...Object.fromEntries(Object.entries(groups).map(([id, g]) => [id, g.short])),
+};
+const degreeFull = {
+  ...Object.fromEntries(degreeOptions.map((d) => [d.id, d.full])),
+  ...Object.fromEntries(Object.entries(groups).map(([id, g]) => [id, g.full])),
+};
+const allYears = [...yearOptions].map((y) => y.year).sort();
+// 2026-2027 is planned, not yet fully taught — the column header says so, since
+// nothing else on the page carries that distinction any more.
+const programmedYears = new Set(yearOptions.filter((y) => y.status === 'programmed').map((y) => y.year));
+
+// Server render = every individual degree, so a JS-less page is complete. The
+// collapsed group rows ride along hidden; the script swaps which set is shown.
+const initialDegrees = aggregateDegrees(deliveries);
+const groupedDeliveries = groupDegrees(deliveries, groupOf);
+const groupRows = aggregateDegrees(groupedDeliveries).filter((d) => groups[d.id]);
+const groupMatrix = degreeYearMatrix(groupedDeliveries);
+const initialMatrix = { ...degreeYearMatrix(deliveries), ...groupMatrix };
+const initialFlow = subjectDegreeLinks(deliveries);
+const maxCell = Math.max(
+  ...Object.values(initialMatrix).flatMap((r) => Object.values(r).map((c) => c.hours)), 1,
+);
+const maxFlowSubject = Math.max(...initialFlow.subjects.map((x) => x.hours), 1);
+---
+<section class="section teaching-record" id="docencia">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{t.teaching_record_eyebrow}</p>
+      <h2>{t.teaching_record_heading}</h2>
+      <p class="section-desc">{t.teaching_record_desc}</p>
+    </div>
+
+    <div class="tr-root" data-teaching-record
+         data-more-label={t.teaching_show_more} data-less-label={t.teaching_show_less}>
+      {/* The charts read these rather than re-fetching anything. */}
+      <script type="application/json" data-teaching-data set:html={JSON.stringify(deliveries)} />
+      <script type="application/json" data-teaching-meta
+              set:html={JSON.stringify({ degreeName, degreeFull, allYears, groupOf })} />
+
+      <dl class="tr-stats">
+        <div class="tr-stat">
+          <dt>{t.teaching_stat_hours}</dt>
+          <dd><span data-stat="hours">{fmtHours(initial.totals.hours)}</span><span class="tr-unit">h</span></dd>
+        </div>
+        <div class="tr-stat">
+          <dt>{t.teaching_stat_subjects}</dt>
+          <dd data-stat="subjects">{initial.totals.subjects}</dd>
+        </div>
+        <div class="tr-stat">
+          <dt>{t.teaching_stat_degrees}</dt>
+          <dd data-stat="degrees">{initial.totals.degrees}</dd>
+        </div>
+        <div class="tr-stat">
+          <dt>{t.teaching_stat_years}</dt>
+          <dd data-stat="years">{initial.totals.years}</dd>
+        </div>
+      </dl>
+
+      <div class="tr-filters">
+        <div class="tr-filter">
+          <span class="tr-filter-label" id="tr-f-year">{t.teaching_filter_course_year}</span>
+          <div class="tr-chips" role="group" aria-labelledby="tr-f-year">
+            {yearOptions.map((y) => (
+              <button type="button" class="tr-chip" data-filter="year" data-value={y.year}
+                      aria-pressed="false">{y.year}</button>
+            ))}
+          </div>
+        </div>
+        <div class="tr-filter">
+          <span class="tr-filter-label" id="tr-f-deg">{t.teaching_filter_titulacion}</span>
+          <div class="tr-chips" role="group" aria-labelledby="tr-f-deg">
+            {degreeOptions.map((d) => (
+              <button type="button" class="tr-chip" data-filter="degree" data-value={d.id}
+                      title={d.full} aria-pressed="false">{d.label}</button>
+            ))}
+          </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline tr-reset" hidden>{t.teaching_filter_reset}</button>
+      </div>
+
+      <p class="tr-empty" hidden>{t.teaching_filter_none}</p>
+
+      {/* Every view below keeps the same lecture/lab split, so one legend
+          governs all four and the two hues always mean the same thing. */}
+      <div class="tr-legend">
+        <span class="tr-key"><span class="tr-swatch tr-swatch-theory"></span>{t.teaching_theory}</span>
+        <span class="tr-key"><span class="tr-swatch tr-swatch-practice"></span>{t.teaching_practice}</span>
+      </div>
+
+      {/* ── C · presence per degree over time ───────────────────────────
+          One dot per academic year taught. Dot AREA is the hours, so the eye
+          compares them fairly; an untaught year is a faint lane, not a small
+          dot, so "absent" never reads as "a little". */}
+      <figure class="tr-chart tr-wide" data-degree-chart>
+        <figcaption>{t.teaching_by_degree}</figcaption>
+        <p class="tr-lede">{t.teaching_by_degree_lede}</p>
+
+        <div class="tl-scroll">
+          <div class="tl" style={`--years:${allYears.length}`}>
+            <div class="tl-head">
+              <span></span>
+              {allYears.map((y) => (
+                <span class:list={['tl-year', { 'is-programmed': programmedYears.has(y) }]}
+                      title={programmedYears.has(y) ? `${y} · ${t.teaching_programmed_note}` : y}>
+                  {y.slice(2, 4)}/{y.slice(7)}
+                  {programmedYears.has(y) && <abbr class="tl-year-mark" title={t.teaching_programmed_note}>*</abbr>}
+                </span>
+              ))}
+              <span class="tl-total-head">h</span>
+            </div>
+            {[...initialDegrees, ...groupRows].map((d) => (
+              <div class="tl-row" data-degree={d.id} data-group={groups[d.id] ? 'true' : undefined}
+                   hidden={Boolean(groups[d.id])}>
+                <span class="tl-label" title={degreeFull[d.id]}>
+                  {degreeName[d.id]}
+                  <em class="tl-meta">{d.years} {t.teaching_years_count} · {d.subjects} {t.teaching_subjects_count}</em>
+                </span>
+                {allYears.map((y) => {
+                  const c = initialMatrix[d.id]?.[y];
+                  const h = c?.hours ?? 0;
+                  return (
+                    <span class:list={['tl-lane', { 'is-on': h > 0 }]} data-year={y}
+                          title={h > 0
+                            ? `${y} · ${fmtHours(h)} h (${t.teaching_theory} ${fmtHours(c.theory)} · ${t.teaching_practice} ${fmtHours(c.practice)})`
+                            : `${y} · ${t.teaching_no_year}`}>
+                      {h > 0 && (
+                        <i class="tl-col" style={`--h:${(h / maxCell) * 100}%`}>
+                          <i class="tl-part tl-part-practice" style={`height:${(c.practice / h) * 100}%`}></i>
+                          <i class="tl-part tl-part-theory" style={`height:${(c.theory / h) * 100}%`}></i>
+                        </i>
+                      )}
+                    </span>
+                  );
+                })}
+                <span class="tl-total"><b>{fmtHours(d.hours)}</b></span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-sm btn-outline tr-more" data-more="degree" hidden></button>
+
+        <p class="tr-chart-note">
+          <span class="tl-legend">
+            <i class="tl-col tl-legend-col" style="--h:30%"></i>
+            <i class="tl-col tl-legend-col" style="--h:65%"></i>
+            <i class="tl-col tl-legend-col" style="--h:100%"></i>
+            {t.teaching_dot_legend}
+          </span>
+          <span class="tl-legend-note">* {t.teaching_programmed_note}</span>
+        </p>
+      </figure>
+
+      {/* ── D · subject → degree flow ───────────────────────────────────
+          The columns are ordinary HTML, so they reflow and stay readable with
+          no JS; the curves are drawn into an overlay from the nodes' MEASURED
+          positions, which is what keeps them correct after any filter. */}
+      <figure class="tr-chart tr-wide" data-flow-chart>
+        <figcaption>{t.teaching_by_flow}</figcaption>
+        <p class="tr-lede">{t.teaching_by_flow_lede}</p>
+
+        <div class="fl" data-flow>
+          <svg class="fl-links" aria-hidden="true" focusable="false"></svg>
+          <div class="fl-col">
+            <p class="fl-col-head">{t.teaching_col_subject}</p>
+            {initialFlow.subjects.map((sub) => (
+              <div class="fl-node fl-node-subject" data-node="subject" data-id={sub.key}
+                   style={`--w:${Math.max(22, (sub.hours / maxFlowSubject) * 100)}%`}>
+                <span class="fl-node-name">{sub.key}</span>
+                <span class="fl-node-meta">{fmtHours(sub.hours)} h · {sub.fanOut} {t.teaching_reaches}</span>
+                <span class="fl-split" title={`${t.teaching_theory} ${fmtHours(sub.theory)} h · ${t.teaching_practice} ${fmtHours(sub.practice)} h`}>
+                  <i class="fl-split-part tr-seg-theory" style={`width:${(sub.theory / sub.hours) * 100}%`}></i>
+                  <i class="fl-split-part tr-seg-practice" style={`width:${(sub.practice / sub.hours) * 100}%`}></i>
+                </span>
+              </div>
+            ))}
+          </div>
+          <div class="fl-col fl-col-right">
+            <p class="fl-col-head">{t.teaching_col_degree}</p>
+            {[...initialDegrees, ...groupRows].map((d) => (
+              <div class="fl-node fl-node-degree" data-node="degree" data-id={d.id}
+                   title={degreeFull[d.id]} hidden={Boolean(groups[d.id])}>
+                <span class="fl-node-name">{degreeName[d.id]}</span>
+                <span class="fl-node-meta">{d.subjects} {t.teaching_subjects_count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline tr-more" data-more="subject" hidden></button>
+      </figure>
+
+      <p class="tr-source tr-attribution">{t.teaching_attribution_note}</p>
+
+      <details class="tr-table-wrap">
+        <summary>{t.teaching_table_toggle}</summary>
+        <div class="tr-table-scroll">
+          <table class="tr-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.teaching_th_year}</th>
+                <th scope="col">{t.teaching_th_subject}</th>
+                <th scope="col">{t.teaching_th_bilingual}</th>
+                <th scope="col">{t.teaching_th_degrees}</th>
+                <th scope="col" class="tr-num">{t.teaching_th_theory}</th>
+                <th scope="col" class="tr-num">{t.teaching_th_practice}</th>
+                <th scope="col" class="tr-num">{t.teaching_th_hours}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deliveries.map((d) => (
+                <tr data-row={d.id}>
+                  <td>{d.year}</td>
+                  <td>{d.subject}</td>
+                  {/* Marked with text, never colour alone; the abbr carries the
+                      full wording for anyone hovering or using a reader. */}
+                  <td class="tr-bilingual">
+                    {d.english
+                      ? <abbr title={t.teaching_english_note}>{t.teaching_bilingual_yes}</abbr>
+                      : <span class="tr-dash" aria-hidden="true">—</span>}
+                  </td>
+                  <td>{d.audience.map((a) => a.label).join(' · ')}</td>
+                  <td class="tr-num">{d.theory ? fmtHours(d.theory) : '—'}</td>
+                  <td class="tr-num">{d.practice ? fmtHours(d.practice) : '—'}</td>
+                  <td class="tr-num"><b>{fmtHours(d.hours)}</b></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <p class="tr-source">{t.teaching_source_note}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import {
+    aggregate, aggregateDegrees, degreeYearMatrix, subjectDegreeLinks,
+    filterDeliveries, groupDegrees, fmtHours,
+  } from '../lib/teaching-aggregate.js';
+
+  const root = document.querySelector('[data-teaching-record]');
+  if (root) {
+    const deliveries = JSON.parse(root.querySelector('[data-teaching-data]').textContent);
+    const meta = JSON.parse(root.querySelector('[data-teaching-meta]').textContent);
+    const timeline = root.querySelector('[data-degree-chart]');
+    const flow = root.querySelector('[data-flow]');
+    const links = flow.querySelector('.fl-links');
+    const chips = [...root.querySelectorAll('.tr-chip')];
+    const reset = root.querySelector('.tr-reset');
+    const empty = root.querySelector('.tr-empty');
+    const views = [...root.querySelectorAll('.tr-wide')];
+    const rows = [...root.querySelectorAll('[data-row]')];
+    const active = { year: new Set(), degree: new Set() };
+
+    // Collapsed by default so the two views open at a readable size; the server
+    // renders every row, so with JS off nothing is hidden and no toggle appears.
+    const COLLAPSED = 4;
+    const expanded = { degree: false, subject: false };
+    const moreBtns = new Map([...root.querySelectorAll('.tr-more')].map((b) => [b.dataset.more, b]));
+    const moreLabels = {
+      more: root.dataset.moreLabel,
+      less: root.dataset.lessLabel,
+    };
+
+    function setToggle(kind, total) {
+      const btn = moreBtns.get(kind);
+      const hideable = total > COLLAPSED;
+      btn.hidden = !hideable;
+      if (!hideable) { expanded[kind] = false; return; }
+      btn.textContent = expanded[kind]
+        ? moreLabels.less
+        : `${moreLabels.more} (${total})`;
+      btn.setAttribute('aria-expanded', String(expanded[kind]));
+    }
+
+    // Read the labels the server already rendered, so the strings stay in the
+    // i18n files and are never duplicated in JS.
+    const firstMeta = timeline.querySelector('.tl-meta')?.textContent ?? '';
+    meta.yearsWord = firstMeta.split('·')[0]?.trim().split(' ').slice(1).join(' ') ?? '';
+    meta.subjectsWord = firstMeta.split('·')[1]?.trim().split(' ').slice(1).join(' ') ?? '';
+    meta.reachesWord = flow.querySelector('.fl-node-meta')?.textContent.split('·')[1]?.trim().split(' ').slice(1).join(' ') ?? '';
+
+
+    function render() {
+      const shown = filterDeliveries(deliveries, {
+        years: [...active.year],
+        degrees: [...active.degree],
+      });
+      const agg = aggregate(shown);
+
+      empty.hidden = shown.length > 0;
+      views.forEach((v) => { v.hidden = shown.length === 0; });
+      reset.hidden = active.year.size === 0 && active.degree.size === 0;
+
+      root.querySelector('[data-stat="hours"]').textContent = fmtHours(agg.totals.hours);
+      root.querySelector('[data-stat="subjects"]').textContent = agg.totals.subjects;
+      root.querySelector('[data-stat="degrees"]').textContent = agg.totals.degrees;
+      root.querySelector('[data-stat="years"]').textContent = agg.totals.years;
+
+      renderTimeline(shown);
+      renderFlow(shown);
+
+      const keep = new Set(shown.map((d) => d.id));
+      rows.forEach((tr) => { tr.hidden = !keep.has(tr.dataset.row); });
+    }
+
+    // C — rows re-ranked, dots resized, untaught years left as empty lanes.
+    function renderTimeline(shown) {
+      // Collapsed: the industrial degrees behave as one audience, so they are
+      // mapped to their group and their shared hours counted once. Expanding
+      // splits them back into the individual degrees.
+      const data = expanded.degree ? shown : groupDegrees(shown, meta.groupOf);
+      const degs = aggregateDegrees(data);
+      const matrix = degreeYearMatrix(data);
+      const max = Math.max(...Object.values(matrix).flatMap((r) => Object.values(r).map((c) => c.hours)), 1);
+      const list = timeline.querySelector('.tl');
+
+      timeline.querySelectorAll('.tl-row').forEach((r) => { r.hidden = true; });
+      const visibleDegs = expanded.degree ? degs : degs.slice(0, COLLAPSED);
+      // The button must promise what expanding actually reveals: the individual
+      // degrees, not the smaller grouped set that is on screen right now.
+      setToggle('degree', aggregateDegrees(shown).length);
+      for (const d of visibleDegs) {
+        const row = timeline.querySelector(`.tl-row[data-degree="${CSS.escape(d.id)}"]`);
+        if (!row) continue;
+        row.hidden = false;
+        row.querySelector('.tl-total b').textContent = fmtHours(d.hours);
+        row.querySelector('.tl-meta').textContent =
+          `${d.years} ${meta.yearsWord} · ${d.subjects} ${meta.subjectsWord}`;
+        row.querySelectorAll('.tl-lane').forEach((lane) => {
+          const c = matrix[d.id]?.[lane.dataset.year];
+          const h = c?.hours ?? 0;
+          lane.classList.toggle('is-on', h > 0);
+          let col = lane.querySelector('.tl-col');
+          if (h > 0) {
+            if (!col) {
+              col = document.createElement('i');
+              col.className = 'tl-col';
+              col.innerHTML = '<i class="tl-part tl-part-practice"></i><i class="tl-part tl-part-theory"></i>';
+              lane.appendChild(col);
+            }
+            col.style.setProperty('--h', `${(h / max) * 100}%`);
+            col.querySelector('.tl-part-practice').style.height = `${(c.practice / h) * 100}%`;
+            col.querySelector('.tl-part-theory').style.height = `${(c.theory / h) * 100}%`;
+          } else if (col) {
+            col.remove();
+          }
+        });
+        list.appendChild(row);
+      }
+    }
+
+    // D — nodes re-ranked, then the curves redrawn from measured geometry.
+    function renderFlow(shown) {
+      const data = expanded.subject ? shown : groupDegrees(shown, meta.groupOf);
+      const { subjects, links: pairs } = subjectDegreeLinks(data);
+      const degs = aggregateDegrees(data);
+      const maxSub = Math.max(...subjects.map((x) => x.hours), 1);
+      const cols = flow.querySelectorAll('.fl-col');
+
+      flow.querySelectorAll('.fl-node').forEach((n) => { n.hidden = true; });
+      const visibleSubs = expanded.subject ? subjects : subjects.slice(0, COLLAPSED);
+      setToggle('subject', subjects.length);
+      const keys = new Set(visibleSubs.map((x) => x.key));
+      const reached = new Set(pairs.filter((l) => keys.has(l.subject)).map((l) => l.degree));
+      for (const sub of visibleSubs) {
+        const n = flow.querySelector(`[data-node="subject"][data-id="${CSS.escape(sub.key)}"]`);
+        if (!n) continue;
+        n.hidden = false;
+        n.style.setProperty('--w', `${Math.max(22, (sub.hours / maxSub) * 100)}%`);
+        n.querySelector('.fl-node-meta').textContent =
+          `${fmtHours(sub.hours)} h · ${sub.fanOut} ${meta.reachesWord}`;
+        n.querySelector('.tr-seg-theory').style.width = `${(sub.theory / sub.hours) * 100}%`;
+        n.querySelector('.tr-seg-practice').style.width = `${(sub.practice / sub.hours) * 100}%`;
+        cols[0].appendChild(n);
+      }
+      for (const d of degs) {
+        if (!reached.has(d.id)) continue;
+        const n = flow.querySelector(`[data-node="degree"][data-id="${CSS.escape(d.id)}"]`);
+        if (!n) continue;
+        n.hidden = false;
+        n.querySelector('.fl-node-meta').textContent = `${d.subjects} ${meta.subjectsWord}`;
+        cols[1].appendChild(n);
+      }
+      drawLinks(pairs);
+    }
+
+    // Paths come from getBoundingClientRect, never from assumed row heights, so
+    // they stay correct after a filter, a reflow or a font swap.
+    function drawLinks(pairs) {
+      const box = flow.getBoundingClientRect();
+      links.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
+      links.setAttribute('width', box.width);
+      links.setAttribute('height', box.height);
+      links.replaceChildren();
+      if (!pairs.length) return;
+
+      const max = Math.max(...pairs.map((p) => p.hours), 1);
+      const anchor = (el, side) => {
+        const r = el.getBoundingClientRect();
+        return { x: (side === 'right' ? r.right : r.left) - box.left, y: r.top + r.height / 2 - box.top };
+      };
+
+      for (const p of pairs) {
+        const a = flow.querySelector(`[data-node="subject"][data-id="${CSS.escape(p.subject)}"]`);
+        const b = flow.querySelector(`[data-node="degree"][data-id="${CSS.escape(p.degree)}"]`);
+        if (!a || !b || a.hidden || b.hidden) continue;
+        const s1 = anchor(a, 'right');
+        const s2 = anchor(b, 'left');
+        const mid = (s1.x + s2.x) / 2;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M${s1.x} ${s1.y} C ${mid} ${s1.y}, ${mid} ${s2.y}, ${s2.x} ${s2.y}`);
+        path.setAttribute('class', 'fl-link');
+        path.setAttribute('stroke-width', String(1.5 + 5 * (p.hours / max)));
+        links.appendChild(path);
+      }
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const set = active[chip.dataset.filter];
+        const on = !set.has(chip.dataset.value);
+        if (on) set.add(chip.dataset.value); else set.delete(chip.dataset.value);
+        chip.setAttribute('aria-pressed', String(on));
+        render();
+      });
+    });
+
+    moreBtns.forEach((btn, kind) => {
+      btn.addEventListener('click', () => {
+        expanded[kind] = !expanded[kind];
+        render();
+      });
+    });
+
+    // First paint: the server rendered every row uncollapsed and drew no curves
+    // (they can only be measured in the browser), so run a full render now.
+    render();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => drawLinks(
+        subjectDegreeLinks(filterDeliveries(deliveries, {
+          years: [...active.year], degrees: [...active.degree],
+        })).links,
+      )).observe(flow);
+    }
+
+    reset.addEventListener('click', () => {
+      active.year.clear();
+      active.degree.clear();
+      chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
+      render();
+    });
+  }
+</script>

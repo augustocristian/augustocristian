@@ -2,7 +2,6 @@
 lang: en
 html_lang: en
 months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
-weekdays_short: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 present: "Present"
 profile_role: "Assistant Professor"
 
@@ -112,7 +111,6 @@ project_role: "Role"
 page_teaching_eyebrow: "Academia"
 page_teaching_heading: "Teaching"
 page_teaching_desc: "Course materials and supervised final degree projects."
-teaching_subject_eyebrow: "Subject"
 # TFG / TFM section headings
 teaching_students_eyebrow: "Students"
 teaching_tfg_heading: "Final Degree Projects"
@@ -132,52 +130,51 @@ teaching_filter_student: "Search by student…"
 teaching_filter_projects: "projects"
 teaching_filter_reset: "Reset"
 # Under-construction notice (set TEACHING_UNDER_CONSTRUCTION in src/config.js to hide)
-teaching_construction_notice: "🚧 This section is currently under construction. Materials will be added progressively."
 
-# ── Teaching page — subject pages ─────────────────────────────────────────
-# Navigation
-teaching_back: "← Back to Teaching"
-# Lesson groups (sidebar headings)
-teaching_tab_theory: "Theory"
-teaching_tab_labs: "Labs"
-teaching_tab_seminars: "Seminars"
-# Lesson sidebar + pager
-subject_nav_aria: "Lesson navigation"
-teaching_lessons: "Lessons"
-teaching_prev_lesson: "Previous"
-teaching_next_lesson: "Next"
-# Session actions (PDF embed + video + external repo link)
-teaching_unit_pdf: "Download PDF"
-teaching_view_pdf: "View PDF"
-teaching_hide_pdf: "Hide PDF"
-teaching_materials: "Materials"
-teaching_pdf_pending: "Not published yet — it will appear here once it is uploaded."
-teaching_watch_video: "Watch video"
-teaching_lab_external: "View on GitHub"
-# Live listing from the external teaching-materials repository
-teaching_repo_materials: "Materials repository"
-
-# Course planning (first lesson of every subject that has a schedule)
-teaching_info: "Overview"
-teaching_planning: "Course planning"
-teaching_planning_lede: "Week-by-week plan for the course. Pick your lab subgroup to highlight your own sessions and download them as a calendar file."
-teaching_course: "Academic year"
-teaching_code: "Course code"
-teaching_centre: "School"
-teaching_course_guide: "Official course guide"
-teaching_your_group: "Your lab subgroup"
-teaching_all_groups: "All subgroups"
-teaching_add_calendar: "Download calendar (.ics)"
-teaching_ics_hint: "Works with Google Calendar, Outlook and Apple Calendar."
-teaching_week: "Week"
-teaching_no_session: "No session"
-teaching_makeup: "Make-up"
-teaching_pa: "Classroom practical"
-teaching_tentative: "To be confirmed"
-teaching_assessment: "Assessment"
-
-# Embeddable subject view (/teaching/<id>/embed/)
-teaching_open_full: "Open full page"
+# ── Teaching page — teaching record chart ─────────────────────────────────
+teaching_record_eyebrow: "Teaching record"
+teaching_record_heading: "Every course I have taught"
+teaching_record_desc: "Hours certified by the University of Oviedo. Filter by academic year or degree — the totals and both charts recompute."
+# Summary tiles
+teaching_stat_hours: "Hours"
+teaching_stat_subjects: "Subjects"
+teaching_stat_degrees: "Degrees"
+teaching_stat_years: "Academic years"
+# Charts
+teaching_theory: "Lecture"
+teaching_practice: "Lab"
+# Filters
+teaching_filter_course_year: "Academic year"
+teaching_filter_titulacion: "Degree"
+teaching_filter_none: "No teaching matches these filters."
+# Table view + notes
+teaching_table_toggle: "View the data as a table"
+teaching_th_year: "Year"
+teaching_th_subject: "Subject"
+teaching_th_bilingual: "Bilingual"
+teaching_bilingual_yes: "EN"
+teaching_th_degrees: "Degrees"
+teaching_th_theory: "Lecture"
+teaching_th_practice: "Lab"
+teaching_th_hours: "Total"
+teaching_programmed_note: "scheduled, not yet fully delivered"
+teaching_english_note: "Taught in English"
+# Presence-by-degree timeline + subject→degree flow
+teaching_by_degree: "Presence in each degree"
+teaching_by_degree_lede: "One dot per academic year taught; its size is the hours. The gaps say as much as the dots."
+teaching_by_flow: "Which subject feeds which degree"
+teaching_by_flow_lede: "A subject shared by several degrees is one class with several audiences — that is why one subject can place you in eight of them."
+teaching_show_more: "Show all"
+teaching_show_less: "Show fewer"
+teaching_attribution_note: "These two views count a shared subject's hours for every degree it reached, so their totals are higher than the certified total above. That is the point: they answer where you have been present, not how the hours divide."
+teaching_col_subject: "Subject"
+teaching_col_degree: "Degree"
+teaching_dot_legend: "dot size = hours that year"
+teaching_no_year: "no teaching that year"
+teaching_years_count: "years"
+teaching_subjects_count: "subjects"
+teaching_reaches: "degrees"
+teaching_source_note: "Source: teaching certificate issued by the University of Oviedo, 8 September 2026. A subject taught to several degrees is one delivery, counted once — as in the certificate's own yearly totals."
 
 # ── GitHub page ────────────────────────────────────────────────────────────
 page_github_eyebrow: "Open Source"

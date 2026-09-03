@@ -19,7 +19,7 @@ const talks = buildTalkViewModels(loadTalks(), lang, t);
   <section class="section">
     <div class="container">
       <div class="grid grid-2">
-        {talks.map((talk) => <TalkCard talk={talk} t={t} />)}
+        {talks.map((talk) => <TalkCard talk={talk} t={t} headingLevel={2} />)}
       </div>
     </div>
   </section>

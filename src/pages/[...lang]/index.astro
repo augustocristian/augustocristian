@@ -47,7 +47,8 @@ const iconDownload = loadIcon('download');
       <SocialLinks />
     </div>
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src={`/${profile.photo}`} alt={profile.name} />
+      <img class="hero-photo" src={`/${profile.photo}`} alt={profile.name}
+           width="640" height="640" fetchpriority="high" decoding="async" />
     </div>
   </section>
 
